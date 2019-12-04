@@ -1,6 +1,8 @@
 # Purpose: clean up the RGB and multispectral photo sets to just include photos taken within the survey area
 # and to flatten the overly complicated file structure into filenames that contain all that information but
 # without any folder hierarchy.
+# Simultaneously, capture the metadata for the photos and save to a csv file for ready access (instead of relying on
+# the slow process of using exiftool)
 
 library(tidyverse)
 library(exiftoolr)
@@ -28,6 +30,26 @@ rgb_photo_new_filepaths <- paste0(target_dir, "/rgb_", str_replace_all(string = 
 
 file.copy(from = rgb_photo_filepaths, to = here::here(rgb_photo_new_filepaths), overwrite = TRUE)
 
+# Because Map Pilot properly tags each photo with the offset in altitude based on the altitude when the first photo is taken,
+# there is no need for us to manually calculate this value for each photo
+# So we can get the metadata from the copied photos directly and write it to disk
+
+single_photo_meta <-
+  list.files(path = here::here(target_dir), full.names = TRUE, pattern = "rgb")[1] %>% 
+  exiftoolr::exif_read()
+
+# We want to drop these particular metadata because they are meaningless for our purposes and are *gigantic*
+single_photo_meta <-
+  single_photo_meta %>% 
+  dplyr::select(-ThumbnailImage, -PreviewImage, -ImageUIDList)
+
+rgb_photo_meta <-
+  list.files(path = here::here(target_dir), full.names = TRUE, pattern = "rgb") %>% 
+  exiftoolr::exif_read(tags = names(single_photo_meta)) %>% 
+  sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), remove = FALSE)
+
+write_csv(x = rgb_photo_meta %>% sf::st_drop_geometry(), path = "drone/L0/niwo_017_2019-10-09_rgb-photos_metadata.csv")
+
 # filter out bad multispectral photos and rename --------------------------
 
 # The RedEdge photos need some extra curation help because the camera was just on a timer and so lots of extra pictures
@@ -53,7 +75,6 @@ multispec_photo_filepaths <-
     list.files(x, recursive = TRUE, full.names = TRUE, pattern = ".tif")
   })
 
-
 # Establish the takeoff point for the rededge mission as the location of the very first photo
 # Note this assumes the first photo is taken of the takeoff point, not of the calibration panels
 # (which were almost always taken some distance from the takeoff point). Ensure that the first
@@ -68,36 +89,37 @@ takeoff_points <-
   })
 
 # Get the DEM elevation for the takeoff point location
-takeoff_elev <- 
+takeoff_elevs <- 
   takeoff_points %>% 
   purrr::map(function(x) {
     raster::extract(dem, x, method = "bilinear")
   })
 
 # Calculate the offset between what the RedEdge altitude thinks it is and what the DEM thinks it is
-takeoff_elev_offset <- purrr::map2(.x = takeoff_elev, .y = takeoff_points, .f = function(.x, .y) {.x - .y$PressureAlt})
+takeoff_elev_offsets <- purrr::map2(.x = takeoff_elevs, .y = takeoff_points, .f = function(.x, .y) {.x - .y$PressureAlt})
 
 # Use the exiftoolsr package to read the metadata of all of the rededge photos
 # First filter any files that are of size 0 bytes (these are just bad triggers of the RedEdge and exiftools won't play nicely with them)
 # Filter out photos that are missing any of the lat/lon or altitude
-
+(start <- Sys.time())
 exif_data <-
-  tibble(dir = multispec_nonCalibration_dirs, takeoff_points, takeoff_elev) %>% 
-  purrr::pmap(.f = function(dir, takeoff_points, takeoff_elev) {
+  tibble(dir = multispec_nonCalibration_dirs, takeoff_point = takeoff_points, takeoff_elev = takeoff_elevs) %>% 
+  purrr::pmap(.f = function(dir, takeoff_point, takeoff_elev) {
     
-    top_photo_dir <- str_split(dir, pattern = "/", simplify = TRUE)
-    top_photo_dir <- top_photo_dir[, ncol(top_photo_dir)]
-    
-    tibble(SourceFile = list.files(dir, recursive = TRUE, full.names = TRUE, pattern = ".tif")) %>% 
-      dplyr::mutate(multispec_photo_old_names = list.files(dir, recursive = TRUE, pattern = ".tif")) %>% 
-      dplyr::mutate(DestFile = paste0(target_dir, "/multispec_", top_photo_dir, "_", str_replace_all(string = multispec_photo_old_names, pattern = "/", replacement = "_"))) %>% 
+    exif_d <-
+      tibble(SourceFile = list.files(dir, recursive = TRUE, full.names = TRUE, pattern = ".tif")) %>% 
       dplyr::filter(file.size(SourceFile) > 0) %>% 
-      left_join(exif_read(.$SourceFile, tags = c("GPSLongitude", "GPSLatitude", "PressureAlt")), by = "SourceFile") %>% 
+      pull(SourceFile) %>% 
+      # read the EXIF metadata from each file
+      exiftoolr::exif_read() %>% 
       readr::type_convert() %>% 
-      dplyr::filter(!is.na(GPSLongitude), !is.na(GPSLatitude), !is.na(PressureAlt)) %>% 
-      dplyr::select(SourceFile, DestFile, GPSLongitude, GPSLatitude, PressureAlt) 
+      # For the rededge camera, we want to include in the new filename the two directories above the file
+      dplyr::mutate(new_FileName = map(str_split(string = Directory, pattern = "/", simplify = FALSE), .f = function(x) paste(rev(rev(x)[1:2]), collapse = "_")),
+                    new_FileName = paste0(new_FileName, "_", FileName)) %>% 
+      dplyr::mutate(DestFile = paste0(target_dir, "/multispec_", new_FileName)) %>% 
+      dplyr::filter(!is.na(GPSLongitude), !is.na(GPSLatitude), !is.na(PressureAlt))
   })
-
+(Sys.time() - start)
 
 # Convert the metadata to a spatial object, calculate the agl (above ground level altitude)
 # as the difference between the RedEdge recorded altitude, the DEM altitude at that point
@@ -117,15 +139,17 @@ exif_data <-
   })
 
 exif_data <-
-  map2(.x = exif_data, .y = takeoff_elev_offset, .f = function(.x, .y) { 
-    .x %>% 
+  map2(.x = exif_data, .y = takeoff_elev_offsets, .f = function(data, takeoff_elev_offset) { 
+    data %>% 
       mutate(band_num = str_sub(SourceFile, start = (nchar(SourceFile) - 4), end = (nchar(SourceFile) - 4))) %>% 
       mutate(band_name = case_when(band_num == 1 ~ "blue",
                                    band_num == 2 ~ "green",
                                    band_num == 3 ~ "red",
                                    band_num == 4 ~ "nir",
                                    band_num == 5 ~ "re"),
-             agl = PressureAlt - raster::extract(x = dem, y = ., method = "bilinear") + .y,
+             ground_elev = raster::extract(x = dem, y = ., method = "bilinear"),
+             takeoff_elev_offset = takeoff_elev_offset,
+             agl = PressureAlt - ground_elev + takeoff_elev_offset,
              suas_at_altitude = ifelse(agl > 70, yes = TRUE, no = FALSE),
              suas_within_footprint = st_intersects(x = st_transform(., 3310), y = st_buffer(st_transform(survey_area, 3310), 10), sparse = FALSE)[ , 1],
              mission_photo = suas_at_altitude & suas_within_footprint)}) %>% 
@@ -149,47 +173,37 @@ exif_data %>%
 
 # copy the mission photos to the L0 folder --------------------------------
 
+# Deal with the EXIF metadata that are list columns by pasting together the elements into
+# a single character string with elements separated by ", "
 photos_to_copy <-
   exif_data %>% 
-  filter(mission_photo)
+  sf::st_drop_geometry() %>% 
+  filter(mission_photo) %>% 
+  dplyr::mutate_if(is.list, .funs = function(x) purrr::map_chr(x, toString))
 
+write_csv(x = photos_to_copy, path = "drone/L0/niwo_017_2019-10-09_multispec-photos_metadata.csv")
 
 # Copy the photos from the working folder to the final photos folder using the new names
 file.copy(from = photos_to_copy$SourceFile, to = photos_to_copy$DestFile, overwrite = TRUE)
 
-
-
-
 # Add the calibration panel photos to the final photos directory
 
-cal_exif <- 
-  tibble(SourceFile = list.files(multispec_calibration_dir, recursive = TRUE, full.names = TRUE, pattern = ".tif"),
-         multispec_old_photo_names = list.files(multispec_calibration_dir, recursive = TRUE, pattern = ".tif"),
-         DestFile = paste0(target_dir, "/calibration_multispec_", multispec_old_photo_names)) %>% 
-  left_join(exif_read(.$SourceFile, tags = c("GPSLongitude", "GPSLatitude", "PressureAlt")), by = "SourceFile") %>% 
+cal_exif <-
+  list.files(multispec_calibration_dir, recursive = TRUE, full.names = TRUE, pattern = ".tif") %>% 
+  # read the EXIF metadata from each file
+  exiftoolr::exif_read() %>% 
   readr::type_convert() %>% 
-  dplyr::select(SourceFile, DestFile, GPSLongitude, GPSLatitude, PressureAlt) %>% 
-  sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), crs = 4326, remove = FALSE) 
+  dplyr::mutate(DestFile = paste0(target_dir, "/calibration_multispec_", FileName)) %>% 
+  mutate(band_num = str_sub(SourceFile, start = (nchar(SourceFile) - 4), end = (nchar(SourceFile) - 4))) %>% 
+  mutate(band_name = case_when(band_num == 1 ~ "blue",
+                               band_num == 2 ~ "green",
+                               band_num == 3 ~ "red",
+                               band_num == 4 ~ "nir",
+                               band_num == 5 ~ "re")) %>% 
+  dplyr::mutate_if(is.list, .funs = function(x) purrr::map_chr(x, toString))
 
-cal_exif$DestFile[1]
 
+write_csv(x = cal_exif, path = "drone/L0/niwo_017_2019-10-09_calibration-multispec-photos_metadata.csv")       
+file.copy(from = cal_exif$SourceFile, to = cal_exif$DestFile, overwrite = TRUE)
 
-calibration_SourceDir <- paste0(multispec_dir, "/calibration")
-calibration_SourceFile <- list.files(calibration_SourceDir, full.names = TRUE)
-calibration_SourceNames <- list.files(calibration_SourceDir)
-calibration_DestFile <- paste0(target_dir, "/multispec_calibration_", calibration_SourceNames)
-
-file.copy(from = cal_exif$SourceFile, to = cal_exif$DestFile)
-
-# After manually curating the photos, get the list of all photos used for analysis
-final_photo_list <- list.files(target_dir)
-
-metadata <- data.frame(site = site_name, flight_datetime = flight_datetime, processed_photos = final_photo_list)
-
-# Add the file size to the metadata
-metadata <-
-  metadata %>% 
-  mutate(file_size_MB = file.size(paste0(target_dir, "/", metadata$processed_photos)) / 1e6)
-
-write_csv(metadata, paste0("drone/L0/", site_name, "_", flight_datetime, "_photos_metadata.csv"))
 
