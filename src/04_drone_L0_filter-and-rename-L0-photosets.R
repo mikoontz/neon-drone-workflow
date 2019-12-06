@@ -72,7 +72,7 @@ rgb_photo_meta <-
 rgb_takeoff_points <-
   rgb_photo_meta %>% 
   filter(SpeedX == 0, SpeedY == 0, SpeedZ == 0) %>% 
-  sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), crs = 4326) %>% 
+  sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), crs = 4326, remove = FALSE) %>% 
   split(f = .$flight_num)
 
 # Get the DEM elevation for the takeoff point locations
@@ -97,7 +97,7 @@ rgb_photo_meta_list <-
 # camera GPS)
 rgb_photo_meta <-
   rgb_photo_meta_list %>% 
-  map(.f = function(x) st_as_sf(x, coords = c("GPSLongitude", "GPSLatitude"), crs = 4326)) %>% 
+  map(.f = function(x) st_as_sf(x, coords = c("GPSLongitude", "GPSLatitude"), crs = 4326, remove = FALSE)) %>% 
   map2(rgb_takeoff_elev_offsets, .f = function(data, takeoff_elev_offset) {
     
     data %>% 
