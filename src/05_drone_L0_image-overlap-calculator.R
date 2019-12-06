@@ -21,6 +21,7 @@ library(fasterize)
 library(sf)
 library(tidyverse)
 library(viridis)
+library(rasterVis)
 
 # function to create image footprint around point locations of each image ---------------------
 # based on AGL, camera properties, and yaw (angles the footprint)
@@ -203,15 +204,22 @@ footprints <-
   multispec_meta %>% 
   image_footprint()
 
-plot(rotated_footprints)
-
 photo_count <- fasterize(sf = footprints, raster = raster(footprints, res = 0.5), fun = "count")
 photo_overlap <- 1 - (1 / photo_count)
 
 photo_overlap_threshold <- photo_overlap
 photo_overlap_threshold[photo_overlap_threshold[] < 0.95] <- NA
 
-plot(photo_count, col = viridis(100))
-plot(photo_overlap_threshold, col = viridis(100))
+neon_plot_anchors <- sf::st_read("data/data_output/niwo_017_gcp-locations.geoJSON") %>% sf::st_transform(st_crs(footprints))
 
+png("figures/niwo_017_multispec-photo-overlap-count.png", width = 10, height = 10, res = 600, units = "in")
+par(mar = c(5, 5, 5, 5))
+plot(photo_count, col = viridis(100), xlab = "easting", ylab = "northing", main = "Count of photos covering area around NEON plot")
+plot(st_geometry(neon_plot_anchors), add = TRUE, col = "red", pch = 19)
+dev.off()
 
+png("figures/niwo_017_multispec-photo-overlap-percent.png", width = 10, height = 10, res = 600, units = "in")
+par(mar = c(5, 5, 5, 5))
+plot(photo_overlap_threshold, col = viridis(100), xlab = "easting", ylab = "northing", main = "Equivalent percent overlap")
+plot(st_geometry(neon_plot_anchors), add = TRUE, col = "red", pch = 19)
+dev.off()
