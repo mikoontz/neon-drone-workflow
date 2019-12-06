@@ -45,8 +45,69 @@ single_photo_meta <-
 
 rgb_photo_meta <-
   list.files(path = here::here(target_dir), full.names = TRUE, pattern = "rgb") %>% 
-  exiftoolr::exif_read(tags = names(single_photo_meta)) %>% 
-  sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), remove = FALSE)
+  exiftoolr::exif_read(tags = names(single_photo_meta))
+
+rgb_photo_meta <-
+  rgb_photo_meta %>% 
+  dplyr::mutate(takeoff_photo = ifelse(test = (RelativeAltitude == "+0.00"), yes = TRUE, no = FALSE))
+
+# Calculate the AGL elevation for each photo based on the ground elevation (from the SRTM DEM),
+# the lon/lat of each photo, and the GPS altitude of each photo
+
+# Total number of flights: 
+total_flights <- sum(rgb_photo_meta$takeoff_photo)
+
+# Create a vector that assigns each photo to its proper flight number
+# This can be used to each photo's location to a proper GPS altitude offset based on what the
+# GPS said the altitude was at the takeoff location (when the drone is on the ground)
+new_flight_idx <- c(which(rgb_photo_meta$takeoff_photo), (nrow(rgb_photo_meta) + 1))
+flight_number <- rep(seq_along(1:total_flights), times = new_flight_idx[-1] - new_flight_idx[-length(new_flight_idx)])
+rgb_photo_meta <-
+  rgb_photo_meta %>% 
+  dplyr::mutate(flight_num = flight_number)
+
+# Get the takeoff points (where the speed in all dimensions is 0; originally was based on when relative altitude was 0,
+# but this can occur during a mission during flight if drone decends a big hill it could be at the same GPS altitude
+# as the takeoff point, but still be in the air)
+rgb_takeoff_points <-
+  rgb_photo_meta %>% 
+  filter(SpeedX == 0, SpeedY == 0, SpeedZ == 0) %>% 
+  sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), crs = 4326) %>% 
+  split(f = .$flight_num)
+
+# Get the DEM elevation for the takeoff point locations
+rgb_takeoff_elevs <- 
+  rgb_takeoff_points %>% 
+  purrr::map(function(x) {
+    raster::extract(dem, x, method = "bilinear")
+  })
+
+# Calculate the offset between what the RGB camera thinks its altitude is and what the DEM thinks it is
+rgb_takeoff_elev_offsets <- purrr::map2(.x = rgb_takeoff_elevs, .y = rgb_takeoff_points, .f = function(.x, .y) {.x - .y$GPSAltitude})
+
+# Split the RGB metadata into a separate list element for each flight (because the elevation offset from
+# the takeoff point will be different for each flight)
+rgb_photo_meta_list <-
+  rgb_photo_meta %>% 
+  split(f = .$flight_num)
+
+# Add the ground elevation based on the DEM (the ground underneath where each photo is taken), the
+# elevation offset (difference between altitude of takeoff elevation and altitude of the camera
+# according to the GPS at each photo point), and the altitude at each photo point (according to
+# camera GPS)
+rgb_photo_meta <-
+  rgb_photo_meta_list %>% 
+  map(.f = function(x) st_as_sf(x, coords = c("GPSLongitude", "GPSLatitude"), crs = 4326)) %>% 
+  map2(rgb_takeoff_elev_offsets, .f = function(data, takeoff_elev_offset) {
+    
+    data %>% 
+      dplyr::mutate(ground_elev = raster::extract(x = dem, y = ., method = "bilinear"),
+                    takeoff_elev_offset = takeoff_elev_offset,
+                    agl = GPSAltitude - ground_elev + takeoff_elev_offset)
+    
+  }) %>% 
+  do.call("rbind", .)
+
 
 write_csv(x = rgb_photo_meta %>% sf::st_drop_geometry(), path = "drone/L0/niwo_017_2019-10-09_rgb-photos_metadata.csv")
 
