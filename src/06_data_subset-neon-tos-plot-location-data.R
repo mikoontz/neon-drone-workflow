@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(sf)
+library(ggrepel)
 
 tos_points <- st_read("data/data_raw/All_NEON_TOS_Plots_V5/All_Neon_TOS_Points_V5.shp")
 
@@ -9,10 +10,14 @@ niwo_017 <-
   tos_points %>% 
   dplyr::filter(plotID == "NIWO_017") %>% 
   dplyr::filter(subtype == "basePlot") %>% 
-  dplyr::filter(crdSource == "Geo 7X (H-Star)")
+  dplyr::filter(crdSource == "Geo 7X (H-Star)") %>% 
+  sf::st_drop_geometry() %>% 
+  sf::st_as_sf(coords = c("longitude", "latitude", "elevation"), remove = FALSE)
 
-plot(st_geometry(niwo_017))
+ggplot(niwo_017, aes(x = longitude, y = latitude)) +
+  geom_point() +
+  geom_label_repel(aes(label = paste(longitude, latitude, elevation, sep = ", ")))
 
 dir.create("data/data_output", recursive = TRUE)
 
-st_write(niwo_017, "data/data_output/niwo_017_gcp-locations.geoJSON")
+st_write(niwo_017, "data/data_output/niwo_017_gcp-locations.kml", delete_dsn = TRUE)

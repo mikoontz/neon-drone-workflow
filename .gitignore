@@ -36,6 +36,8 @@ vignettes/*.pdf
 rsconnect/
 
 drone/L0
+drone/L1
 drone/*.files
 drone/*.psx
 data/data_raw/*
+data/data_output/*
