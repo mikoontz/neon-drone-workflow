@@ -35,6 +35,8 @@ vignettes/*.pdf
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 
+.DS_Store
+
 drone/L0
 drone/L1
 drone/*.files
