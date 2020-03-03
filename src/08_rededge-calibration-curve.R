@@ -29,7 +29,7 @@ ggplot(refl, aes(x = nm, y = reflectance)) +
        y = "Reflectance",
        title = "Reflectance curve for Micasense Calibrated Reflectance Panel RP02-1701230-SC")
 
-ggsave(filename = "figures/rededge-calibration-curve-reflectance-panel.png")
+# ggsave(filename = "figures/rededge-calibration-curve-reflectance-panel.png")
 
 mean_refl <-
   refl %>% 
