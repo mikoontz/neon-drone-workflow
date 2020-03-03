@@ -21,6 +21,9 @@ flight_datetime <- "2019-10-09"
 
 agl_of_mission_m <- 100
 
+
+# Digital Elevation Model data come from the SRTM mission and the 1 arcsecond global product
+# https://lpdaac.usgs.gov/products/srtmgl1v003/
 dem <- raster::raster("data/data_raw/N40W106.hgt")
 
 flight_logs_list <- 
@@ -35,12 +38,12 @@ flight_logs_list <-
   # # assume the first row of each log file is the location of the takeoff point
   # # All altitude calculations are relative to this point, so getting the
   # # elevation of this point from the DEM tells us the offset
-  # takeoff_points <-
-  #   purrr::map(flight_logs_list, .f = function(x) {
-  #     x %>% 
-  #       dplyr::slice(1)
-  #   })
-  x <- flight_logs_list[[1]]
+  takeoff_points <-
+    purrr::map(flight_logs_list, .f = function(x) {
+      x %>%
+        dplyr::slice(1)
+    })
+
   # filter the spatial flight log to just the rows where images incremented
   # and the drone is in a "flying" condition
   photo_points_list <-
@@ -76,15 +79,46 @@ flight_logs_list <-
   site_bounds <- 
     photo_points %>% 
     st_union() %>% 
-    st_convex_hull() %>% 
-    st_as_sf()
+    st_convex_hull()
   
   # Grab the site DEM with a 3 arc second buffer
-  site_dem <- raster::crop(x = dem, y = st_buffer(site_bounds, 3 / 60 / 60), snap = "out")
+  site_dem <- raster::crop(x = dem, y = as(st_buffer(site_bounds, 3 / 60 / 60), "Spatial"), snap = "out")
   
-  dir.create(paste0("drone/L1/survey-extent/", site_name), recursive = TRUE)
+  if(!dir.exists("drone/L0/mission-footprint/niwo_017/2019-10-09")) {
+    dir.create("drone/L0/mission-footprint/niwo_017/2019-10-09", recursive = TRUE)
+  }
   
-  sf::st_write(obj = photo_points, dsn = paste0("drone/L1/survey-extent/", site_name, "/", flight_datetime, "_rgb-photo-points.geoJSON"), delete_dsn = TRUE)
-  sf::st_write(obj = site_bounds, dsn = paste0("drone/L1/survey-extent/", site_name, "/", flight_datetime, "_site-bounds.geoJSON"), delete_dsn = TRUE)
-  raster::writeRaster(x = site_dem, filename = paste0("drone/L1/survey-extent/", site_name, "/", flight_datetime, "_site-dem.tiff"), overwrite = TRUE)
+  if (!file.exists("drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_photo-points.geoJSON")) {
+    sf::st_write(obj = photo_points, dsn = "drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_photo-points.geoJSON", delete_dsn = TRUE)
+  }
   
+  if (!file.exists("drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_site-bounds.geoJSON")) {
+    sf::st_write(obj = site_bounds, dsn = "drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_site-bounds.geoJSON", delete_dsn = TRUE)
+  }
+  
+  if (!file.exists("drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_srtm30m.tif")) {
+    raster::writeRaster(site_dem, filename = "drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_srtm30m.tif", overwrite = TRUE)
+  }
+  
+  # also create a bounding box that is just around the field data (with a little buffer)
+  niwo_017 <- 
+    st_read("data/data_output/niwo_017_gcp-locations.geoJSON") 
+  
+  niwo_017_local_crs <-
+    paste0("32", 
+           ifelse(stringr::str_detect(string = unique(niwo_017$utmZone), pattern = "N"), yes = "6", no = "7"), 
+           stringr::str_extract(unique(niwo_017$utmZone), pattern = "[0-9]+")) %>% 
+    as.numeric()
+  
+  constrained_site_bounds <-
+    niwo_017 %>% 
+    sf::st_drop_geometry() %>% 
+    st_as_sf(coords = c("easting", "northing"), crs = niwo_017_local_crs) %>% 
+    st_union() %>% 
+    st_convex_hull() %>% 
+    st_buffer(dist = 20, joinStyle = "MITRE", mitreLimit = 5) %>% 
+    st_transform(4326)
+  
+  if (!file.exists("drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.geoJSON")) {
+    sf::st_write(obj = constrained_site_bounds, dsn = "drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.geoJSON", delete_dsn = TRUE)
+  }
