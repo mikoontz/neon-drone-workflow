@@ -39,6 +39,9 @@ rsconnect/
 
 data/data_drone/L0/*
 data/data_drone/L1/*
+data/data_drone/L2/*
+data/data_drone/L3a/*
+data/data_drone/L3b/*
 data/data_drone/*.files
 data/data_drone/*.psx
 data/data_raw/*
