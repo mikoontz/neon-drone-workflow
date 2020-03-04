@@ -11,13 +11,13 @@ library(sf)
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
-rgb_dir <- paste0("drone/L0/originals/", site_name, "/", flight_datetime, "/rgb")
-multispec_dir <- paste0("drone/L0/originals/", site_name, "/", flight_datetime, "/multispectral")
+rgb_dir <- paste0("data/data_drone/L0/originals/", site_name, "/", flight_datetime, "/rgb")
+multispec_dir <- paste0("data/data_drone/L0/originals/", site_name, "/", flight_datetime, "/multispectral")
 
-target_dir <- paste0("drone/L0/photos/", site_name, "/", flight_datetime)
+target_dir <- paste0("data/data_drone/L0/photos/", site_name, "/", flight_datetime)
 
-survey_area <- sf::st_read(paste0("drone/L1/survey-extent/", site_name, "/", flight_datetime, "_site-bounds.geojson"))
-dem <- raster::raster(paste0("drone/L1/survey-extent/", site_name, "/", flight_datetime, "_site-dem.tif"))
+survey_area <- sf::st_read(paste0("data/data_drone/L1/survey-extent/", site_name, "/", flight_datetime, "_site-bounds.geojson"))
+dem <- raster::raster(paste0("data/data_drone/L1/survey-extent/", site_name, "/", flight_datetime, "_site-dem.tif"))
 
 # Create new directory to store all the photos
 # dir.create(paste0("data/data_working/", current_site))
@@ -109,7 +109,7 @@ rgb_photo_meta <-
   do.call("rbind", .)
 
 
-write_csv(x = rgb_photo_meta %>% sf::st_drop_geometry(), path = "drone/L0/niwo_017_2019-10-09_rgb-photos_metadata.csv")
+write_csv(x = rgb_photo_meta %>% sf::st_drop_geometry(), path = "data/data_drone/L0/niwo_017_2019-10-09_rgb-photos_metadata.csv")
 
 # filter out bad multispectral photos and rename --------------------------
 
@@ -242,7 +242,7 @@ photos_to_copy <-
   filter(mission_photo) %>% 
   dplyr::mutate_if(is.list, .funs = function(x) purrr::map_chr(x, toString))
 
-write_csv(x = photos_to_copy, path = "drone/L0/niwo_017_2019-10-09_multispec-photos_metadata.csv")
+write_csv(x = photos_to_copy, path = "data/data_drone/L0/niwo_017_2019-10-09_multispec-photos_metadata.csv")
 
 # Copy the photos from the working folder to the final photos folder using the new names
 file.copy(from = photos_to_copy$SourceFile, to = photos_to_copy$DestFile, overwrite = TRUE)
@@ -264,7 +264,7 @@ cal_exif <-
   dplyr::mutate_if(is.list, .funs = function(x) purrr::map_chr(x, toString))
 
 
-write_csv(x = cal_exif, path = "drone/L0/niwo_017_2019-10-09_calibration-multispec-photos_metadata.csv")       
+write_csv(x = cal_exif, path = "data/data_drone/L0/niwo_017_2019-10-09_calibration-multispec-photos_metadata.csv")       
 file.copy(from = cal_exif$SourceFile, to = cal_exif$DestFile, overwrite = TRUE)
 
 

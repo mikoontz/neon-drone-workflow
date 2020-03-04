@@ -119,7 +119,7 @@ x3_actual_forward_overlap_agl <- 1 - (flight_speed / x3_shutter_speed / x3_v_foo
 
 # Actual overlap based on image locations and their footprints
 x3_meta <- 
-  read_csv("drone/L0/niwo_017_2019-10-09_rgb-photos_metadata.csv") %>% 
+  read_csv("data/data_drone/L0/niwo_017_2019-10-09_rgb-photos_metadata.csv") %>% 
   sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), crs = 4326, remove = FALSE) %>% 
   dplyr::mutate(h_footprint = (x3_sensor_width_mm / x3_focal_length_mm) * (agl),
                 v_footprint = (x3_sensor_height_mm / x3_focal_length_mm) * (agl)) %>% 
@@ -182,7 +182,7 @@ re_actual_side_overlap_agl <- 1 - (transect_spacing / re_h_footprint_actual_agl_
 re_actual_forward_overlap_agl <- 1 - (flight_speed / re_shutter_speed / re_v_footprint_actual_agl_m)
 
 multispec_meta <- 
-  read.csv("drone/L0/niwo_017_2019-10-09_multispec-photos_metadata.csv") %>% 
+  read.csv("data/data_drone/L0/niwo_017_2019-10-09_multispec-photos_metadata.csv") %>% 
   dplyr::filter(band_name == "blue") %>% 
   sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), crs = 4326, remove = FALSE) %>% 
   dplyr::mutate(h_footprint = (re_sensor_width_mm / re_focal_length_mm) * (agl),

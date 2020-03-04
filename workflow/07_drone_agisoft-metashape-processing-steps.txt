@@ -1,0 +1,236 @@
+USGS Metashape Workflow
+
+1. Adding photos
+- followed instructions exactly
+- disabled calibration cameras
+
+2. Align photos
+Round 1 (unsuccessful)
+- Accuracy: high
+- Key point limit: 60000
+- Tie point limit: 0
+- Generic preselection: no
+- Reference preselection: yes
+- Reset current alignment: no
+- Adaptive camera model fitting: yes
+
+Round 2
+- Accuracy: highest
+- Key point limit: 60000
+- Tie point limit: 0
+- Generic preselection: yes
+- Reference preselection: yes, Estimated
+- Reset current alignment: no
+- Apply masks to: None
+- Guided image matching: no
+- Adaptive camera model fitting: yes
+
+
+3. Optimizing the photo alignment
+Round 1
+- Tools -> Optimize cameras
+- Changed Camera accuracy (deg) from default (10) to 2
+- Selected Fit f; Fit cx, cy; Fit k1; Fit k2; Fit k3; Fit p1; Fit p2
+- No projections below 100, but all Error (pix) still above 0.3
+
+Round 2
+- Tools -> Optimize cameras
+- Changed Camera accuracy (deg) from default (10) to 2
+- Changed Tie point accuracy (pix) from 0.156 back to 1
+- Selected Fit f; Fit cx, cy; Fit k1; Fit k2; Fit k3; Fit p1; Fit p2
+- Selected 'Adaptive camera model fitting' which I think negates the selections above (?) in favor of picking the optimal settings
+- Lowest projections is 2916, but all Error (pix) still above 0.3 (lowest is 0.327)
+
+4. Error reduction - gradual selection
+Round 1
+- Model -> Gradual Selection (instead of Edit -> Gradual Selection)
+4a. Reconstruction uncertainty (goal is to get to Level 10 or lower using 2 runs of this procedure; lower than Level 50 is 'highly recommended'; don't delete more than half the points on any single iteration)
+- 1st iteration of Reconstruction uncertainty: Level 30 resulted in deletion of ~50% of the points
+- Reoptimize (Tools -> Optimize cameras) using same settings as before: Fit f; Fit cx, cy; Fit k1; Fit k2; Fit k3; Fit p1; Fit p2
+- 2nd iteration of Reconstruction uncertainty: Level 10 resulted in deletion of ~12.5% of points 
+- (another) Reoptimize (Tools -> Optimize cameras) using same settings as before: Fit f; Fit cx, cy; Fit k1; Fit k2; Fit k3; Fit p1; Fit p2 (minimum projections is 742, and 5-10% of photos now with Error (pix) < 0.3)
+4b. Projection accuracy (goal is to reach a level of 2 or 3; if not possible, go to a level of about 50% of the points selected; run until you reach projection accuracy of 2)
+- 1st iteration of Projection accuracy: Level 2 resulted in deletion of 19% of points
+- Reoptimize (Tools -> Optimize cameras) using same settings as before: Fit f; Fit cx, cy; Fit k1; Fit k2; Fit k3; Fit p1; Fit p2 (minimum projections is 412, and ~90% of photos now with Error (pix) < 0.3)
+
+4c. Tie point accuracy value set to 0.1
+- Reoptimize (Tools -> Optimize cameras) by checking ALL settings. SEUW: 1.55397 -> 1.55325))
+- Tie point accuracy value set to 0.2
+- Reoptimize (Tools -> Optimize cameras) by checking ALL settings. SEUW: 0.776634 -> 0.776634))
+- Tie point accuracy value set to 0.156
+- Reoptimize (Tools -> Optimize cameras) by checking ALL settings. SEUW: 0.995679 -> 0.995679))
+
+4d. Positional error
+- Uncheck images with > 3m positional accuracy error
+-
+
+Round 2
+4a. Reconstruction uncertainty (goal is to get to Level 10 or lower using 2 runs of this procedure; lower than Level 50 is 'highly recommended'; don't delete more than half the points on any single iteration)
+- 30202614 points total
+- Level 100 results in 624776 points removed
+- Reoptimize (Tools -> Optimize cameras) using same settings as before: Fit f; Fit cx, cy; Fit k1; Fit k2; Fit k3; Fit p1; Fit p2; Adaptive camera model fitting (negates prior selection?)
+- 29577838 points remain
+- Level 50 results in 10343924 points removed
+- 19233914 points remain
+
+4b. Projection accuracy (goal is to reach a level of 2 or 3; if not possible, go to a level of about 50% of the points selected; run until you reach projection accuracy of 2)
+- 19233914 points
+- Level 3 results in 1845271 points removed
+- Reoptimize (Tools -> Optimize cameras) using same settings as before: Fit f; Fit cx, cy; Fit k1; Fit k2; Fit k3; Fit p1; Fit p2; Adaptive camera model fitting (negates prior selection?)
+
+4c. Tie point accuracy value set to 0.3
+- Reoptimize (Tools -> Optimize cameras) by checking ALL settings. SEUW: 0.508699 -> 0.505908))
+
+4d. Positional error
+- Uncheck images with > 15m positional accuracy error
+
+5. Place markers
+- able to find and mark 5 out of the 9 GCP's in the RedEdge imagery
+- entered lon/lat/elev data for each of the 5 GCPs
+- reoptimize cameras with all values checked
+
+6. Reprojection accuracy
+Round 1
+- eliminate points (no more than 10% at a time) to get to a reprojection accuracy of 0.3
+- was able to do this in one step
+- reoptimize cameras using all settings checked
+
+Round 2
+- eliminate points (no more than 10% at a time) to get to a reprojection accuracy of 0.3
+- 17388643 points remain
+- Level 0.4 results in 715717 points removed
+- reoptimize cameras with all values checked (adaptive camera model fitting checked)
+- 16672926 points remain
+- Level 0.3 results in 1642666 points removed
+- reoptimize cameras with all values checked (adaptive camera model fitting checked)
+- 15030260 points remain
+- Level 0.3 results in 20303 points removed
+- reoptimize cameras with all values checked (adaptive camera model fitting checked)
+- 15009957 points remain
+- Level 0.3 results in 5565 points removed
+- reoptimize cameras with all values checked (adaptive camera model fitting checked)
+- 15004392 points remain
+- Level 0.3 results in  2742 points removed
+- reoptimize cameras with all values checked (adaptive camera model fitting checked)
+- 15001650 points remain
+- Level 0.3 results in  1482 points removed
+- reoptimize cameras with all values checked (adaptive camera model fitting NOT checked)
+- 15000168 points remain
+- Level 0.3 results in 28067 points removed
+- reoptimize cameras with all values checked (adaptive camera model fitting NOT checked)
+- 14972101 points remain
+- Level 0.3 results in 3419 points removed
+- reoptimize cameras with all values checked (adaptive camera model fitting NOT checked)
+- 14968682 points remain
+- Level 0.3 results in 723 points removed
+- reoptimize cameras with all values checked (adaptive camera model fitting NOT checked)
+- 14967959 points remain
+- Level 0.3 results in 354 points removed
+- reoptimize cameras with all values checked (adaptive camera model fitting NOT checked)
+- 14967605 points remain
+- Level 0.3 would result in 273 points removed
+- CHOSE NOT TO CONTINUE THIS PROCESS; reprojection error at 0.359282
+
+Build
+
+7. Build dense point cloud
+Round 1
+- Quality: Ultra high
+- Depth filtering: aggressive
+- Resulted in big gaps (diagnosis: too many points removed during the gradual selection step. steps to fix: rerun initial photo alignment and redo gradual selection procedure being more lenient with allowing some points to say in the sparse cloud; still hit the 'recommended' targets, but maybe not the 'best case recommended' targets.
+
+Round 2
+- Quality: Ultra high
+- Depth filtering: aggressive
+- Result looks much better than Round 1
+
+8. Build mesh
+- Source data: dense cloud
+- Surface type: height field (because imagery is nadir facing, not oblique (?))
+- Quality: high
+- Interpolation: enabled
+- Point classes: all
+- Calculate vertex colors: check
+
+9. Build texture
+- Texture type: diffuse map
+- Source data: images
+- Mapping mode: adaptive orthophoto (USGS says orthophoto, but adaptive orthophoto is supposed to do better for vertical textures. Like trees?)
+- Blending mode: mosaic
+- Texture size/count: 4096
+- Enable hole filling: checked
+- Enable ghosting filter: checked
+- Looks like this is going to be a long process; might be worth thinking harder about whether it's an output that we even need. USGS workflow suggests it can be used to reality check the orthomosaic process before building the full orthomosaic (about 15.5 hours; maybe orthophoto instead of adaptive orthophoto would be faster and sufficient?)
+
+10. Build DEM
+Projection: Geographic; EPSG4326
+Source data: dense cloud
+Interpolation: Enabled
+Point classes: all
+Resolution: 0.0583052 m/px
+Total size (pix): 6820 x 6337
+
+11. Build orthomosaic
+Projection: Geographic; EPSG4326
+Surface: DEM
+Blending mode: mosaic
+Refine seamlines: checked
+Enable hole filling: checked
+Pixel size: X: 6.82839e-07 Y: 5.2483e-07
+
+
+12. Export products
+
+13. Generate report
+
+
+
+
+
+
+
+
+
+
+
+
+
+RGB Workflow
+1. Add photos
+- disabled photos taken on take-off platform
+
+2. Camera calibration
+- Enable rolling shutter adjustment 
+
+3. Estimate image quality
+- all images with quality <0.7 are disabled
+
+4. Align photos
+- Accuracy: highest
+- Key piont limit: 60000
+- Tie point limit: 0
+- Generic preselection: no
+- Reference preselection: yes
+- Adaptive camera model fitting: yes
+
+5. Optimizing the photo alignment
+- Tools -> Optimize cameras
+- Selected Fit f; Fit cx, cy; Fit k1; Fit k2; Fit k3; Fit p1; Fit p2
+- SEUW: 0.138227 -> 0.138196
+
+6. Gradual selection
+6a. Reconstruction uncertainty
+- Level 34 to remove ~50% of points
+- Reoptimize cameras: SEUW: 0.132965 -> 0.132321
+- Level 22 to remove ~50% of points
+- Reoptimize cameras (adaptive model fitting): SEUW: 0.1292 -> 0.128876
+
+6b. Projection accuracy
+- Level 2 resulted in deletion of ~30% of points
+
+6c. Tie point accuracy
+- reduced to 0.13
+- SEUW: 1.06878 -> 1.06744
+
+6d. Positional error
+- Uncheck images with > 3m positional accuracy error

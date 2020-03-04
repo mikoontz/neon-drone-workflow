@@ -27,7 +27,7 @@ agl_of_mission_m <- 100
 dem <- raster::raster("data/data_raw/N40W106.hgt")
 
 flight_logs_list <- 
-  list.files(paste0("drone/L0/flight-logs/", site_name), full.names = TRUE) %>% 
+  list.files(paste0("data/data_drone/L0/flight-logs/", site_name), full.names = TRUE) %>% 
   purrr::map(read_csv) %>% 
   purrr::map(.f = function(x) {
     x %>% 
@@ -84,20 +84,20 @@ flight_logs_list <-
   # Grab the site DEM with a 3 arc second buffer
   site_dem <- raster::crop(x = dem, y = as(st_buffer(site_bounds, 3 / 60 / 60), "Spatial"), snap = "out")
   
-  if(!dir.exists("drone/L0/mission-footprint/niwo_017/2019-10-09")) {
-    dir.create("drone/L0/mission-footprint/niwo_017/2019-10-09", recursive = TRUE)
+  if(!dir.exists("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09")) {
+    dir.create("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09", recursive = TRUE)
   }
   
-  if (!file.exists("drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_photo-points.geoJSON")) {
-    sf::st_write(obj = photo_points, dsn = "drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_photo-points.geoJSON", delete_dsn = TRUE)
+  if (!file.exists("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_photo-points.geoJSON")) {
+    sf::st_write(obj = photo_points, dsn = "data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_photo-points.geoJSON", delete_dsn = TRUE)
   }
   
-  if (!file.exists("drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_site-bounds.geoJSON")) {
-    sf::st_write(obj = site_bounds, dsn = "drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_site-bounds.geoJSON", delete_dsn = TRUE)
+  if (!file.exists("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_site-bounds.geoJSON")) {
+    sf::st_write(obj = site_bounds, dsn = "data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_site-bounds.geoJSON", delete_dsn = TRUE)
   }
   
-  if (!file.exists("drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_srtm30m.tif")) {
-    raster::writeRaster(site_dem, filename = "drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_srtm30m.tif", overwrite = TRUE)
+  if (!file.exists("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_srtm30m.tif")) {
+    raster::writeRaster(site_dem, filename = "data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_srtm30m.tif", overwrite = TRUE)
   }
   
   # also create a bounding box that is just around the field data (with a little buffer)
@@ -119,6 +119,6 @@ flight_logs_list <-
     st_buffer(dist = 20, joinStyle = "MITRE", mitreLimit = 5) %>% 
     st_transform(4326)
   
-  if (!file.exists("drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.geoJSON")) {
-    sf::st_write(obj = constrained_site_bounds, dsn = "drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.geoJSON", delete_dsn = TRUE)
+  if (!file.exists("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.geoJSON")) {
+    sf::st_write(obj = constrained_site_bounds, dsn = "data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.geoJSON", delete_dsn = TRUE)
   }

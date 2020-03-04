@@ -37,9 +37,9 @@ rsconnect/
 
 .DS_Store
 
-drone/L0
-drone/L1
-drone/*.files
-drone/*.psx
+data/data_drone/L0/*
+data/data_drone/L1/*
+data/data_drone/*.files
+data/data_drone/*.psx
 data/data_raw/*
 data/data_output/*

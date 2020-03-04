@@ -21,6 +21,7 @@
 ## Data sources
 
 - The high-precision locations of the NEON 40 x 40m plot monuments can be found here: [Geospatial data for NEON TOS plots](https://data.neonscience.org/documents/-/document_library_display/JEygRkSpUBoq/view_file/2480213?_110_INSTANCE_JEygRkSpUBoq_redirect=https%3A%2F%2Fdata.neonscience.org%2Fdocuments%2F-%2Fdocument_library_display%2FJEygRkSpUBoq%2Fview%2F2233450%3F_110_INSTANCE_JEygRkSpUBoq_redirect%3Dhttps%253A%252F%252Fdata.neonscience.org%252Fdocuments%253Fp_p_id%253D110_INSTANCE_JEygRkSpUBoq%2526p_p_lifecycle%253D0%2526p_p_state%253Dnormal%2526p_p_mode%253Dview%2526p_p_col_id%253Dcolumn-1%2526p_p_col_count%253D1)
+- The global 30-m (1 arcsecond) digital elevation model can be found here: [SRTMGL1 v003](https://lpdaac.usgs.gov/products/srtmgl1v003/)
 
 ## Data preparation
 
