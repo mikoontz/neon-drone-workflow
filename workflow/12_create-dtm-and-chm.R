@@ -7,6 +7,10 @@ library(raster)
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
+if(!dir.exists(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime))) {
+  dir.create(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime), recursive = TRUE)
+}
+
 dense_point_cloud <- lidR::readLAS(files = file.path("data", "data_drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dense-point-cloud_cropped.las")))
 sparse_point_cloud <- lidR::readLAS(files = file.path("data", "data_drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_sparse-point-cloud_cropped.las")))
 
@@ -41,6 +45,9 @@ classified_sparse_point_cloud <- lidR::lasground(las = sparse_point_cloud,
                                                                 time_step = 0.65))
 
 # Plot the classification of the point cloud for inspection
+plot(sparse_point_cloud)
+
+# Plot the classification of the point cloud for inspection
 plot(classified_sparse_point_cloud, color = "Classification", col = c("darkgreen", "white"))
 
 # Create a 1m resolution digital terrain model using the classified ground points
@@ -52,12 +59,8 @@ dtm <- lidR::grid_terrain(las = classified_sparse_point_cloud,
 
 dtm_4326 <- raster::projectRaster(from = dtm, crs = sp::CRS("+init=epsg:4326"))
 
-if(!dir.exists(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime))) {
-  dir.create(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime), recursive = TRUE)
-}
-
 # Write the dtm file to disk
-raster::writeRaster(x = dtm, filename = file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dtm.tif")), overwrite = TRUE)
+raster::writeRaster(x = dtm, filename = file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dtm_cropped.tif")), overwrite = TRUE)
 
 
 # calculate a canopy height model -----------------------------------------
@@ -79,8 +82,12 @@ chm <- dsm - dtm_resamp
 chm_smooth <- raster::focal(chm, w = matrix(1, 3, 3), mean)
 chm_smooth[raster::getValues(chm_smooth) < 0] <- 0
 
+plot(dsm, col = viridis::viridis(100))
+plot(dtm_resamp, col = viridis::viridis(100))
+plot(chm_smooth, col = viridis::viridis(100))
+
 # Write the chm file to disk so we can use it later
 # Note that all of these outputs generated using R get written to the same place, regardless of whether the
 # output is derived from merged X3+RedEdge imagery versus just being derived from RedEdge imagery
-raster::writeRaster(x = chm_smooth, filename = file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_chm.tif")), overwrite = TRUE)
+raster::writeRaster(x = chm_smooth, filename = file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_chm_cropped.tif")), overwrite = TRUE)
 

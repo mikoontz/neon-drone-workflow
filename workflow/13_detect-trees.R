@@ -9,8 +9,8 @@ library(lidR)
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
-chm <- raster::raster(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_chm.tif")))
-dtm <- raster::raster(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dtm.tif")))
+chm <- raster::raster(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_chm_cropped.tif")))
+dtm <- raster::raster(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dtm_cropped.tif")))
 
 pc <- lidR::readLAS(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_classified-dense-point-cloud_cropped.las")))
 
@@ -26,7 +26,7 @@ if(!dir.exists(file.path("data", "data_drone", "L3a", "geometric", site_name, fl
   dir.create(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime), recursive = TRUE)
 }
 
-if(!file.exists(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ttops.gpkg")))) {
+if(!file.exists(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ttops_cropped.gpkg")))) {
   
-  sf::st_write(obj = ttops %>% st_transform(4326), dsn = file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ttops.gpkg")))
+  sf::st_write(obj = ttops %>% st_transform(4326), dsn = file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ttops_cropped.gpkg")))
 }

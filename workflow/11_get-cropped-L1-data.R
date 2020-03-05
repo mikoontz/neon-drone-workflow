@@ -1,6 +1,6 @@
 # Purpose: get all the data files that will be necessary
 
-dependencies <- c("tidyverse", "sf", "raster", "lidR", "stars")
+dependencies <- c("tidyverse", "sf", "raster", "lidR", "stars", "ForestTools")
 need_install <- dependencies[!sapply(dependencies, require, character.only = TRUE)]
 install.packages(need_install, character.only = TRUE)
 
@@ -10,6 +10,11 @@ library(lidR)
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
+
+# if on macOS, get xquartz to visualize point clouds----------------------
+
+# https://www.xquartz.org/
+# https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.11.dmg
 
 # create directory to store L1 products -----------------------------------
 

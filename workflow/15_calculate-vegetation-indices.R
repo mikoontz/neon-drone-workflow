@@ -20,12 +20,3 @@ if(!dir.exists(file.path("data", "data_drone", "L3a", "spectral", site_name, fli
 if(!file.exists(file.path("data", "data_drone", "L3a", "spectral", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ndvi.tif")))) {
   raster::writeRaster(x = ndvi, filename = file.path("data", "data_drone", "L3a", "spectral", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ndvi.tif")))
 }
-
-
-
-pc <- lidR::readLAS(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_classified-dense-point-cloud_cropped.las")))
-
-normalized_pc <- lidR::lasnormalize(las = pc, algorithm = dtm)
-
-
-t_hulls <- lidR::tree_hulls(las = normalized_pc)
