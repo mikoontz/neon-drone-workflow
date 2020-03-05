@@ -25,6 +25,10 @@ classified_dense_point_cloud <- lidR::lasground(las = dense_point_cloud,
                                                           time_step = 0.65))
 
 
+if(!file.exists(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_classified-dense-point-cloud_cropped.las")))) {
+  lidR::writeLAS(las = classified_dense_point_cloud, file = file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_classified-dense-point-cloud_cropped.las")))
+}
+
 # Plot the classification of the point cloud for inspection
 # plot(classified_dense_point_cloud, color = "Classification")
 
