@@ -37,6 +37,6 @@ if(!dir.exists(file.path("data", "data_drone", "L3a", "geometric", site_name, fl
   dir.create(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime), recursive = TRUE)
 }
 
-if(!file.exists(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_crowns.gpkg")))) {
-  sf::st_write(obj = crowns, dsn = file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_crowns.gpkg")))
+if(!file.exists(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_crowns_cropped.gpkg")))) {
+  sf::st_write(obj = crowns, dsn = file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_crowns_cropped.gpkg")))
 }
