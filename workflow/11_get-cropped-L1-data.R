@@ -1,5 +1,9 @@
 # Purpose: get all the data files that will be necessary
 
+dependencies <- c("tidyverse", "sf", "raster", "lidR", "stars")
+need_install <- dependencies[!sapply(dependencies, require, character.only = TRUE)]
+install.packages(need_install, character.only = TRUE)
+
 library(raster)
 library(lidR)
 

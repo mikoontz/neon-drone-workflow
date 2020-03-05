@@ -6,7 +6,6 @@ library(sf)
 # devtools::install_github("cran/lidR@fd23e40058363f2e1ea29ade94fd06504422ed1f")
 # devtools::install_github("Jean-Romain/lidRplugins@a06022664534778aa7c10e4681f64f61c89aad24")
 library(lidR)
-library(ForestTools)
 library(stars)
 
 site_name <- "niwo_017"
