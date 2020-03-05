@@ -22,17 +22,15 @@ if(!dir.exists(file.path("data", "data_drone", "L1", site_name, flight_datetime)
 
 # orthomosaic -------------------------------------------------------------
 
-cropped_ortho <- raster::brick(x = "https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/niwo_017_2019-10-09_ortho_cropped.tif")
-
-writeRaster(x = cropped_ortho, filename = file.path("data", "data_drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif")), overwrite = TRUE)
-
+download.file(url = "https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/niwo_017_2019-10-09_ortho_cropped.tif",
+              destfile = file.path("data", "data_drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif")),
+              method = "curl")
 
 # digital surface model ---------------------------------------------------
 
-cropped_dsm <- raster::raster(x = "https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/niwo_017_2019-10-09_dsm_cropped.tif")
-
-writeRaster(x = cropped_dsm, filename = file.path("data", "data_drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm_cropped.tif")), overwrite = TRUE)
-
+download.file(url = "https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/niwo_017_2019-10-09_dsm_cropped.tif",
+              destfile = file.path("data", "data_drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm_cropped.tif")),
+              method = "curl")
 
 # dense point cloud -------------------------------------------------------
 
