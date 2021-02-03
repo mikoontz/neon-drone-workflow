@@ -10,7 +10,6 @@ library(lidR)
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
-
 # if on macOS, get xquartz to visualize point clouds----------------------
 
 # https://www.xquartz.org/
@@ -18,35 +17,40 @@ flight_datetime <- "2019-10-09"
 
 # create directory to store L1 products -----------------------------------
 
-if(!dir.exists(file.path("data", "data_drone", "L1", site_name, flight_datetime))) {
-  dir.create(file.path("data", "data_drone", "L1", site_name, flight_datetime), recursive = TRUE)
+if(!dir.exists(file.path("data", "drone", "L1", site_name, flight_datetime))) {
+  dir.create(file.path("data", "drone", "L1", site_name, flight_datetime), recursive = TRUE)
 }
+
+# files to be downloaded from remote and named
+cropped_ortho_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif"))
+cropped_dsm_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm_cropped.tif"))
+cropped_dense_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dense-point-cloud_cropped.las"))
+cropped_sparse_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_sparse-point-cloud_cropped.las"))
+
+# remote files (currently on S3, should be shifted to OSF or the like)
+cropped_ortho_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/", site_name, "_", flight_datetime, "_ortho_cropped.tif")
+cropped_dsm_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/", site_name, "_", flight_datetime, "_dsm_cropped.tif")
+cropped_dense_point_cloud_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/", site_name, "_", flight_datetime, "_dense-point-cloud_cropped.las")
+cropped_sparse_point_cloud_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/", site_name, "_", flight_datetime, "_sparse-point-cloud_cropped.las")
 
 # get L1 products from S3 -------------------------------------------------
 
-
 # orthomosaic -------------------------------------------------------------
-
-download.file(url = "https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/niwo_017_2019-10-09_ortho_cropped.tif",
-              destfile = file.path("data", "data_drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif")),
-              method = "curl")
+if(!file.exists(cropped_ortho_fname)) {
+  download.file(url = cropped_ortho_url, destfile = cropped_ortho_fname, method = "curl")
+}
 
 # digital surface model ---------------------------------------------------
-
-download.file(url = "https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/niwo_017_2019-10-09_dsm_cropped.tif",
-              destfile = file.path("data", "data_drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm_cropped.tif")),
-              method = "curl")
+if(!file.exists(cropped_dsm_fname)) {
+  download.file(url = cropped_dsm_url, destfile = cropped_dsm_fname, method = "curl")
+}
 
 # dense point cloud -------------------------------------------------------
-
-download.file(url = "https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/niwo_017_2019-10-09_dense-point-cloud_cropped.las", 
-              destfile =  file.path("data", "data_drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dense-point-cloud_cropped.las")),
-              method = "curl")
-
+if(!file.exists(cropped_dense_point_cloud_fname)) {
+  download.file(url = cropped_dense_point_cloud_url, destfile =  cropped_dense_point_cloud_fname, method = "curl")
+}
 
 # sparse point cloud ------------------------------------------------------
-
-
-download.file(url = "https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/niwo_017_2019-10-09_sparse-point-cloud_cropped.las",
-              destfile = file.path("data", "data_drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_sparse-point-cloud_cropped.las")),
-              method = "curl")
+if(!file.exists(cropped_sparse_point_cloud_fname)) {
+  download.file(url = cropped_sparse_point_cloud_url, destfile = cropped_sparse_point_cloud_fname, method = "curl")
+}
