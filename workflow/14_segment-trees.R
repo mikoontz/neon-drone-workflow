@@ -12,9 +12,16 @@ library(ForestTools)
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
-ttops <- sf::st_read(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ttops_cropped.gpkg")))
+# files to be read in this script
+cropped_ttops_fname <- file.path("data", "drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ttops_cropped.gpkg"))
+cropped_chm_fname <- file.path("data", "drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_chm_cropped.tif"))
 
-chm <- raster::raster(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_chm_cropped.tif")))
+# files to be written in this script
+cropped_crowns_fname <- file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_crowns_cropped.gpkg"))
+
+# read necessary data products
+ttops <- sf::st_read(cropped_ttops_fname)
+chm <- raster::raster(cropped_chm_fname)
 
 non_spatial_ttops <-
   ttops %>%
@@ -33,10 +40,6 @@ crowns <-
 
 plot(crowns$geometry)
 
-if(!dir.exists(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime))) {
-  dir.create(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime), recursive = TRUE)
-}
-
-if(!file.exists(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_crowns_cropped.gpkg")))) {
-  sf::st_write(obj = crowns, dsn = file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_crowns_cropped.gpkg")))
+if(!file.exists(cropped_crowns_fname)) {
+  sf::st_write(obj = crowns, dsn = cropped_crowns_fname)
 }

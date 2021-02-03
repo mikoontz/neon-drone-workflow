@@ -9,10 +9,21 @@ library(lidR)
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
-chm <- raster::raster(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_chm_cropped.tif")))
-dtm <- raster::raster(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dtm_cropped.tif")))
+# directories to be created
+L3a_geo_dir <- file.path("data", "drone", "L3a", "geometric", site_name, flight_datetime)
 
-pc <- lidR::readLAS(file.path("data", "data_drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_classified-dense-point-cloud_cropped.las")))
+# files to be read in this script
+cropped_chm_fname <- file.path("data", "drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_chm_cropped.tif"))
+cropped_dtm_fname <- file.path("data", "drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dtm_cropped.tif"))
+cropped_classified_dense_pc_fname <- file.path("data", "drone", "L2", "geometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_classified-dense-point-cloud_cropped.las"))
+
+# files to be written in this script
+cropped_ttops_fname <- file.path("data", "drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ttops_cropped.gpkg"))
+
+# read in the necessary data products
+chm <- raster::raster(cropped_chm_fname)
+dtm <- raster::raster(cropped_dtm_fname)
+pc <- lidR::readLAS(cropped_classified_dense_pc_fname)
 
 normalized_pc <- lidR::lasnormalize(las = pc, algorithm = dtm)
 
@@ -22,11 +33,11 @@ ttops <- sf::st_as_sf(ttops)
 plot(chm, col = viridis::viridis(100))
 plot(ttops %>% st_transform(4326) %>% st_geometry(), add = TRUE, pch = 19, col = "red")  
   
-if(!dir.exists(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime))) {
-  dir.create(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime), recursive = TRUE)
+if(!dir.exists(L3a_geo_dir)) {
+  dir.create(L3a_geo_dir, recursive = TRUE)
 }
 
-if(!file.exists(file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ttops_cropped.gpkg")))) {
+if(!file.exists(cropped_ttops_fname)) {
   
-  sf::st_write(obj = ttops %>% st_transform(4326), dsn = file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ttops_cropped.gpkg")))
+  sf::st_write(obj = ttops %>% st_transform(4326), dsn = cropped_ttops_fname)
 }
