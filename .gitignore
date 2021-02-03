@@ -47,3 +47,5 @@ data/drone/*.files
 data/drone/*.psx
 data/raw/*
 data/out/*
+
+docs/manuscript/*.pdf
