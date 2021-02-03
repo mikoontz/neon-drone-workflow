@@ -1,0 +1,88 @@
+---
+bibliography: ../neon-drone-workflow.bib
+csl: ../ecosphere.csl
+params:
+  title: "Democratizing macroecology: integrating drone-derived data with the National Ecological Observatory Network"
+  author: |
+    Michael J. Koontz^1\*^,
+    Victoria Scholl,
+    Anna Spiers,
+    Megan Cattau,
+    Brett A. Melbourne,
+    Jennifer K. Balch,
+    Tristan Goulden,
+    John Adler
+  affiliation: |
+    ^1^Earth Lab, University of Colorado-Boulder; Boulder, CO, USA  
+
+  correspondence: |
+    michael.koontz@colorado.edu
+  keywords: |
+    NEON, macroecology, UAV, drone    
+  date_generated: !r format(Sys.Date(), "%B %d, %Y")
+  
+geometry: margin=1in
+header-includes:
+  - \usepackage[left]{lineno}
+  - \linenumbers
+  - \usepackage{setspace}
+  - \doublespacing
+  - \DeclareUnicodeCharacter{200E}{}
+  - \usepackage{caption}
+  - \captionsetup[figure]{labelformat=empty}
+  - \captionsetup[table]{labelformat=empty}
+
+output: pdf_document
+---
+
+```{r setup, include = FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE, include = FALSE)
+```
+
+# `r params$title`
+
+`r params$author`
+
+`r params$affiliation`
+
+*^\*^Correspondence:* ``r params$correspondence``
+
+*Keywords:* `r params$keywords`
+
+Date report generated: `r params$date_generated`
+
+## Abstract 
+
+## Introduction
+
+A bit about macroecology and scale challenges in ecology
+
+A bit about NEON
+
+A bit about drones
+[@koontz2021]
+
+A bit about integration
+
+A bit about the future
+
+## Methods
+
+### Best practices
+
+### Instrumentation and equipment
+Micasense RedEdge3
+DJI Zenmuse X3
+DJI Matrice 100
+
+Cross-hatch pattern
+
+USGS Agisoft Metashape workflow for Structure from Motion (SfM) photogrammetry processing.
+
+### Linking field data with drone data
+
+### Linking AOP data with drone data
+
+## Research agenda
+
+[@zipkin2021]
