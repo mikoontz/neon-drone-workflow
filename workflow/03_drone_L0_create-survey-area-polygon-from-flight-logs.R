@@ -16,18 +16,35 @@ library(tidyverse)
 library(purrr)
 library(raster)
 
+# Create directories
+dir.create("data/raw", showWarnings = FALSE)
+dir.create("data/out", showWarnings = FALSE)
+dir.create("data/drone", showWarnings = FALSE)
+
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
-agl_of_mission_m <- 100
+# directory of the mission footprint data (site bounds, photo points, elevation used during flight to follow the terrain)
+mission_footprint_dir <- paste0("data/drone/L0/mission-footprint/", site_name, "/", flight_datetime)
 
+# the files that will be written with this script
+
+gcp_locations_fname <- paste0("data/out/", site_name, "_gcp-locations.gpkg")
+photo_points_fname <- paste0(mission_footprint_dir, "/", site_name, "_", flight_datetime, "_photo-points.gpkg")
+site_bounds_fname <- paste0(mission_footprint_dir, "/", site_name, "_", flight_datetime, "_site-bounds.gpkg")
+srtm30m_fname <- paste0(mission_footprint_dir, "/", site_name, "_", flight_datetime, "_srtm30m.tif")
+constrained_site_bounds_fname <- paste0(mission_footprint_dir, "/", site_name, "_", flight_datetime, "_constrained-site-bounds.gpkg")
+
+# the altitude of the mission in meters above ground level, as programmed 
+# prior to flight using flight software (e.g., Map Pilot for iOS)
+agl_of_mission_m <- 100
 
 # Digital Elevation Model data come from the SRTM mission and the 1 arcsecond global product
 # https://lpdaac.usgs.gov/products/srtmgl1v003/
-dem <- raster::raster("data/data_raw/N40W106.hgt")
+dem <- raster::raster("data/raw/N40W106.hgt")
 
 flight_logs_list <- 
-  list.files(paste0("data/data_drone/L0/flight-logs/", site_name), full.names = TRUE) %>% 
+  list.files(paste0("data/drone/L0/flight-logs/", site_name), pattern = flight_datetime, full.names = TRUE) %>% 
   purrr::map(read_csv) %>% 
   purrr::map(.f = function(x) {
     x %>% 
@@ -71,7 +88,8 @@ flight_logs_list <-
       x %>% 
         dplyr::mutate(ground_elev_under_photo = raster::extract(dem, ., method = "bilinear")) %>% 
         dplyr::mutate(agl = `Altitude (m)` + takeoff_elev - ground_elev_under_photo) %>%
-        dplyr::filter(agl > (agl_of_mission_m / 2))
+        dplyr::filter(agl > (agl_of_mission_m / 2)) %>% 
+        mutate(Time = as.character(Time))
     }) %>% 
     do.call(rbind, .)
    
@@ -84,41 +102,54 @@ flight_logs_list <-
   # Grab the site DEM with a 3 arc second buffer
   site_dem <- raster::crop(x = dem, y = as(st_buffer(site_bounds, 3 / 60 / 60), "Spatial"), snap = "out")
   
-  if(!dir.exists("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09")) {
-    dir.create("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09", recursive = TRUE)
+  if(!dir.exists(mission_footprint_dir)) {
+    dir.create(mission_footprint_dir, recursive = TRUE)
   }
   
-  if (!file.exists("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_photo-points.geoJSON")) {
-    sf::st_write(obj = photo_points, dsn = "data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_photo-points.geoJSON", delete_dsn = TRUE)
+  if (!file.exists(photo_points_fname)) {
+    sf::st_write(obj = photo_points, dsn = photo_points_fname, delete_dsn = TRUE)
   }
   
-  if (!file.exists("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_site-bounds.geoJSON")) {
-    sf::st_write(obj = site_bounds, dsn = "data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_site-bounds.geoJSON", delete_dsn = TRUE)
+  if (!file.exists(site_bounds_fname)) {
+    sf::st_write(obj = site_bounds, dsn = site_bounds_fname, delete_dsn = TRUE)
   }
   
-  if (!file.exists("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_srtm30m.tif")) {
-    raster::writeRaster(site_dem, filename = "data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_srtm30m.tif", overwrite = TRUE)
+  if (!file.exists(srtm30m_fname)) {
+    raster::writeRaster(site_dem, filename = srtm30m_fname, overwrite = TRUE)
   }
   
   # also create a bounding box that is just around the field data (with a little buffer)
-  niwo_017 <- 
-    st_read("data/data_output/niwo_017_gcp-locations.geoJSON") 
+  download.file(url = "https://data.neonscience.org/documents/10179/2449631/All_NEON_TOS_Plots_V5/ba3daf92-9d78-41b0-a5b0-f6bf0cbea006",
+                destfile = "data/raw/All_NEON_TOS_Plots_V5.zip")
+  unzip("data/raw/All_NEON_TOS_Plots_V5.zip", exdir = "data/raw")
+  unlink("data/raw/All_NEON_TOS_Plots_V5.zip")
   
-  niwo_017_local_crs <-
+  all_neon_tos_points <- read_sf("data/raw/All_NEON_TOS_Plots_V5/All_Neon_TOS_Points_V5.shp")
+  
+  my_site <-
+    all_neon_tos_points %>% 
+    filter(plotID == toupper(site_name)) %>% 
+    filter(crdSource == "Geo 7X (H-Star)") %>% 
+    filter(subtype == "basePlot")
+  
+  st_write(obj = my_site, dsn = gcp_locations_fname)
+  
+  my_site_local_crs <-
     paste0("32", 
-           ifelse(stringr::str_detect(string = unique(niwo_017$utmZone), pattern = "N"), yes = "6", no = "7"), 
-           stringr::str_extract(unique(niwo_017$utmZone), pattern = "[0-9]+")) %>% 
+           ifelse(stringr::str_detect(string = unique(my_site$utmZone), pattern = "N"), yes = "6", no = "7"), 
+           stringr::str_extract(unique(my_site$utmZone), pattern = "[0-9]+")) %>% 
     as.numeric()
   
   constrained_site_bounds <-
-    niwo_017 %>% 
+    my_site %>% 
     sf::st_drop_geometry() %>% 
-    st_as_sf(coords = c("easting", "northing"), crs = niwo_017_local_crs) %>% 
+    st_as_sf(coords = c("easting", "northing"), crs = my_site_local_crs) %>% 
     st_union() %>% 
     st_convex_hull() %>% 
     st_buffer(dist = 20, joinStyle = "MITRE", mitreLimit = 5) %>% 
     st_transform(4326)
   
-  if (!file.exists("data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.geoJSON")) {
-    sf::st_write(obj = constrained_site_bounds, dsn = "data/data_drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.geoJSON", delete_dsn = TRUE)
+  if (!file.exists(constrained_site_bounds_fname)) {
+    sf::st_write(obj = constrained_site_bounds, dsn = constrained_site_bounds_fname, delete_dsn = TRUE)
   }
+  

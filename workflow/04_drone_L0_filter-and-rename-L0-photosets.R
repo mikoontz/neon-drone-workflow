@@ -11,17 +11,27 @@ library(sf)
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
-rgb_dir <- paste0("data/data_drone/L0/originals/", site_name, "/", flight_datetime, "/rgb")
-multispec_dir <- paste0("data/data_drone/L0/originals/", site_name, "/", flight_datetime, "/multispectral")
+mission_footprint_dir <- paste0("data/drone/L0/mission-footprint/", site_name, "/", flight_datetime)
+rgb_dir <- paste0("data/drone/L0/originals/", site_name, "/", flight_datetime, "/rgb")
+multispec_dir <- paste0("data/drone/L0/originals/", site_name, "/", flight_datetime, "/multispectral")
 
-target_dir <- paste0("data/data_drone/L0/photos/", site_name, "/", flight_datetime)
-
-survey_area <- sf::st_read(paste0("data/data_drone/L1/survey-extent/", site_name, "/", flight_datetime, "_site-bounds.geojson"))
-dem <- raster::raster(paste0("data/data_drone/L1/survey-extent/", site_name, "/", flight_datetime, "_site-dem.tif"))
+target_dir <- paste0("data/drone/L0/photos/", site_name, "/", flight_datetime)
 
 # Create new directory to store all the photos
-# dir.create(paste0("data/data_working/", current_site))
 dir.create(target_dir, recursive = TRUE)
+
+# files to be written using this scripts
+rgb_photo_meta_fname <- paste0("data/drone/L0/", site_name, "_", flight_datetime, "_rgb-photos_metadata.csv")
+photo_points_plot_fname <- paste0("figs/", site_name, "_multispec-photo-points.pdf")
+multispec_photos_metadata_fname <- paste0("data/drone/L0/", site_name, "_", flight_datetime, "_multispec-photos_metadata.csv")
+calibration_multispec_photos_metadata_fname <- paste0("data/drone/L0/", site_name, "_", flight_datetime, "_calibration-multispec-photos_metadata.csv")
+
+# files to be read within this script
+site_bounds_fname <- paste0(mission_footprint_dir, "/", site_name, "_", flight_datetime, "_site-bounds.gpkg")
+srtm30m_fname <- paste0(mission_footprint_dir, "/", site_name, "_", flight_datetime, "_srtm30m.tif")
+
+survey_area <- sf::st_read(site_bounds_fname)
+dem <- raster::raster(srtm30m_fname)
 
 # Combine the RGB photos, and append an rgb to the filename
 rgb_photo_filepaths <- list.files(rgb_dir, recursive = TRUE, full.names = TRUE, pattern = ".JPG")
@@ -108,8 +118,8 @@ rgb_photo_meta <-
   }) %>% 
   do.call("rbind", .)
 
-
-write_csv(x = rgb_photo_meta %>% sf::st_drop_geometry(), path = "data/data_drone/L0/niwo_017_2019-10-09_rgb-photos_metadata.csv")
+rgb_photo_meta_df <- sf::st_drop_geometry(rgb_photo_meta)
+write_csv(x = rgb_photo_meta_df, path = rgb_photo_meta_fname)
 
 # filter out bad multispectral photos and rename --------------------------
 
@@ -225,7 +235,7 @@ photo_points_gg <-
        color = "Mission photo?") +
   scale_color_manual(values = c("red", "black"))
 
-ggsave(filename = paste0("figures/", site_name, "_multispec-photo-points.pdf"))
+ggsave(filename = photo_points_plot_fname)
 
 exif_data %>% 
   group_by(band_name) %>% 
@@ -242,13 +252,12 @@ photos_to_copy <-
   filter(mission_photo) %>% 
   dplyr::mutate_if(is.list, .funs = function(x) purrr::map_chr(x, toString))
 
-write_csv(x = photos_to_copy, path = "data/data_drone/L0/niwo_017_2019-10-09_multispec-photos_metadata.csv")
+write_csv(x = photos_to_copy, path = multispec_photos_metadata_fname)
 
 # Copy the photos from the working folder to the final photos folder using the new names
 file.copy(from = photos_to_copy$SourceFile, to = photos_to_copy$DestFile, overwrite = TRUE)
 
 # Add the calibration panel photos to the final photos directory
-
 cal_exif <-
   list.files(multispec_calibration_dir, recursive = TRUE, full.names = TRUE, pattern = ".tif") %>% 
   # read the EXIF metadata from each file
@@ -263,8 +272,8 @@ cal_exif <-
                                band_num == 5 ~ "re")) %>% 
   dplyr::mutate_if(is.list, .funs = function(x) purrr::map_chr(x, toString))
 
+write_csv(x = cal_exif, path = calibration_multispec_photos_metadata_fname)
 
-write_csv(x = cal_exif, path = "data/data_drone/L0/niwo_017_2019-10-09_calibration-multispec-photos_metadata.csv")       
 file.copy(from = cal_exif$SourceFile, to = cal_exif$DestFile, overwrite = TRUE)
 
 

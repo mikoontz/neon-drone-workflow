@@ -23,6 +23,19 @@ library(tidyverse)
 library(viridis)
 library(rasterVis)
 
+site_name <- "niwo_017"
+flight_datetime <- "2019-10-09"
+
+# files to be read within this script
+rgb_photo_meta_fname <- paste0("data/drone/L0/", site_name, "_", flight_datetime, "_rgb-photos_metadata.csv")
+photo_points_plot_fname <- paste0("figs/", site_name, "_multispec-photo-points.pdf")
+multispec_photos_metadata_fname <- paste0("data/drone/L0/", site_name, "_", flight_datetime, "_multispec-photos_metadata.csv")
+gcp_locations_fname <- paste0("data/out/", site_name, "_gcp-locations.gpkg")
+
+# files to be written from this script
+multispec_photo_overlap_count_fname <- paste0("figs/niwo_017_multispec-photo-overlap-count.png")
+multispec_photo_overlap_pct_fname <- paste0("figs/niwo_017_multispec-photo-overlap-percent.png")
+
 # function to create image footprint around point locations of each image ---------------------
 # based on AGL, camera properties, and yaw (angles the footprint)
 image_footprint <- function(obj, rad = TRUE) {
@@ -119,7 +132,7 @@ x3_actual_forward_overlap_agl <- 1 - (flight_speed / x3_shutter_speed / x3_v_foo
 
 # Actual overlap based on image locations and their footprints
 x3_meta <- 
-  read_csv("data/data_drone/L0/niwo_017_2019-10-09_rgb-photos_metadata.csv") %>% 
+  read_csv(rgb_photo_meta_fname) %>% 
   sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), crs = 4326, remove = FALSE) %>% 
   dplyr::mutate(h_footprint = (x3_sensor_width_mm / x3_focal_length_mm) * (agl),
                 v_footprint = (x3_sensor_height_mm / x3_focal_length_mm) * (agl)) %>% 
@@ -129,7 +142,7 @@ x3_meta <-
                 epsg = 32700 - round((45 + lat) / 90) * 100 + round((183 + lon) / 6))
 
 # For now, assume that all the photos are taken in the same UTM zone. If that's not the case, the next processing
-# step can be split up by grouping by the epsg column (use base::split then lapply())
+# step can be split up by grouping by the epsg column (use base::split() then lapply() or dplyr::group_by() then dplyr::group_split() then purrr::map())
 x3_meta <-
   x3_meta %>% 
   st_transform(unique(.$epsg))
@@ -182,7 +195,7 @@ re_actual_side_overlap_agl <- 1 - (transect_spacing / re_h_footprint_actual_agl_
 re_actual_forward_overlap_agl <- 1 - (flight_speed / re_shutter_speed / re_v_footprint_actual_agl_m)
 
 multispec_meta <- 
-  read.csv("data/data_drone/L0/niwo_017_2019-10-09_multispec-photos_metadata.csv") %>% 
+  read.csv(multispec_photos_metadata_fname) %>% 
   dplyr::filter(band_name == "blue") %>% 
   sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), crs = 4326, remove = FALSE) %>% 
   dplyr::mutate(h_footprint = (re_sensor_width_mm / re_focal_length_mm) * (agl),
@@ -210,15 +223,17 @@ photo_overlap <- 1 - (1 / photo_count)
 photo_overlap_threshold <- photo_overlap
 photo_overlap_threshold[photo_overlap_threshold[] < 0.95] <- NA
 
-neon_plot_anchors <- sf::st_read("data/data_output/niwo_017_gcp-locations.geoJSON") %>% sf::st_transform(st_crs(footprints))
+neon_plot_anchors <- 
+  sf::st_read(gcp_locations_fname) %>% 
+  sf::st_transform(st_crs(footprints))
 
-png("figures/niwo_017_multispec-photo-overlap-count.png", width = 10, height = 10, res = 600, units = "in")
+png(multispec_photo_overlap_count_fname, width = 10, height = 10, res = 600, units = "in")
 par(mar = c(5, 5, 5, 5))
 plot(photo_count, col = viridis(100), xlab = "easting", ylab = "northing", main = "Count of photos covering area around NEON plot")
 plot(st_geometry(neon_plot_anchors), add = TRUE, col = "red", pch = 19)
 dev.off()
 
-png("figures/niwo_017_multispec-photo-overlap-percent.png", width = 10, height = 10, res = 600, units = "in")
+png(multispec_photo_overlap_pct_fname, width = 10, height = 10, res = 600, units = "in")
 par(mar = c(5, 5, 5, 5))
 plot(photo_overlap_threshold, col = viridis(100), xlab = "easting", ylab = "northing", main = "Equivalent percent overlap")
 plot(st_geometry(neon_plot_anchors), add = TRUE, col = "red", pch = 19)

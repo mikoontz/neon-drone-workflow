@@ -21,13 +21,15 @@
 ## Data sources
 
 - The high-precision locations of the NEON 40 x 40m plot monuments can be found here: [Geospatial data for NEON TOS plots](https://data.neonscience.org/documents/-/document_library_display/JEygRkSpUBoq/view_file/2480213?_110_INSTANCE_JEygRkSpUBoq_redirect=https%3A%2F%2Fdata.neonscience.org%2Fdocuments%2F-%2Fdocument_library_display%2FJEygRkSpUBoq%2Fview%2F2233450%3F_110_INSTANCE_JEygRkSpUBoq_redirect%3Dhttps%253A%252F%252Fdata.neonscience.org%252Fdocuments%253Fp_p_id%253D110_INSTANCE_JEygRkSpUBoq%2526p_p_lifecycle%253D0%2526p_p_state%253Dnormal%2526p_p_mode%253Dview%2526p_p_col_id%253Dcolumn-1%2526p_p_col_count%253D1)
+The script 03_drone_L0_create-survey-area-polygon-from-flight-logs.R also downloads these automatically.
 - The global 30-m (1 arcsecond) digital elevation model can be found here: [SRTMGL1 v003](https://lpdaac.usgs.gov/products/srtmgl1v003/)
 
 ## Data preparation
 
 1. Fetch the 30m DEM from the Shuttle Radar Topography Mission (SRTM) that covers the whole area of interest for the project.
-This can be acquired from earthdata.nasa.gov/, Google Earth Engine, or other free sources. Save it to disk in "data/data_raw/"
-2. Fetch the flight logs and save them in "drone/L0/flight-logs/niwo_017/"
+This can be acquired from earthdata.nasa.gov/, Google Earth Engine, or other free sources. Save it to disk in "data/raw/"
+2. Fetch the flight logs (directly from flight planning software or rom an integrated data service if you use that, like AirData) and save them in "data/drone/L0/flight-logs/niwo_017/".
+You can also use the geolocations of the photo points to help delineate the mission footprint, but grabbing the EXIF metadata from thousands of pictures can take a while.
 3. Use the flight logs to create a polygon representing the survey area.
 4. Use the mission area polygon to filter the multispectral images that were taken outside of the mission area (take offs, landings, etc.)
 5. Flatten the file structure of the RGB and multispectral imagery.
