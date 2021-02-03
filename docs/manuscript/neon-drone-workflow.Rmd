@@ -58,11 +58,13 @@ Date report generated: `r params$date_generated`
 A bit about macroecology and scale challenges in ecology
 
 A bit about NEON
+[@balch2020a]
 
 A bit about drones
-[@koontz2021]
+[@anderson2013b; @koontz2021]
 
 A bit about integration
+[@zipkin2021]
 
 A bit about the future
 
@@ -75,14 +77,32 @@ Micasense RedEdge3
 DJI Zenmuse X3
 DJI Matrice 100
 
-Cross-hatch pattern
+Cross-hatch pattern, overlap, altitude, figure
 
 USGS Agisoft Metashape workflow for Structure from Motion (SfM) photogrammetry processing.
 
 ### Linking field data with drone data
+Tree detection and segmentation
 
 ### Linking AOP data with drone data
+Spectral resampling
 
 ## Research agenda
+1. Expand the spatiotemporal scope of NEON sampling (e.g., more frequently than AOP or TOS collect data, sampling outside NEON footprint)
+1. 
+
+## Conclusions
+
+## Acknowledgements
+2019 NEON Science Summit
+
+## Author contributions
+
+Author contributions are defined using the Contributor Roles Taxonomy (CRediT; https://casrai.org/credit/).
+Conceptualization: ; Data curation: ; Formal analysis: ; Funding acquisition: ; Investigation: ; Methodology: ; Project administration: ; Resources: ; Software: ; Supervision: ; Validation: ; Visualization: ; Writing -- original draft: ; Writing -- review and editing:   
+
+\newpage
+
+## References
 
 [@zipkin2021]
