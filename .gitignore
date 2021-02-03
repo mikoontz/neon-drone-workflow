@@ -36,6 +36,7 @@ vignettes/*.pdf
 rsconnect/
 
 .DS_Store
+figs/micasense-rededge3-transmissivity-v-wavelength-from-blog.png
 
 data/drone/L0/*
 data/drone/L1/*
