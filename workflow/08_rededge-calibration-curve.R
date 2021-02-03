@@ -6,7 +6,7 @@ lwr_nm <- 465
 upr_nm <- 860
 
 refl <- 
-  readr::read_csv(file = "data/data_raw/RP02-1701230-SC.csv", 
+  readr::read_csv(file = "data/raw/RP02-1701230-SC.csv", 
            col_names = c("nm", "reflectance")) %>% 
   dplyr::filter((nm >= lwr_nm - 10) & (nm <= upr_nm + 10)) %>% 
   dplyr::mutate(color = case_when(nm >= 465 & nm <= 485 ~ "blue",
@@ -29,16 +29,9 @@ ggplot(refl, aes(x = nm, y = reflectance)) +
        y = "Reflectance",
        title = "Reflectance curve for Micasense Calibrated Reflectance Panel RP02-1701230-SC")
 
-# ggsave(filename = "figures/rededge-calibration-curve-reflectance-panel.png")
+ggsave(filename = "figs/rededge-calibration-curve-reflectance-panel.png")
 
 mean_refl <-
   refl %>% 
   group_by(color) %>% 
   summarize(reflectance = mean(reflectance))
-
-
-mean_refl$reflectance
-
-
-refl %>% 
-  filter(center)

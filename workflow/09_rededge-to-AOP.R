@@ -7,13 +7,13 @@ library(tidyverse)
 
 # quantum efficiency of silicon chip in RedEdge 3 camera
 qe <- 
-  readr::read_csv("data/data_raw/MicasenseQEvals_trim.csv", skip = 1) %>% 
+  readr::read_csv("data/raw/MicasenseQEvals_trim.csv", skip = 1) %>% 
   dplyr::mutate(qe = QE_percent * 0.01) %>% 
   setNames(c("wavelength_nm", "qe_pct", "qe"))
 
 # bandpass filter sensitivity
 filters <-
-  readr::read_csv("data/data_output/RedEdge_3_Filters_srs.csv") %>% 
+  readr::read_csv("data/out/RedEdge_3_Filters_srs.csv") %>% 
   dplyr::rename(wavelength_nm = `Wavlength (nm)`, 
                 blue = `Band 1`,
                 green = `Band 2`,
@@ -55,4 +55,4 @@ ggplot(sensitivity, aes(x = wavelength_nm, y = sensitivity, color = band)) +
   geom_line() +
   scale_color_manual(values = c("blue", "green", "red", "#ff0055", "darkred"))
 
-ggsave("figures/rededge3-wavelength-sensitivity.png")
+ggsave("figs/rededge3-wavelength-sensitivity.png")
