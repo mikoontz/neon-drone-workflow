@@ -56,15 +56,17 @@ Date report generated: `r params$date_generated`
 ## Introduction
 
 A bit about macroecology and scale challenges in ecology
+[@larue2021]
 
 A bit about NEON
-[@balch2020a]
+[@balch2020]
 
 A bit about drones
 [@anderson2013b; @koontz2021]
 
 A bit about integration
 [@zipkin2021]
+[@scholl2020] Integrating AOP to TOS
 
 A bit about the future
 
@@ -104,5 +106,3 @@ Conceptualization: ; Data curation: ; Formal analysis: ; Funding acquisition: ; 
 \newpage
 
 ## References
-
-[@zipkin2021]

@@ -33,3 +33,6 @@ You can also use the geolocations of the photo points to help delineate the miss
 3. Use the flight logs to create a polygon representing the survey area.
 4. Use the mission area polygon to filter the multispectral images that were taken outside of the mission area (take offs, landings, etc.)
 5. Flatten the file structure of the RGB and multispectral imagery.
+
+
+NEON Algorithm Theoretical Basis Document: NEON Imaging Spectrometer Level 1B Calibrated Radiance: https://data.neonscience.org/documents/-/document_library_display/JEygRkSpUBoq/view_file/1877425?_110_INSTANCE_JEygRkSpUBoq_redirect=https%3A%2F%2Fdata.neonscience.org%2Fdocuments%2F-%2Fdocument_library_display%2FJEygRkSpUBoq%2Fview%2F11204%3F_110_INSTANCE_JEygRkSpUBoq_keywords%3D%26_110_INSTANCE_JEygRkSpUBoq_topLink%3Dhome%26_110_INSTANCE_JEygRkSpUBoq_advancedSearch%3Dfalse%26_110_INSTANCE_JEygRkSpUBoq_cur2%3D2%26_110_INSTANCE_JEygRkSpUBoq_delta2%3D20%26p_r_p_564233524_resetCur%3Dfalse%26_110_INSTANCE_JEygRkSpUBoq_andOperator%3Dtrue%26_110_INSTANCE_JEygRkSpUBoq_delta1%3D20
