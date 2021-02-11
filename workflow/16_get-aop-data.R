@@ -1,4 +1,4 @@
-remotes::install_github('earthlab/neonhs')
+# remotes::install_github('earthlab/neonhs')
 library(neonUtilities)
 library(neonhs)
 library(sf)
