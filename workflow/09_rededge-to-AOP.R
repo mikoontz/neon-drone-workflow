@@ -20,39 +20,43 @@ filters <-
                 red = `Band 3`,
                 `red edge` = `Band 5`,
                 `near infrared` = `Band 4`) %>% 
-  tidyr::pivot_longer(names_to = "band", values_to = "reflectance", cols = -1) %>% 
+  tidyr::pivot_longer(names_to = "band", values_to = "transmission", cols = -1) %>% 
   dplyr::mutate(band = factor(band, levels = c("blue", "green", "red", "red edge", "near infrared")))
 
 # Plot both 
 ggplot() +
-  geom_line(data = filters, mapping = aes(x = wavelength_nm, y = reflectance, col = band)) +
+  geom_line(data = filters, mapping = aes(x = wavelength_nm, y = transmission, col = band)) +
   scale_color_manual(values = c("blue", "green", "red", "#ff0055", "darkred")) +
   theme_bw() +
   geom_line(data = qe, mapping = aes(x = wavelength_nm, y = qe)) +
   labs(x = "Wavelength (nm)",
-       y = "Reflectance (colored lines)\nQuantum efficiency (black line)",
+       y = "Bandpass filter transmission (colored lines)\nQuantum efficiency (black line)",
        color = "Band")
 
-# Join the two datasets and combine the two sensitivities (bandpass filter and silicon chip)
-sensitivity <-
+# Join the two datasets and combine the two sensitivities (bandpass filter and silicon chip quantum efficiency)
+rsr <-
   filters %>% 
   dplyr::left_join(qe, by = "wavelength_nm") %>% 
-  dplyr::mutate(sensitivity = reflectance * qe)
+  dplyr::mutate(spectral_response = transmission * qe)
 
 # Plot the raw combination
-ggplot(sensitivity, aes(x = wavelength_nm, y = sensitivity, color = band)) +
+ggplot(rsr, aes(x = wavelength_nm, y = spectral_response, color = band)) +
   geom_line() +
-  scale_color_manual(values = c("blue", "green", "red", "#ff0055", "darkred"))
+  scale_color_manual(values = c("blue", "green", "red", "#ff0055", "darkred")) +
+  labs(y = "Spectral response")
 
 # Peak normalize the combined sensitivity per band
-sensitivity <-
-  sensitivity %>% 
+rsr <-
+  rsr %>% 
   dplyr::group_by(band) %>% 
-  dplyr::mutate(sensitivity = sensitivity / max(sensitivity, na.rm = TRUE)) %>% 
+  dplyr::mutate(relative_spectral_response = spectral_response / max(spectral_response, na.rm = TRUE)) %>% 
   dplyr::ungroup()
 
-ggplot(sensitivity, aes(x = wavelength_nm, y = sensitivity, color = band)) +
+ggplot(rsr, aes(x = wavelength_nm, y = relative_spectral_response, color = band)) +
   geom_line() +
-  scale_color_manual(values = c("blue", "green", "red", "#ff0055", "darkred"))
+  scale_color_manual(values = c("blue", "green", "red", "#ff0055", "darkred")) +
+  labs(y = "Relative spectral response")
 
-ggsave("figs/rededge3-wavelength-sensitivity.png")
+ggsave("figs/micasense-rededge3-relative-spectral-response.png")
+
+write.csv(x = rsr, file = "data/out/micasense-rededge3-relative-spectral-response.csv", row.names = FALSE)
