@@ -56,7 +56,7 @@ Date report generated: `r params$date_generated`
 ## Introduction
 
 ### Macroecology
-Macroecology is the study of spatiotemporally extensive systems whose biological, geophysical, and social components interact dynamically both within and across scales. [@heffernan2014].
+Macroecology is the study of spatially extensive systems whose biological, geophysical, and social components interact dynamically both within and across spatial and temporal scales. [@heffernan2014].
 It's an important discipline because these broader spatial extents, from hundreds to thousands of kilometers, represent the scale at which societally relevant challenges arise [@heffernan2014].
 Studies of this scope are data hungry, which makes them particularly challenging and often inaccessible to most researchers [@estes2018; @ernest2018]. (requiring extensive fieldwork and/or expensive equipment) [@weinstein2021].
 The observational domains of most ecological research is limited [@estes2018].
