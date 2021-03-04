@@ -6,8 +6,8 @@ lwr_nm <- 465
 upr_nm <- 860
 
 refl <- 
-  readr::read_csv(file = "data/raw/RP02-1701230-SC.csv", 
-           col_names = c("nm", "reflectance")) %>% 
+  read.csv(file = "data/raw/RP02-1701230-SC.csv", header = FALSE) %>% 
+  setNames(c("nm", "reflectance")) %>% 
   dplyr::filter((nm >= lwr_nm - 10) & (nm <= upr_nm + 10)) %>% 
   dplyr::mutate(color = case_when(nm >= 465 & nm <= 485 ~ "blue",
                                   nm >= 550 & nm <= 570 ~ "green",
@@ -17,6 +17,7 @@ refl <-
   dplyr::mutate(color = factor(color, levels = c("blue", "green", "red", "re", "nir"))) %>% 
   dplyr::mutate(center = ifelse(nm %in% c(475, 560, 668, 717, 840), yes = TRUE, no = FALSE))
   
+write.csv(x = refl, file = "data/out/micasense-rededge3-nominal-sensitivity.csv", row.names = FALSE)
 
 ggplot(refl, aes(x = nm, y = reflectance)) +
   geom_point() +

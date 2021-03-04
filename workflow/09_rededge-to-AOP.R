@@ -18,10 +18,10 @@ filters <-
                 blue = `Band 1`,
                 green = `Band 2`,
                 red = `Band 3`,
-                `red edge` = `Band 5`,
-                `near infrared` = `Band 4`) %>% 
+                `re` = `Band 5`,
+                `nir` = `Band 4`) %>% 
   tidyr::pivot_longer(names_to = "band", values_to = "transmission", cols = -1) %>% 
-  dplyr::mutate(band = factor(band, levels = c("blue", "green", "red", "red edge", "near infrared")))
+  dplyr::mutate(band = factor(band, levels = c("blue", "green", "red", "re", "nir")))
 
 # Plot both 
 ggplot() +
