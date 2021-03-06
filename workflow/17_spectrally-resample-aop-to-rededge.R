@@ -42,22 +42,23 @@ hs <- neonhs::hs_read(filename = fname_h5[1],
                       crop = mission_footprint)
 
 raster::writeRaster(x = hs, filename = "data/out/temp-raster.tif", overwrite = TRUE)
-ras <- hsdar::speclib("data/out/temp-raster.tif", 
-                      wavelength = neon_usable_bands$band_center,
-                      fwhm = neon_usable_bands$fwhm)
+
+neon_speclib <- hsdar::speclib("data/out/temp-raster.tif", 
+                               wavelength = neon_usable_bands$band_center,
+                               fwhm = neon_usable_bands$fwhm)
 
 # Get micasense rededge spectral response function
 target_rsr <- 
   read.csv("data/out/micasense-rededge3-relative-spectral-response.csv") %>% 
   filter(relative_spectral_response >= rsr_threshold)
 
-speclib_mat <-
+rededge_speclib_mat <-
   target_rsr %>% 
   pivot_wider(names_from = "band", values_from = "relative_spectral_response")
 
-rededge_speclib <- speclib(as.matrix(speclib_mat[, -1]), speclib_mat$wavelength_nm)
+rededge_speclib <- speclib(as.matrix(rededge_speclib_mat[, -1]), rededge_speclib_mat$wavelength_nm)
 
-neon_resampled_to_rededge <- spectralResampling(x = ras, response_function = rededge_speclib)
+neon_resampled_to_rededge <- spectralResampling(x = neon_speclib, response_function = rededge_speclib)
 
 r <- neon_resampled_to_rededge@spectra@spectra_ra
 
