@@ -7,6 +7,7 @@ library(hsdar)
 library(ggplot2)
 library(sf)
 library(tidyr)
+library(viridis)
 
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
@@ -15,7 +16,7 @@ flight_datetime <- "2019-10-09"
 dir.create("data/out/AOP", recursive = TRUE, showWarnings = FALSE)
 
 # files to be read using this script
-mission_footprint_fname <- "data/drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_site-bounds.gpkg"
+mission_footprint_fname <- "data/drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.gpkg"
 cropped_ortho_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif"))
 micasense_rededge3_characteristics_fname <-  "data/out/micasense-rededge3_sensor-characteristics.csv"
 
@@ -131,8 +132,8 @@ neon_resampled_ndvi <-
 drone_ndvi <- (ortho[["nir"]] - ortho[["red"]]) / (ortho[["nir"]] + ortho[["red"]])
 
 # Plot side by side
-par(mfrow = c(1, 2))
-plot(neon_resampled_ndvi)
-plot(drone_ndvi)
-
-
+png(filename = "figs/ndvi_neon-resampled-v-drone-original.png", res = 400, width = 6, height = 4, units = "in")
+par(mfrow = c(1, 2), mar = rep(0, 4))
+plot(neon_resampled_ndvi, col = viridis(100), axes = FALSE, box = FALSE, horizontal = TRUE, zlim = c(-0.2, 1))
+plot(drone_ndvi, col = viridis(100), axes = FALSE, box = FALSE, horizontal = TRUE, zlim = c(-0.2, 1))
+dev.off()

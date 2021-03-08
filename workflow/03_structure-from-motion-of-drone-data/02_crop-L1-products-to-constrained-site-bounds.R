@@ -27,7 +27,12 @@ cropped_sparse_point_cloud_fname <- file.path("data", "drone", "L1", site_name, 
 # site boundary just overlapping the field data
 constrained_site_bounds <- st_read(constrained_site_bounds_fname)
 
-# Orthomosaic outputs from Metashape derived using Micasense Rededge imagery need to be divided by 32768 to make 1 correspond to 100% reflectance
+# Orthomosaic outputs from Metashape derived using Micasense Rededge imagery need to be divided by 32768 to make 1 correspond to 100% reflectance (.tif files are 16 bit images and half that value [2^16 / 2] corresponds
+# to 100% reflectance. See https://support.micasense.com/hc/en-us/articles/215460518-What-are-the-units-of-the-Atlas-GeoTIFF-output-
+# August 16, 2019 14:08
+# What are the units of the Atlas GeoTIFF output?
+# GeoTIFF: This is a 5-layer, 16-bit ortho-rectified GeoTIFF file. A GIS application is needed to open this type of file. The pixel values are proportional to % reflectance, with a pixel value of 32768 being equal to 100% reflectance (65535 is equal to 200% reflectance). In order to extract the reflectance values you will need to divide by 32768.
+
 # Then, we multiply through by 256 to put the 0 to 1 values back on a standard 256 color ramp
 ortho <- raster::brick(ortho_fname) / 32768
 cropped_ortho <- raster::crop(x = ortho, y = constrained_site_bounds)
