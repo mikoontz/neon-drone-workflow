@@ -1,5 +1,5 @@
-# Purpose: crop the outputs from Metashape to more closely adhere to the ground data (and to make .tif and .las files smaller and easier
-# to work with)
+# Purpose: crop the outputs from Metashape to more closely adhere to the ground 
+# data (and to make .tif and .las files smaller and easier to work with)
 
 library(tidyverse)
 library(sf)

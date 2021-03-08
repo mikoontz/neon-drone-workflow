@@ -1,6 +1,4 @@
-# remotes::install_github('earthlab/neonhs')
 library(neonUtilities)
-library(neonhs)
 library(sf)
 
 site_name <- "niwo_017"
@@ -20,6 +18,11 @@ local_utm <-
          stringr::str_extract(unique(gcp$utmZone), pattern = "[0-9]+")) %>% 
   as.numeric()
 
+# We'll use the centroid of the vegetation plot that we flew over to spatially
+# restrict the amount of NEON spectrometer data that we download
+# Note this could be a point location from anywhere within the footprint of
+# the AOP
+
 site_centroid <- 
   gcp %>% 
   sf::st_transform(local_utm) %>% 
@@ -36,9 +39,9 @@ neonUtilities::byTileAOP(dpID = "DP3.30006.001",
                          year = 2019, 
                          easting = site_centroid[1, "X"], 
                          northing = site_centroid[1, "Y"],
-                         buffer = 20,
-                         savepath = "data/raw/AOP/")
+                         buffer = 20, # per help docs, "Defaults to 0. If easting and northing coordinates are the centroids of NEON TOS plots, use buffer=20"
+                         savepath = "data/raw/AOP")
 
-hs_fname <- list.files("data/raw/AOP", recursive = TRUE, full.names = TRUE)
-hs <- lapply(X = hs_fname, FUN = neonhs::hs_read, bands = 1:426)
-
+## Note that this download mechanism is sometimes unreliable and it might
+## require going to the NEON website to use the GUI for downloads
+## (https://data.neonscience.org/data-products/DP3.30006.001)

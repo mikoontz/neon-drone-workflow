@@ -17,8 +17,6 @@ library(purrr)
 library(raster)
 
 # Create directories
-dir.create("data/raw", showWarnings = FALSE)
-dir.create("data/out", showWarnings = FALSE)
 dir.create("data/drone", showWarnings = FALSE)
 
 site_name <- "niwo_017"

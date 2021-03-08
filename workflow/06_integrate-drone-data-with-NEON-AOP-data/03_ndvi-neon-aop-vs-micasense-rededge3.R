@@ -14,7 +14,7 @@ cropped_ortho_fname <- file.path("data", "drone", "L1", site_name, flight_dateti
 cropped_crowns_fname <- file.path("data", "data_drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_crowns_cropped.gpkg"))
 
 # files to be written in this script
-ndvi_fname <- file.path("data", "data_drone", "L3a", "spectral", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ndvi.tif"))
+ndvi_fname <- file.path("data", "data", "L3a", "spectral", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ndvi.tif"))
 
 # read in necessary data products
 ortho <- raster::brick(cropped_ortho_fname)

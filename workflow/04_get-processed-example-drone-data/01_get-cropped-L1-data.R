@@ -1,4 +1,7 @@
-# Purpose: get all the data files that will be necessary
+# Purpose: get all the data files that will be necessary for intergrating with
+# NEON field and AOP data
+# Users may wish to start from this point to download the data that have
+# already been through the structure from motion workflow
 
 dependencies <- c("tidyverse", "sf", "raster", "lidR", "stars", "ForestTools")
 need_install <- dependencies[!sapply(dependencies, require, character.only = TRUE)]
@@ -37,20 +40,20 @@ cropped_sparse_point_cloud_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.
 
 # orthomosaic -------------------------------------------------------------
 if(!file.exists(cropped_ortho_fname)) {
-  download.file(url = cropped_ortho_url, destfile = cropped_ortho_fname, method = "curl")
+  download.file(url = cropped_ortho_url, destfile = cropped_ortho_fname)
 }
 
 # digital surface model ---------------------------------------------------
 if(!file.exists(cropped_dsm_fname)) {
-  download.file(url = cropped_dsm_url, destfile = cropped_dsm_fname, method = "curl")
+  download.file(url = cropped_dsm_url, destfile = cropped_dsm_fname)
 }
 
 # dense point cloud -------------------------------------------------------
 if(!file.exists(cropped_dense_point_cloud_fname)) {
-  download.file(url = cropped_dense_point_cloud_url, destfile =  cropped_dense_point_cloud_fname, method = "curl")
+  download.file(url = cropped_dense_point_cloud_url, destfile =  cropped_dense_point_cloud_fname)
 }
 
 # sparse point cloud ------------------------------------------------------
 if(!file.exists(cropped_sparse_point_cloud_fname)) {
-  download.file(url = cropped_sparse_point_cloud_url, destfile = cropped_sparse_point_cloud_fname, method = "curl")
+  download.file(url = cropped_sparse_point_cloud_url, destfile = cropped_sparse_point_cloud_fname)
 }
