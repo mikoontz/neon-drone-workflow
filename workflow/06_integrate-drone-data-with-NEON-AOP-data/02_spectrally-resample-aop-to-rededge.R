@@ -132,8 +132,19 @@ neon_resampled_ndvi <-
 drone_ndvi <- (ortho[["nir"]] - ortho[["red"]]) / (ortho[["nir"]] + ortho[["red"]])
 
 # Plot side by side
-png(filename = "figs/ndvi_neon-resampled-v-drone-original.png", res = 400, width = 6, height = 4, units = "in")
+png(filename = "figs/ndvi_neon-spectral-resampled-v-drone-original.png", res = 400, width = 6, height = 4, units = "in")
 par(mfrow = c(1, 2), mar = rep(0, 4))
 plot(neon_resampled_ndvi, col = viridis(100), axes = FALSE, box = FALSE, horizontal = TRUE, zlim = c(-0.2, 1))
 plot(drone_ndvi, col = viridis(100), axes = FALSE, box = FALSE, horizontal = TRUE, zlim = c(-0.2, 1))
+dev.off()
+
+drone_ndvi_agg <- raster::aggregate(drone_ndvi, 
+                                    fact = c(round(nrow(drone_ndvi) / nrow(neon_resampled_ndvi)), 
+                                             round(ncol(drone_ndvi) / ncol(neon_resampled_ndvi))))
+
+# Plot side by side
+png(filename = "figs/ndvi_neon-spectral-resampled-v-drone-spatial-resampled.png", res = 400, width = 6, height = 4, units = "in")
+par(mfrow = c(1, 2), mar = rep(0, 4))
+plot(neon_resampled_ndvi, col = viridis(100), axes = FALSE, box = FALSE, horizontal = TRUE, zlim = c(-0.2, 1))
+plot(drone_ndvi_agg, col = viridis(100), axes = FALSE, box = FALSE, horizontal = TRUE, zlim = c(-0.2, 1))
 dev.off()
