@@ -14,6 +14,7 @@ flight_datetime <- "2019-10-09"
 
 # create necessary directories
 dir.create("data/out/AOP", recursive = TRUE, showWarnings = FALSE)
+dir.create(file.path("data", "drone", "L3a", "spectral", site_name, flight_datetime))
 
 # files to be read using this script
 mission_footprint_fname <- "data/drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.gpkg"
@@ -22,6 +23,8 @@ micasense_rededge3_characteristics_fname <-  "data/out/micasense-rededge3_sensor
 
 # files to be written using this script
 neon_aop_spectral_crop <- file.path("data", "out", "AOP", "neon-aop-spectral-crop-for-micasense-rededge.tif")
+ndvi_drone_fname <- file.path("data", "drone", "L3a", "spectral", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ndvi.tif"))
+ndvi_neon_fname <- file.path("data", "out", "AOP", "ndvi_spectral-resampled.tif")
 
 # Get the mission footprint and transform it to the same coordinate reference 
 # system as the NEON AOP data
@@ -50,7 +53,7 @@ micasense_rededge3_characteristics <-
   dplyr::arrange(channel)
 
 # Get NEON AOP spectrometer file(s) that were downloaded in previous script
-fname_h5 <- list.files("data/raw/AOP", recursive = TRUE, full.names = TRUE)
+fname_h5 <- list.files("data/raw/AOP", recursive = TRUE, full.names = TRUE, pattern = ".h5$")
 file_h5 <- lapply(fname_h5, FUN = hdf5r::H5File$new, mode = "r+")
 
 # This script is currently set up to show how to work with a single one of the
@@ -130,6 +133,10 @@ neon_resampled_ndvi <-
   (neon_resampled_r[["nir"]] - neon_resampled_r[["red"]]) / (neon_resampled_r[["nir"]] + neon_resampled_r[["red"]])
 
 drone_ndvi <- (ortho[["nir"]] - ortho[["red"]]) / (ortho[["nir"]] + ortho[["red"]])
+
+# Write NDVI products to disk
+raster::writeRaster(x = drone_ndvi, filename = ndvi_drone_fname)
+raster::writeRaster(x = neon_resampled_ndvi, filename = ndvi_neon_fname)
 
 # Plot side by side
 png(filename = "figs/ndvi_neon-spectral-resampled-v-drone-original.png", res = 400, width = 6, height = 4, units = "in")
