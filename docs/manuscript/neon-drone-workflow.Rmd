@@ -2,17 +2,17 @@
 bibliography: ../neon-drone-workflow.bib
 csl: ../ecosphere.csl
 params:
-  title: "Democratizing macroecology: integrating optical data between uncrewed aerial systems (UAS) and the National Ecological Observatory Network (NEON)"
+  title: "Democratizing macroecology: integrating uncrewed aerial systems with the National Ecological Observatory Network"
   author: |
     Michael J. Koontz^1\*^,
-    Victoria M. Scholl,
-    Anna I. Spiers,
-    Megan E. Cattau,
-    John Adler,
-    Joseph McGlinchy,
-    Tristan Goulden,
-    Brett A. Melbourne,
-    Jennifer K. Balch
+    Victoria M. Scholl^1,2,3^,
+    Anna I. Spiers^1,4^,
+    Megan E. Cattau^5^,
+    John Adler^2,6^,
+    Joseph McGlinchy^1^,
+    Tristan Goulden^6^,
+    Brett A. Melbourne^4^,
+    Jennifer K. Balch^1,2^
   affiliation: |
     ^1^Earth Lab, University of Colorado; Boulder, CO, USA  
     ^2^Department of Geography, University of Colorado; Boulder, CO, USA  
@@ -24,7 +24,7 @@ params:
   correspondence: |
     mikoontz@gmail.com
   keywords: |
-    NEON, macroecology, UAV, drone    
+    NEON, macroecology, UAS, drone    
   date_generated: !r format(Sys.Date(), "%B %d, %Y")
   
 geometry: margin=1in
@@ -38,7 +38,7 @@ header-includes:
   - \captionsetup[figure]{labelformat=empty}
   - \captionsetup[table]{labelformat=empty}
 
-output: pdf_document
+output: word_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -156,8 +156,8 @@ pecifically, we focus on optical data collected by each tool over terrestrial si
 Both NEON- and UAS-enabled ecology have faced criticism for having “backwards” approaches to science.
 Critics suggest that clear science questions take a back seat to high-quality but rote data collection in the case of NEON [@lindenmayer2018] or perpetual methodological refinement in the case of UAS [@gillan2021].
 In light of this, we echo @assmann2019 in emphasizing that the main question to keep in mind while navigating UAS-NEON integration considerations is: what are the science requirements?
-Unfortunately, much of the key UAS equipment (vehicle, payload, flight planning) that is available off-the-shelf is not necessarily compatible with each other, which means that the decision for what system to use needs to take the considerations for all three pieces into account at once.
-Vehicle, payload, and mission planning likely need to be considered as the first step in building a UAS operation.
+Unfortunately, some of the UAS components (vehicle and payload) that are available off-the-shelf are not necessarily compatible with each other, which means that the decision for what system to use needs to take the considerations for both pieces into account at once.
+Thus, the vehicle and payload likely need to be considered as the first step in building a UAS operation.
 
 ### Vehicle
 
@@ -179,10 +179,52 @@ A flat surface clear of obstructions (e.g., on dirt rather than grass, away from
 VTOL systems require a smaller take-off and landing footprint, which may be satisfied with only a small canopy gap, compared to vehicles that use fixed wings for lift, which require a “runway” for  fixed wing vehicles.
 Locating such a site may be challenging at some NEON sites (e.g., NIWO, with dense canopy cover) and easy at others (e.g., SJER, with an open woodland ecotype).
 Bringing something that can provide a clean surface will prevent dirt from obstructing or scratching the sensor lens; for example, a user may bring a car trunk’s mat or plywood as a reliable take-off and landing surface.
-Finally, flight planning software programs are compatible with only select brands and types of vehicle, so consider this in choosing a vehicle if a software program has already been selected.
-
-With either platform, the vehicle endurance and the mission goals is likely to require purchase of several batteries to keep the vehicle flying for the necessary duration of a field day.
+With any platform, the vehicle endurance and the mission goals are likely to require purchase of several batteries to keep the vehicle flying for the necessary duration of a field day.
 A user may consider an energy source to charge batteries in the field, like a solar charger or generator, or may just invest in several batteries to have fully charged each day.
+
+```{r}
+table_nums(name = "table-vehicle", "Summary of vehicle considerations for UAS-enabled ecology.")
+```
+
+```{r vehicle_table_print, echo = FALSE, include = TRUE, results = 'asis'}
+vehicle_table_print <-
+  tibble::tibble(Consideration = c("", "", "", "Vehicle", "", "", ""), 
+                 Options = c("Rotocopter",
+                             "",
+                             "",
+                             
+                             "Fixed wing", 
+                             "",
+                             
+                             "VTOL fixed wing",
+                             "(Hybrid)"),
+                 Advantages = c("Ease of take-off and landing",
+                                "Hover capability, maneuverability",
+                                "Affordable", 
+                                
+                                "Longer flight time (2+ hours)",
+                                "Cover large spatial extent", 
+                                
+                                "Simpler takeoff/landing",
+                                "Longer flight time"),
+                 Disadvantages = c("Shorter flight time (~20 minutes)", 
+                                   "",
+                                   "",
+                                   
+                                   "Minimum flight speed to keep it aloft (affecting overlap, image quality)",
+                                   "Complex takeoff/landing", 
+                                   
+                                   "Newer technology",
+                                   "Expensive"),
+                 `Reference(s)` = c("", "", "", "@anderson2013b; @goodbody2017; @padua2017", "", "", ""))
+  
+pandoc.table(vehicle_table_print, 
+             split.tables = Inf,
+             caption = table_nums(name = "table-vehicle"),
+             keep.line.breaks = TRUE)
+```
+
+ 
 
 ### Environment
 
@@ -260,6 +302,48 @@ Clear communication with concerned parties of UAV flights for research, even if 
 The pilot should have an equipment list and an operations checklist to make sure safety procedures are followed.
 Emergency operating procedures should be understood should a mishap occur, including: crash, battery fire, flyaway, airspace violation, or propellor injury.
 
+```{r}
+# table_nums(name = "table-regulations", "Summary of rules/regulations considerations for UAS-enabled ecology.")
+```
+
+```{r regulations_table_print, echo = FALSE, include = TRUE, results = 'asis'}
+# regulations_table_print <-
+#   tibble::tibble(Consideration = c("", "", "", "Vehicle", "", "", ""), 
+#                  Options = c("Rotocopter",
+#                              "",
+#                              "",
+#                              
+#                              "Fixed wing", 
+#                              "",
+#                              
+#                              "VTOL fixed wing",
+#                              "(Hybrid)"),
+#                  Advantages = c("Ease of take-off and landing",
+#                                 "Hover capability, maneuverability",
+#                                 "Affordable", 
+#                                 
+#                                 "Longer flight time (2+ hours)",
+#                                 "Cover large spatial extent", 
+#                                 
+#                                 "Simpler takeoff/landing",
+#                                 "Longer flight time"),
+#                  Disadvantages = c("Shorter flight time (~20 minutes)", 
+#                                    "",
+#                                    "",
+#                                    
+#                                    "Minimum flight speed to keep it aloft (affecting overlap, image quality)",
+#                                    "Complex takeoff/landing", 
+#                                    
+#                                    "Newer technology",
+#                                    "Expensive"),
+#                  `Reference(s)` = c("", "", "", "@anderson2013b; @goodbody2017; @padua2017", "", "", ""))
+#   
+# pandoc.table(regulations_table_print, 
+#              split.tables = Inf,
+#              caption = table_nums(name = "table-regulations"),
+#              keep.line.breaks = TRUE)
+```
+
 ### Payload
 
 The payload is the equipment carried by the UAV that collects data for post-processing.
@@ -328,7 +412,7 @@ If you have a tight budget, buy some materials from the hardware store and make 
 Note that spectrometers like the ASD cost tens of thousands of dollars, so try to borrow a spectrometer from a group that you collaborate with or send your panel(s) to them to be measured.
 
 ```{r}
-fig_nums(name = "fig-calibration-panels", "Comparison of reflectance spectra (A) for a calibrated reflectance panel (B).
+fig_nums(name = "fig-calibration-panel", "Comparison of reflectance spectra (A) for a calibrated reflectance panel (B).
 The panel vendor provides a reflectance spectrum describing the panel’s reflectance at the time of purchase (black reflectance profile, “Micasense, 2017”).
 After three years of using the panel repeatedly for field work, we re-measured the panel using a handheld spectrometer (blue reflectance profile, “ASD, 2020”) to evaluate the change in spectral reflectance for the panel.
 The spectra in (A) are reflectance values as a function of wavelength across the visible and near infrared.
@@ -338,7 +422,7 @@ This is a result of the panel becoming dirty from dust and sand in the field, as
 This change in reflectance demonstrates the necessity to clean, re-measure, or replace your panels when performing radiometric calibration.")
 ```
 
-![`r fig_nums(name = "fig-calibration-panels")`](../../figs/micasense-rededge3-calibrated-reflectance-panel-deterioration.png)
+![`r fig_nums(name = "fig-calibration-panel")`](../../figs/micasense-rededge3-calibrated-reflectance-panel-deterioration.png)
 
 ### Georeferencing
 
@@ -352,17 +436,19 @@ Many off-the-shelf payloads and vehicles contain a basic GNSS receiver with an a
 If you do not have a GNSS receiver in your payload or if you require greater accuracy than what is provided by the built-in GNSS receiver, then additional steps are required.
 
 Ground control points (GCPs), Real-time Kinematic (RTK) corrections, and Post-processed Kinematic (PPK) corrections are three solutions to accurately georeference images collected by the UAS.
-GCPs are markers laid out on the ground with known geolocations that are visible in the UAS data.
-RTK and PPK kinematic corrections augment the accuracy of the built-in GNSS receiver by correcting the noise inherent in the instrument using additional equipment and processing steps.
-Even with a high-precision GNSS (such as what is enabled with RTK and PPK corrections), it is still considered good practice by some to collect ground control points.
-Most commonly, this requires laying out ground control points (GCPs) that are identifiable from UAS imagery and obtaining spatial coordinates of these GCPs in order to tie your imagery to real-world coordinates.
-NEON sites have permanent markers that have been georeferenced with high precision (approximately 0.3 m) that can be used as GCPs if they can be made visible from the UAS (`r fig_nums(name = "fig-photo-overlap", display = "cite")`).
+GCPs are markers laid out on the ground with known geolocations that are visible in the UAS data and are used to tie your imagery to real-world coordinates.
 Ideally, GCPs will be placed near edges or randomly throughout the mission area, but the density of GCPs is typically more important, with [@santana2021] finding that 10 GCPs in their 2 ha area of interest were needed for sub-7 cm precision (but 4 GCPs produced 16 cm precision at all flight heights and GCP spatial distributions).
 @zimmerman2020 found that it was optimal to place GCPs in the corners of the study site, as well as at low and high elevations within the study site.
 GCPs must be visible from the sensor, so it’s best to place them in bright and open areas.
 Finding suitable locations in heavily forested areas with closed canopies can be challenging, therefore, it may be beneficial to expand survey areas to include suitable areas for GCPs if none can be found within the area of scientific interest.
- Examples of effective GCPs are fabric swaths placed in an X, bright-colored bucket lids, or checkered mats (`r fig_nums(name = "fig-gcps", display = "cite")`; `r fig_nums(name = "fig-gcps-zoom", display = "cite")`).
+Examples of effective GCPs are fabric swaths placed in an X, bright-colored bucket lids, or checkered mats (`r fig_nums(name = "fig-gcps", display = "cite")`).
+NEON sites have permanent markers that have been georeferenced with high precision (approximately 0.3 m) that can be used as GCPs if they can be made visible from the UAS (`r fig_nums(name = "fig-photo-overlap", display = "cite")`).
 High precision GNSS for geolocating the GCPs may be prohibitively expensive, but you may potentially borrow from geodetic services (e.g. nonprofit UNAVCO allows equipment to be borrowed for NSF-funded projects).  
+
+RTK and PPK kinematic corrections augment the accuracy of the built-in GNSS receiver by correcting the noise inherent in the instrument using additional equipment and processing steps without the need for laying out GCPs and determining their locations.
+For instance, @gillan2021 was able to survey and process data covering over 190 hectares of rangeland in approximately 30 days versus an estimated 141 days using a conventional UAS workflow, with an estimated 47 days saved just from using an RTK system versus GCPs.
+Even with a high-precision GNSS (such as what is enabled with RTK and PPK corrections), it is still considered good practice by some to collect ground control points at known locations in order to quantify geolocation error.
+
 
 ```{r}
 fig_nums(name = "fig-gcps", "Aerial RGB photograph captured using a DJI Phantom 4 Pro on January 23, 2020 at 120m of altitude above ground level.
@@ -370,13 +456,7 @@ The photo depicts three ground control points (GCPs) each of two different types
 The GCPs are progressively more conspicuous under the canopy, in the shrub field, and on the dirt road.")
 ```
 
-![`r fig_nums(name = "fig-gcps")`](../../figs/field-photos/gcp-examples.JPG)
-
-```{r}
-fig_nums(name = "fig-gcps-zoom", "Detail of the GCPs from the original photograph.")
-```
-
-![`r fig_nums(name = "fig-gcps-zoom")`](../../figs/field-photos/gcp-examples_zoom.JPG)
+![`r fig_nums(name = "fig-gcps")`](../../figs/example-gcps-with-inset.png)
 
 ### Data management
 
@@ -385,14 +465,17 @@ It’s important to bring empty SD cards (with fast write speed, if possible) in
 Have an idea of your anticipated data storage requirements for each mission to budget hardware accordingly (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`).
 Like with data processing, one must consider whether to store data locally or in the cloud, and how to backup the data.
 For long-term storage, you will want to consider which data products from the mission to publish and how you’ll want to make these products publicly available.
+We suggest publishing the raw images taken from UAS missions which may be processed to even higher quality products given the rapid advances in structure from motion photogrammetry.
 You’ll also want to figure out good long-term storage for the raw data at your institution or elsewhere. 
+For such high volumes of data, it is sound data management practice to establish "data levels" that characterize how derived each new processed product is, with Level 0 representing raw data and higher levels being derived from lower levels [@wyngaard2019].
 
 For data collection, we recorded each flight’s imagery on a separate 32 GB SD card rated at >90 MB/s write speed.
 For multi-day trips or if SD cards need to be reused, we transfer imagery from the SD cards to a portable solid state hard drive (Samsung T series).
  Upon returning from the field, we transferred images from the SD cards (or portable solid state hard drive, as the case may be) to two locations: 1) the solid state hard drive on a local desktop gaming computer for short term storage, and 2) a Network Attached Storage (NAS) with 6 spinning disk hard drives in a RAID array for long-term storage.
 Both the short-term storage (local desktop) and long-term storage (NAS) solutions are backed up to the cloud using a 3rd party backup client (Backblaze) at a cost of ~$5.00 USD per terabyte per month.
 We used the local desktop (Alienware Aurora R7 with an Intel i7-8700k 3.70 GHz hexacore processor and 64 GB of RAM) for data processing.
-We used the Open Science Framework for public-facing storage (https://osf.io/enbwu/).
+We use the same data levels as @koontz2021, except we didn't process our data to Level 3b or Level 4.
+We used the Open Science Framework for public-facing storage (available upon publication).
 
 ```{r}
 fig_nums(name = "fig-data-management-schematic", "Planning a data management pipeline is a hefty investment but can save time and money in the long-run, making it well-worth prioritizing up-front.
@@ -410,22 +493,19 @@ It’s recommended to perform quality assurance (QA) checks  on the images while
 This could mean viewing the images on a laptop on-site, or at the end of the field day at home, in an office, or in a hotel if it’s an overnight trip.
 Check the data for obvious artifacts such as over or under exposure in images, that the number of images expected were collected, and that file sizes appear consistent and reasonable.
 Generally a full QA assessment cannot be performed in the field due to time and computation limitations, but the field QA should be sufficient to ensure the images can be processed into desired products.
- Some NEON sites (e.g., NIWO) have a field house that may be accessed, with permission, for laptop friendly workspaces and / or charging options.
+Some NEON sites (e.g., NIWO) have a field house that may be accessed, with permission, for laptop friendly workspaces and / or charging options.
 Contact the site host at each site for more information.
-Processing UAS imagery to create an orthomosaic or point cloud can be GPU-intensive, depending on the specifications of whatever post-processing software is being used.
+Processing UAS imagery to create an orthomosaic or point cloud can be CPU, RAM, and GPU-intensive, so a workstation that balances these hardware components is ideal.
 One may have a workstation powerful enough to process images locally, or they may want to invest in a cloud-processing option [e.g., Cyverse-- see @swetnam2018] (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`).
 Be sure to be consistent with the datum/projection for each of your datasets (GNSS positions of GCPs, GNSS locations of UAS camera), and transform where necessary.
 
-Many software applications are available for SfM photogrammetry processing that produce results of similar quality [@forsmoo2019].
- You must select the appropriate post-processing (i.e., photogrammetry) software license for you needs and resources (e.g., Agisoft Metashape, Pix4D), and take note of what processing steps you take from raw data to final products, for sake of reproducibility.
+Many software applications are available for structure from motion photogrammetry processing that produce results of similar quality [@forsmoo2019].
+You must select the appropriate post-processing (i.e., photogrammetry) software license for you needs and resources (e.g., Agisoft Metashape, Pix4D), and take note of what processing steps you take from raw data to final products, for sake of reproducibility.
 
-
-Flatten folder structure from different cameras and rename files (Level 0 data)
-Photogrammetric processing
-Following USGS workflow (see Supplemental Information for notes taken while processing)
-Pro-tip: take notes in a .txt file as a troubleshooting step for processing failures during this workflow is to start again and be less stringent about standards for the gradual selection procedures.
-Notes let you see exactly the thresholds you used in previous iterations and let you adjust accordingly.
-Convolution to translate drone-derived multispectral images to AOP
+We followed the USGS workflow to process our raw Micasense RedEdge 3 imagery into an orthomosaic and a dense point cloud (https://uas.usgs.gov/nupo/pdf/USGSAgisoftPhotoScanWorkflow.pdf).
+We classified the dense point cloud into "ground" and "non-ground" points using a cloth simulation filter algorithm [@zhang2016] implemented in the `lidR` [@roussel2019] package.
+We used a local maximum filter to detect individual trees [@popescu2004] as implemented in the `lidR` package and a marker controlled watershed segmentation algorithm to segment individual tree crowns [@plowright2018].
+We used the `hsdar` package to spectrally resample the NEON imaging spectrometer data to match the spectral resolution of the Micasense RedEdge 3 camera [@lehnert2019].
 
 ```{r}
 fig_nums(name = "fig-spectral-overlap", "Relative spectral responses for two channels of the Micasense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer.
@@ -449,74 +529,46 @@ Macroecology will benefit from a “macroscope” to enable the study of broad-e
 The ideal macroscope comprises a nested array of tools that provide full coverage of spatial and temporal observational domains. 
 In their complementarity, the value of multiple observational tools in concert is more than the sum of the parts [@dornelas2019]. 
 Pairing UAS with NEON partially completes the constellation of Earth observing tools that contribute to the macroscope, and combines the flexiblity of UAS 
-In this work, we aid the adoption of these tools amongst macroecologists by providing a mental model of their integration.
+In this work, we aid the adoption of these tools amongst macroecologists by providing a mental model and some practical considerations for their integration.
 
-
-
-Challenges remain for integrating UAS with NEON.
-Cross-scale data integration brings a host of potential pitfalls that could pollute inference if care isn't taken to avoid them [@zipkin2021].
-Validation of specific sensors by direct comparison with the “state of the science” instruments is an additional step closer to harmonizing the data from ; requires coincident flights (Fawcett et al., 2020)
-
-### Discussion point: additional challenges with integration
-`Scale challenges in ecology (LaRue et al. 2021)
-Big data challenges in ecology (Farley et al. 2018)
-
-
-Consistent cyberinfrastructure for hosting these kinds of data
-It’s a lot of data
-algorithms get better all the time so it’s worth sharing the raw images and not just the derived products
-This can be costly
-There are opportunities for leveraging NSF-sponsored resources (e.g., Cyverse, OpenTopography, Open Science Framework)
-Clear documentation of data provenance will assist in data integration
-
-
-Critically, increasing access to an elusive observational domain (broad-extent, fine-grain) doesn’t equate to it being accessible. 
+Challenges remain for integrating UAS with NEON, but they are surmountable.
+Some of these challenges are fundamentally associated with "big", cross-scale data.
+Integrating data cross scales brings a host of potential pitfalls that could pollute inference if care isn't taken to avoid them [@zipkin2021].
+Clear documentation of data provenance including sensor characteristics, data acquisition methods (e.g., flight pattern), data acquisition conditions (e.g., time of day, cloud cover) will enable rigorous cross-scale data integration.
+The proliferation of reasonably low-cost, off-the-shelf, drone-ready sensors (many designed for precision agriculture use) creates a need for validation of whether those instruments produce "science grade" data (which itself is a relative term, depending on what the specific science requirements are for a given project).
+This validation may be achieved via direct comparison of the low-cost sensors with “state of the science” instruments using coincident flights [e.g., @fawcett2020].
+Big data in ecology is relatively new [@farley2018], and approaches to UAS-derived big data are fairly ad hoc across researchers [@wyngaard2019].
+Maintaining supportive communities of practice, such as the High Latitude Drone Ecology Network (https://arcticdrones.org/), can help overcome some of these idiosyncratic approaches.
+Integrating UAS operations with NEON can help anchor the community to the common currency of NEON data types, organization, and collection protocols which will enhance the interoperability of UAS data.
+Cyberinfrastructure for managing and processing UAS data are not yet built in a way that encourages consistency between projects or researchers.
+In this way, NEON provides an aspirational example for how purpose-built cyberinfrastructure can facilitate macroecology, and the foundational resources for building an equivalently valuable architecture for UAS data may already be represented in other NSF-sponsored projects (e.g., Cyverse, OpenTopography, Open Science Framework). 
+NEON alos provides an aspirational target for educational resources, which are critical to ensuring that would-be NEON/UAS users have the environmental data science skills necessary to turn their data into inference [@hampton2017].
+Critically, increasing access to an elusive observational domain (broad-extent, fine-grain) doesn’t equate to it being fully accessible. 
 We can illustrate this point using access to the Landsat archive, which we previously discussed as an exemplar of the effect of data access on democratization of science. 
-While making Landsat images cheaper brought more researchers from lower prestige institutions and lower income parts of the world [@nagaraj2020], but they are still overwhelmingly men [@miller2013; @miller2016].
+While making Landsat images cheaper brought more researchers from lower prestige institutions and lower income parts of the world [@nagaraj2020], but they are still overwhelmingly men [@miller2016; @miller2016a].
 A truly accessible tool wouldn't exhibit such a demographic bias, and it is incumbent upon the UAS and NEON community to be self-reflective about who is being excluded from the community and proactive about what steps can be taken to make it more inclusive.
 
+We conclude with a research agenda for UAS/NEON integration, which we hope provides a vision to be built upon. Integrating UAS with NEON allows:
 
-### Discussion point: education needs/technical training
-Education needed too (Nagy et al. in this special issue)
-Hampton et al. papers
-
-### Discussion point: Research frontiers
-NEON data as a common currency for validating new methods, teaching 
-Need to emphasize the benefits of using UAV to compare/supplement NEON AOP data. 
-High spatial, temporal resolution 
-collect (NEON) off-year data with UAV
-Augment with flights at additional times per year (e.g. phenology)
-Flexible data collection to fill spatiotemporal gaps in the high-quality, well-calibrated NEON AOP data 
-Tracking through time (research frontier: can you follow the same tree through time?)
-Sub-meter res drone imagery can unpack detail not captured in AOP data. 
-Higher spatial resolution drone multi/hyperspectral imagery can spectrally unmix hyperspectral data products to distinguish spectral signatures of individual leaves or understory plants (e.g., useful for plant population studies of small wildflowers).  
-Derive a sub-meter DEM using higher spatial res drone imagery (e.g., useful in areas with steep elevation - important for understanding hydrology)
-A researcher can use cm-scale drone data to identify/segment individual wildflowers for population studies, and then use NEON AOP data to derive environmental data from surrounding area (e.g., AOP-derived canopy cover would be an important predictor for a population-level phenological study of wildflowers)
-Drones can supplement remote sensing data that AOP doesn’t have (e.g. thermal IR cameras on drones to compare thermal regulation of similar plant species) 
-Proof of concept for projects outside of NEON sites. Develop a new method or workflow that involve drones at a NEON site and use AOP data for validation of your POC before taking the methods to the intended site that may be hard to get to, but has a similar environment to the NEON site. 
-Supplementing in quick-response following disturbance events
-With innovations in miniaturization, more sensors can be added to UAVs
-Access - doesn’t cost much for a PI to get a drone
-Expand your study area beyond a NEON site 
-Spectral unmixing and further vertical integration (McGlinchy et al. in this special issue)
-Intentionally augment NEON in a systematic way
-Argument to be made: NEON was a big step (and represents state of the science in terms of instrumentation), but then as the technology gets better and cheaper, there are really valuable measurements that can be collected by drones. NEON AOP offers robust RGB, LiDAR & hyperspectral data, that can be used to validate/calibrate drones; what’s the minimum info you need (“how good can you get with uav?”; e.g.,  can you get away with 5 bands of the multispectral sensors instead of the 426 bands from the hyperspectral); the “cheaper, good enough” data
-Is the drone even necessary? (what can we get from a smart phone?)
-Motivating question: what do you do with a million trees? (e.g., https://www.nature.com/articles/s41467-020-20678-z)
-NEON could create Collection Standards
-Lessons learned from other platforms technologies
+1. Filling in spatial and temporal scales missed by NEON data collection (e.g., capturing data in a year when a NEON site is skipped by the AOP, collecting data on a similar vegetation type of a NEON site but outside of NEON's direct footprint, capturing data at a site multiple times per year to understand phenomena at sub-yearly time scales, tracking individual plants through time, capturing data at spatial resolutions finer than 10 cm)
+1. Opportunistic data collection (e.g., capturing data immediately after a disturbance event)
+1. Connecting NEON data to other Earth observing systems using UAS data as a bridge
+1. Supplementing NEON data using sensors that aren't part of the NEON suite of sensors (e.g., thermal data to compare thermal regulation of different plant species) 
+1. Validating lower cost, off-the-shelf payloads against the state-of-the-science NEON data collection (e.g., determining how well a multispectral imager designed for agriculture captures surface reflectance, determining how well an algorithm detects the trees in a NEON vegetation structure plot)
+1. Replacing high-cost NEON AOP flights with lower-cost alternatives (e.g., if the drone-derived data are "good enough" compared to the AOP, can we reduce the operational costs of the AOP)
+1. Using NEON data as a common currency for validating new methods 
 
 ## Acknowledgements
 
 Funding for the 2019 NEON Science Summit was provided by NSF Award #1906144. Additional funding was provided by Earth Lab through the University of Colorado, Boulder’s Grand Challenge Initiative, the Cooperative Institute for Research in Environmental Sciences, and the North Central Climate Adaptation Science Center. We would also like to acknowledge the National Aeronautics and Space Administration (NASA) New Investigator Program (NIP) grant 80NSSC18K0750 to M. E. Cattau. The National Ecological Observatory Network is a program sponsored by the National Science Foundation and operated under cooperative agreement by Battelle. This material is based in part upon work supported by the National Science Foundation through the NEON Program.
 
 ## Data availability
-All data and code required to reproduce the analysis and the workflow presented in this manuscript can be found on the Open Science Framework at https://osf.io/enbwu/
+All data and code required to reproduce the analysis and the workflow presented in this manuscript can be found on the Open Science Framework at (available upon publication) and on GitHub (available upon publication)
 
-## Author contributions
+<!-- ## Author contributions -->
 
-Author contributions are defined using the Contributor Roles Taxonomy (CRediT; https://casrai.org/credit/).
-Conceptualization: ; Data curation: ; Formal analysis: ; Funding acquisition: ; Investigation: ; Methodology: ; Project administration: ; Resources: ; Software: ; Supervision: ; Validation: ; Visualization: ; Writing -- original draft: ; Writing -- review and editing:   
+<!-- Author contributions are defined using the Contributor Roles Taxonomy (CRediT; https://casrai.org/credit/). -->
+<!-- Conceptualization: ; Data curation: ; Formal analysis: ; Funding acquisition: ; Investigation: ; Methodology: ; Project administration: ; Resources: ; Software: ; Supervision: ; Validation: ; Visualization: ; Writing -- original draft: ; Writing -- review and editing:    -->
 
 \newpage
 
