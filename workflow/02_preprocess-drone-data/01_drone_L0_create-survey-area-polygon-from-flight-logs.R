@@ -39,6 +39,7 @@ agl_of_mission_m <- 100
 
 # Digital Elevation Model data come from the SRTM mission and the 1 arcsecond global product
 # https://lpdaac.usgs.gov/products/srtmgl1v003/
+# http://e4ftl01.cr.usgs.gov/MEASURES/SRTMGL1.003/2000.02.11/N40W106.SRTMGL1.hgt.zip
 dem <- raster::raster("data/raw/N40W106.hgt")
 
 flight_logs_list <- 
@@ -50,104 +51,107 @@ flight_logs_list <-
       sf::st_set_crs(4326)
   })
 
-  # # assume the first row of each log file is the location of the takeoff point
-  # # All altitude calculations are relative to this point, so getting the
-  # # elevation of this point from the DEM tells us the offset
-  takeoff_points <-
-    purrr::map(flight_logs_list, .f = function(x) {
-      x %>%
-        dplyr::slice(1)
-    })
+# # assume the first row of each log file is the location of the takeoff point
+# # All altitude calculations are relative to this point, so getting the
+# # elevation of this point from the DEM tells us the offset
+takeoff_points <-
+  purrr::map(flight_logs_list, .f = function(x) {
+    x %>%
+      dplyr::slice(1)
+  })
 
-  # filter the spatial flight log to just the rows where images incremented
-  # and the drone is in a "flying" condition
-  photo_points_list <-
-    purrr::map(flight_logs_list, .f = function(x) {
-      photo_points <-
-        x %>% 
-        dplyr::filter(Images > lag(Images))
-      
-      takeoff_point <- x[which.min(x$Time), ]
-      photo_points <- rbind(takeoff_point, photo_points)
-    })
-  
-  # Iterate over the list elements representing the photo points for each flight
-  # and the take off point for each flight to calculate the elevation for each
-  # photo point (on the ground) and the agl (above ground level) measure for
-  # each photo point (by taking the ground elevation, the takeoff elevation, and
-  # the relative altitude offset from the takeoff elevation into account)
-  # Note: the agl should be fairly consistent across the whole mission.
-  photo_points <- 
-    purrr::map(photo_points_list, .f = function(x) {
-      
-      takeoff_point <- x[which.min(x$Time), ]
-      takeoff_elev <- raster::extract(dem, takeoff_point, method = "bilinear")
-      
+# filter the spatial flight log to just the rows where images incremented
+# and the drone is in a "flying" condition
+photo_points_list <-
+  purrr::map(flight_logs_list, .f = function(x) {
+    photo_points <-
       x %>% 
-        dplyr::mutate(ground_elev_under_photo = raster::extract(dem, ., method = "bilinear")) %>% 
-        dplyr::mutate(agl = `Altitude (m)` + takeoff_elev - ground_elev_under_photo) %>%
-        dplyr::filter(agl > (agl_of_mission_m / 2)) %>% 
-        mutate(Time = as.character(Time))
-    }) %>% 
-    do.call(rbind, .)
-   
-  # create a vector object representing the convex hull of the photopoints
-  site_bounds <- 
-    photo_points %>% 
-    st_union() %>% 
-    st_convex_hull()
-  
-  # Grab the site DEM with a 3 arc second buffer
-  site_dem <- raster::crop(x = dem, y = as(st_buffer(site_bounds, 3 / 60 / 60), "Spatial"), snap = "out")
-  
-  if(!dir.exists(mission_footprint_dir)) {
-    dir.create(mission_footprint_dir, recursive = TRUE)
-  }
-  
-  if (!file.exists(photo_points_fname)) {
-    sf::st_write(obj = photo_points, dsn = photo_points_fname, delete_dsn = TRUE)
-  }
-  
-  if (!file.exists(site_bounds_fname)) {
-    sf::st_write(obj = site_bounds, dsn = site_bounds_fname, delete_dsn = TRUE)
-  }
-  
-  if (!file.exists(srtm30m_fname)) {
-    raster::writeRaster(site_dem, filename = srtm30m_fname, overwrite = TRUE)
-  }
-  
-  # also create a bounding box that is just around the field data (with a little buffer)
-  download.file(url = "https://data.neonscience.org/documents/10179/2449631/All_NEON_TOS_Plots_V5/ba3daf92-9d78-41b0-a5b0-f6bf0cbea006",
-                destfile = "data/raw/All_NEON_TOS_Plots_V5.zip")
-  unzip("data/raw/All_NEON_TOS_Plots_V5.zip", exdir = "data/raw")
-  unlink("data/raw/All_NEON_TOS_Plots_V5.zip")
-  
-  all_neon_tos_points <- read_sf("data/raw/All_NEON_TOS_Plots_V5/All_Neon_TOS_Points_V5.shp")
-  
-  my_site <-
-    all_neon_tos_points %>% 
-    filter(plotID == toupper(site_name)) %>% 
-    filter(crdSource == "Geo 7X (H-Star)") %>% 
-    filter(subtype == "basePlot")
-  
-  st_write(obj = my_site, dsn = gcp_locations_fname)
-  
-  my_site_local_crs <-
-    paste0("32", 
-           ifelse(stringr::str_detect(string = unique(my_site$utmZone), pattern = "N"), yes = "6", no = "7"), 
-           stringr::str_extract(unique(my_site$utmZone), pattern = "[0-9]+")) %>% 
-    as.numeric()
-  
-  constrained_site_bounds <-
-    my_site %>% 
-    sf::st_drop_geometry() %>% 
-    st_as_sf(coords = c("easting", "northing"), crs = my_site_local_crs) %>% 
-    st_union() %>% 
-    st_convex_hull() %>% 
-    st_buffer(dist = 20, joinStyle = "MITRE", mitreLimit = 5) %>% 
-    st_transform(4326)
-  
-  if (!file.exists(constrained_site_bounds_fname)) {
-    sf::st_write(obj = constrained_site_bounds, dsn = constrained_site_bounds_fname, delete_dsn = TRUE)
-  }
-  
+      dplyr::filter(Images > lag(Images))
+    
+    takeoff_point <- x[which.min(x$Time), ]
+    photo_points <- rbind(takeoff_point, photo_points)
+  })
+
+# Iterate over the list elements representing the photo points for each flight
+# and the take off point for each flight to calculate the elevation for each
+# photo point (on the ground) and the agl (above ground level) measure for
+# each photo point (by taking the ground elevation, the takeoff elevation, and
+# the relative altitude offset from the takeoff elevation into account)
+# Note: the agl should be fairly consistent across the whole mission.
+photo_points <- 
+  purrr::map(photo_points_list, .f = function(x) {
+    
+    takeoff_point <- x[which.min(x$Time), ]
+    takeoff_elev <- raster::extract(dem, takeoff_point, method = "bilinear")
+    
+    x %>% 
+      dplyr::mutate(ground_elev_under_photo = raster::extract(dem, ., method = "bilinear")) %>% 
+      dplyr::mutate(agl = `Altitude (m)` + takeoff_elev - ground_elev_under_photo) %>%
+      dplyr::filter(agl > (agl_of_mission_m / 2)) %>% 
+      mutate(Time = as.character(Time))
+  }) %>% 
+  do.call(rbind, .)
+
+# create a vector object representing the convex hull of the photopoints
+site_bounds <- 
+  photo_points %>% 
+  st_union() %>% 
+  st_convex_hull()
+
+# Grab the site DEM with a 3 arc second buffer
+site_dem <- raster::crop(x = dem, y = as(st_buffer(site_bounds, 3 / 60 / 60), "Spatial"), snap = "out")
+
+if(!dir.exists(mission_footprint_dir)) {
+  dir.create(mission_footprint_dir, recursive = TRUE)
+}
+
+if (!file.exists(photo_points_fname)) {
+  sf::st_write(obj = photo_points, dsn = photo_points_fname, delete_dsn = TRUE)
+}
+
+if (!file.exists(site_bounds_fname)) {
+  sf::st_write(obj = site_bounds, dsn = site_bounds_fname, delete_dsn = TRUE)
+}
+
+if (!file.exists(srtm30m_fname)) {
+  raster::writeRaster(site_dem, filename = srtm30m_fname, overwrite = TRUE)
+}
+
+# also create a bounding box that is just around the field data (with a little buffer)
+download.file(url = "https://data.neonscience.org/documents/10179/2449631/All_NEON_TOS_Plots_V5/ba3daf92-9d78-41b0-a5b0-f6bf0cbea006",
+              destfile = "data/raw/All_NEON_TOS_Plots_V5.zip")
+unzip("data/raw/All_NEON_TOS_Plots_V5.zip", exdir = "data/raw")
+unlink("data/raw/All_NEON_TOS_Plots_V5.zip")
+
+all_neon_tos_points <- read_sf("data/raw/All_NEON_TOS_Plots_V5/All_Neon_TOS_Points_V5.shp")
+
+my_site <-
+  all_neon_tos_points %>% 
+  filter(plotID == toupper(site_name)) %>% 
+  filter(crdSource == "Geo 7X (H-Star)") %>% 
+  filter(subtype == "basePlot")
+
+my_site_local_crs <-
+  paste0("32", 
+         ifelse(stringr::str_detect(string = unique(my_site$utmZone), pattern = "N"), yes = "6", no = "7"), 
+         stringr::str_extract(unique(my_site$utmZone), pattern = "[0-9]+")) %>% 
+  as.numeric()
+
+my_site <-
+  my_site %>% 
+  mutate(local_crs = my_site_local_crs)
+
+st_write(obj = my_site, dsn = gcp_locations_fname, delete_dsn = TRUE)
+
+constrained_site_bounds <-
+  my_site %>% 
+  sf::st_drop_geometry() %>% 
+  st_as_sf(coords = c("easting", "northing"), crs = my_site_local_crs) %>% 
+  st_union() %>% 
+  st_convex_hull() %>% 
+  st_buffer(dist = 20, joinStyle = "MITRE", mitreLimit = 5) %>% 
+  st_transform(4326)
+
+if (!file.exists(constrained_site_bounds_fname)) {
+  sf::st_write(obj = constrained_site_bounds, dsn = constrained_site_bounds_fname, delete_dsn = TRUE)
+}
