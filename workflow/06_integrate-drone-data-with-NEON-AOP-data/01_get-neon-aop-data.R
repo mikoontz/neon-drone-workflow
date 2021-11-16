@@ -42,6 +42,18 @@ neonUtilities::byTileAOP(dpID = "DP3.30006.001",
                          buffer = 20, # per help docs, "Defaults to 0. If easting and northing coordinates are the centroids of NEON TOS plots, use buffer=20"
                          savepath = "data/raw/AOP")
 
+# Get discrete return LiDAR data if desired
+# https://data.neonscience.org/data-products/DP1.30003.001
+# NEON (National Ecological Observatory Network). Discrete return LiDAR point cloud, RELEASE-2021 (DP1.30003.001). https://doi.org/10.48443/6e8k-3343. Dataset accessed from https://data.neonscience.org on August 11, 2021
+
+# neonUtilities::byTileAOP(dpID = "DP1.30003.001",
+#                          site = "NIWO",
+#                          year = 2019,
+#                          easting = site_centroid[1, "X"],
+#                          northing = site_centroid[1, "Y"],
+#                          buffer = 20, # per help docs, "Defaults to 0. If easting and northing coordinates are the centroids of NEON TOS plots, use buffer=20"
+#                          savepath = "data/raw/AOP")
+
 ## Note that this download mechanism is sometimes unreliable and it might
 ## require going to the NEON website to use the GUI for downloads
 ## (https://data.neonscience.org/data-products/DP3.30006.001)
