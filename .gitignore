@@ -52,3 +52,6 @@ figs/field-photos/*
 docs/manuscript/*.pdf
 
 docs/manuscript/submission/*
+
+incubator/*
+docs/manuscript/feedback/*

@@ -26,7 +26,13 @@ ortho_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, past
 # if RGB camera was also used in addition to Micasense Rededge sensor
 # ortho_rgb_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_rgb.tif"))
 
+
 dsm_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm.tif"))
+
+# if RGB camera was also used in addition to Micasense Rededge sensor and you want
+# the DSM derived from RGB imagery
+dsm_rgb_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm_rgb.tif"))
+
 dense_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dense-point-cloud.las"))
 sparse_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_sparse-point-cloud.las"))
 
@@ -37,6 +43,10 @@ cropped_ortho_fname <- file.path("data", "drone", "L1", site_name, flight_dateti
 # cropped_rgb_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_rgb_cropped.tif"))
 
 cropped_dsm_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm_cropped.tif"))
+
+#  if RGB camera was also used in addition to Micasense Rededge sensor
+cropped_dsm_rgb_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm_rgb_cropped.tif"))
+
 cropped_dense_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dense-point-cloud_cropped.las"))
 cropped_sparse_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_sparse-point-cloud_cropped.las"))
 
@@ -76,6 +86,10 @@ cropped_dsm <- raster::crop(x = dsm, y = constrained_site_bounds)
 # rgb <- raster::brick(ortho_rgb_fname)
 # cropped_rgb <- raster::crop(x = rgb, y = site_bounds)
 
+# RGB DSM (if RGB camera was also used and you want the DSM derived from RGB photos)
+dsm_rgb <- raster::raster(dsm_rgb_fname)
+cropped_dsm_rgb <- raster::crop(x = dsm_rgb, y = site_bounds)
+
 # Point cloud is exported from Metashape in a local coordinate reference system (CRS) in order to properly 
 # meet some .las file standards (like the scaling for the X and Y dimension)
 # Because of this, we need to crop the point cloud using a site boundary polygon that is in the same CRS
@@ -95,6 +109,9 @@ writeRaster(x = cropped_dsm, filename = cropped_dsm_fname, overwrite = TRUE)
 
 # RGB orthomosaic
 # writeRaster(x = cropped_rgb, filename = cropped_rgb_fname, overwrite = TRUE)
+
+# RGB DSM
+writeRaster(x = cropped_dsm_rgb, filename = cropped_dsm_rgb_fname, overwrite = TRUE)
 
 # dense point cloud
 writeLAS(las = cropped_dense_point_cloud, file = cropped_dense_point_cloud_fname)

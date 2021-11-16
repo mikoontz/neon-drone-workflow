@@ -42,13 +42,8 @@ qe <-
 
 # bandpass filter sensitivity
 filters <-
-  read.csv("data/out/RedEdge_3_Filters_srs.csv", check.names = FALSE) %>% 
-  dplyr::rename(wavelength_nm = `Wavlength (nm)`, 
-                blue = `Band 1`,
-                green = `Band 2`,
-                red = `Band 3`,
-                `re` = `Band 5`,
-                `nir` = `Band 4`) %>% 
+  read.csv("data/out/RedEdge_3_Filters_srs.csv") %>%
+  setNames(c("wavelength_nm", "blue", "green", "red", "re", "nir")) %>% 
   tidyr::pivot_longer(names_to = "band", values_to = "transmission", cols = -1) %>% 
   dplyr::mutate(band = factor(band, levels = c("blue", "green", "red", "re", "nir")))
 
