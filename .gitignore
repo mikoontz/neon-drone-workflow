@@ -55,3 +55,7 @@ docs/manuscript/submission/*
 
 incubator/*
 docs/manuscript/feedback/*
+
+*.docx
+*standin*
+*.pptx
