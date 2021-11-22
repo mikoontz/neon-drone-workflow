@@ -33,13 +33,13 @@ sparse_point_cloud <- lidR::readLAS(files = cropped_sparse_point_cloud_fname)
 # cloth resolution set to be ~5 times the average spacing between points
 # when point cloud density is ~30 pts per m^2
 
-classified_dense_point_cloud <- lidR::lasground(las = dense_point_cloud, 
-                                          algorithm = csf(sloop_smooth = TRUE, 
-                                                          class_threshold = 0.25, 
-                                                          cloth_resolution = 0.5,  
-                                                          rigidness = 1, 
-                                                          iterations = 500, 
-                                                          time_step = 0.65))
+classified_dense_point_cloud <- lidR::classify_ground(las = dense_point_cloud, 
+                                                      algorithm = csf(sloop_smooth = TRUE, 
+                                                                      class_threshold = 0.25, 
+                                                                      cloth_resolution = 0.5,  
+                                                                      rigidness = 1, 
+                                                                      iterations = 500, 
+                                                                      time_step = 0.65))
 
 
 if(!file.exists(cropped_classified_dense_pc_fname)) {
@@ -49,13 +49,13 @@ if(!file.exists(cropped_classified_dense_pc_fname)) {
 # Plot the classification of the point cloud for inspection
 # plot(classified_dense_point_cloud, color = "Classification")
 
-classified_sparse_point_cloud <- lidR::lasground(las = sparse_point_cloud, 
-                                                algorithm = csf(sloop_smooth = TRUE, 
-                                                                class_threshold = 0.25, 
-                                                                cloth_resolution = 0.5,  
-                                                                rigidness = 1, 
-                                                                iterations = 500, 
-                                                                time_step = 0.65))
+classified_sparse_point_cloud <- lidR::classify_ground(las = sparse_point_cloud, 
+                                                       algorithm = csf(sloop_smooth = TRUE, 
+                                                                       class_threshold = 0.25, 
+                                                                       cloth_resolution = 0.5,  
+                                                                       rigidness = 1, 
+                                                                       iterations = 500, 
+                                                                       time_step = 0.65))
 
 # Plot the classification of the point cloud for inspection
 plot(sparse_point_cloud)
@@ -71,36 +71,45 @@ dtm <- lidR::grid_terrain(las = classified_sparse_point_cloud,
                           algorithm = tin())
 
 dtm_4326 <- raster::projectRaster(from = dtm, crs = sp::CRS("+init=epsg:4326"))
+dtm_4326 <- terra::project(x = terra::rast(dtm), y = "epsg:4326")
 
 # Write the dtm file to disk
 raster::writeRaster(x = dtm, filename = cropped_dtm_fname, overwrite = TRUE)
+terra::writeRaster(x = dtm, filename = cropped_dtm_fname, overwrite = TRUE)
 
 
 # calculate a canopy height model -----------------------------------------
 
 dsm <- raster::raster(cropped_dsm_fname)
+dsm <- terra::rast(cropped_dsm_fname)
+dsm <- terra::project(x = dsm, y = paste0("epsg:", local_utm), method = "bilinear")
 
 # Using bilinear interpolation to downsample the 1m resolution DTM to have the
 # same resolution as the dsm (~5cm, but slightly different for each site)
-dtm_resamp <- raster::resample(dtm_4326, dsm, method = "bilinear")
+dtm_resamp <- raster::resample(x = dtm, y = dsm, method = "bilinear")
+# dtm_resamp <- terra::resample(dtm_4326, dsm, method = "bilinear")
 
 # The Canopy Height Model (chm) is the dsm (vegetation + ground) minus the dtm (ground)
 # to give just the height of the vegetation.
 chm <- dsm - dtm_resamp
 
-# # Smooth out the chm and set any negative values to 0 (meaning "ground") following
-# # advice from Zagalikis, Cameron, and Miller (2004) and references therein
-# # More recently, a 3x3 pixel smoothing filter was specifically suggested as ideal
-# # for sUAS derived chm by Mohan et al. (2017)
-chm_smooth <- raster::focal(chm, w = matrix(1, 3, 3), mean)
-chm_smooth[raster::getValues(chm_smooth) < 0] <- 0
+# Save smoothing step for later, because different smooth values might be a variable
+# to compare different values for and rate their performance
+
+# Smooth out the chm and set any negative values to 0 (meaning "ground") following
+# advice from Zagalikis, Cameron, and Miller (2004) and references therein
+# More recently, a 3x3 pixel smoothing filter was specifically suggested as ideal
+# for sUAS derived chm by Mohan et al. (2017)
+# chm_smooth <- raster::focal(chm, w = matrix(1, 3, 3), mean)
+# chm_smooth[raster::getValues(chm_smooth) < 0] <- 0
 
 plot(dsm, col = viridis::viridis(100))
 plot(dtm_resamp, col = viridis::viridis(100))
-plot(chm_smooth, col = viridis::viridis(100))
+# plot(chm_smooth, col = viridis::viridis(100))
 
 # Write the chm file to disk so we can use it later
 # Note that all of these outputs generated using R get written to the same place, regardless of whether the
 # output is derived from merged X3+RedEdge imagery versus just being derived from RedEdge imagery
-raster::writeRaster(x = chm_smooth, filename = cropped_chm_fname, overwrite = TRUE)
+# raster::writeRaster(x = chm_smooth, filename = cropped_chm_fname, overwrite = TRUE)
+terra::writeRaster(x = chm, filename = cropped_chm_fname, overwrite = TRUE)
 
