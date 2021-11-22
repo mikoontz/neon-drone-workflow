@@ -117,12 +117,17 @@ if (!file.exists(srtm30m_fname)) {
   raster::writeRaster(site_dem, filename = srtm30m_fname, overwrite = TRUE)
 }
 
-# also create a bounding box that is just around the field data (with a little buffer)
+# Use the NEON data that describe the plot locations to create site-specific
+# points that could be used for ground control, and the polygons that define
+# the perimeter of the site
+
+# First download the plot geometry information
 download.file(url = "https://data.neonscience.org/documents/10179/2449631/All_NEON_TOS_Plots_V5/ba3daf92-9d78-41b0-a5b0-f6bf0cbea006",
               destfile = "data/raw/All_NEON_TOS_Plots_V5.zip")
 unzip("data/raw/All_NEON_TOS_Plots_V5.zip", exdir = "data/raw")
 unlink("data/raw/All_NEON_TOS_Plots_V5.zip")
 
+# We'll get the point locations of the permanently marked points within our plot of interest
 all_neon_tos_points <- read_sf("data/raw/All_NEON_TOS_Plots_V5/All_Neon_TOS_Points_V5.shp")
 
 my_site <-
@@ -131,6 +136,7 @@ my_site <-
   filter(crdSource == "Geo 7X (H-Star)") %>% 
   filter(subtype == "basePlot")
 
+# The geometry is in EPSG4326, but we may want it in the local UTM coordinate reference system
 my_site_local_crs <-
   paste0("32", 
          ifelse(stringr::str_detect(string = unique(my_site$utmZone), pattern = "N"), yes = "6", no = "7"), 
