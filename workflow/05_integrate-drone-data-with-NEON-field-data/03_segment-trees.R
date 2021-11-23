@@ -47,10 +47,16 @@ crowns <-
   dplyr::left_join(non_spatial_ttops, by = "treeID") %>% 
   sf::st_make_valid()
 
-%>% 
-  dplyr::group_by(treeID) %>% 
-  dplyr::summarize(x = unique(x), y = unique(y), height = mean(height), winRadius = mean(winRadius))
+for (i in 1:nrow(crowns)) {
+  this_point <- sf::st_drop_geometry(crowns[i, ]) %>% sf::st_as_sf(coords = c("x", "y"), crs = sf::st_crs(crowns))
+  crowns[i, "point_in_crown"] <- as.vector(sf::st_intersects(x = this_point, y = crowns[i, ], sparse = FALSE))
+}
+
+crowns <-
+  crowns %>% 
+  dplyr::filter(point_in_crown) %>% 
+  dplyr::select(-point_in_crown)
 
 if(!file.exists(cropped_crowns_fname)) {
-  sf::st_write(obj = crowns, dsn = cropped_crowns_fname)
+  sf::st_write(obj = crowns, dsn = cropped_crowns_fname, delete_dsn = TRUE)
 }

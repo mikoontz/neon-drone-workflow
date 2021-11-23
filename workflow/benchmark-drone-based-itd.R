@@ -9,43 +9,33 @@ flight_datetime <- "2019-10-09"
 
 # files to be read
 cropped_crowns_fname <- file.path("data", "drone", "L3a", "geometric", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_crowns_cropped.gpkg"))
+gcp_locations_fname <- paste0("data/out/", site_name, "_gcp-locations.gpkg")
 
-# NeonTreeEvaluation::download()
+gcp <- sf::st_read(gcp_locations_fname)
+crowns <- sf::st_read(cropped_crowns_fname)
 
-df <- submission %>% filter(plot_name=="NIWO_017_2019")
-results <- evaluate_field_stems(predictions = df, project = F, show = T, summarize = T)
+gcp <- sf::st_transform(gcp, sf::st_crs(crowns))
 
-rgb_path <- get_data(plot_name = "NIWO_017_2019", type="rgb")
-rgb <- terra::rast(rgb_path)
+# trees are only mapped on the ground within the innermost 20 x 20m plot
+interior_20m_plot <-
+  gcp %>% 
+  dplyr::filter(pointID %in% c(49, 51, 33, 31)) %>% 
+  sf::st_geometry() %>%
+  sf::st_union() %>% 
+  sf::st_cast("POLYGON")
 
-res <- terra::res(rgb)
-e <- sf::st_bbox(terra::ext(rgb))
-full_tos_plot <- sf::st_as_sfc(e) %>% sf::st_set_crs(local_utm)
+target_trees <-
+  crowns %>% 
+  sf::st_drop_geometry() %>% 
+  sf::st_as_sf(coords = c("x", "y"), crs = sf::st_crs(crowns)) %>% 
+  dplyr::filter(sf::st_intersects(x = ., y = interior_20m_plot, sparse = FALSE))
 
-rgb1 <- terra::rast(get_data(plot_name = "NIWO_017_2019", type = "rgb"))
-rgb2 <- terra::rast(get_data(plot_name = "NIWO_017_2018", type = "rgb"))
-
-
-par(mfrow = c(1, 2))
-terra::plotRGB(rgb1)
-terra::plotRGB(rgb2)
-
-xmls <- get_data("NIWO_017_2018", type = "annotations")
-annotations2 <- xml_parse(xmls)
-
-boxes2 <- NeonTreeEvaluation::boxes_to_spatial_polygons(boxes = annotations2, raster_object = raster::stack(rgb2))
-dev.off()
-# boxes1 <- NeonTreeEvaluation::boxes_to_spatial_polygons(boxes = crowns, raster_object = raster::stack(rgb2))
-
-terra::plotRGB(rgb2)
-plot(sf::st_geometry(boxes2), col = "red", add = TRUE)
-# plot(sf::st_geometry(boxes1), col = "blue", add = TRUE)
-
-
-crowns <- 
-  sf::st_read(cropped_crowns_fname) %>% 
-  dplyr::filter(sf::st_intersects(x = ., y = interior_plot, sparse = FALSE)) %>%
+crowns <-
+  crowns %>% 
+  # dplyr::filter(sf::st_intersects(x = ., y = interior_20m_plot, sparse = FALSE)) %>%
   # dplyr::filter(sf::st_intersects(x = ., y = full_tos_plot, sparse = FALSE)) %>%
+  # dplyr::filter(sf::st_within(x = ., y = interior_20m_plot, sparse = FALSE)) %>%
+  # dplyr::filter(treeID %in% target_trees$treeID) %>%
   dplyr::rename(geometry = geom) %>% 
   dplyr::mutate(xmin_proj = NA, ymin_proj = NA, xmax_proj = NA, ymax_proj = NA)
 
@@ -57,52 +47,74 @@ for(i in 1:nrow(crowns)) {
   crowns[i, "ymax_proj"] <- bbox$ymax
 }
 
-
+# note that the required "image position" for the NeonTreeEvaluation package
+# starts at 0 at the *top* of the image, then *increases* as it goes down
+# which is the opposite of how Northing works in geographic space
+# we have to account for this when setting the ymin and ymax variables
 crowns <-
   crowns %>% 
   dplyr::mutate(xmin = (xmin_proj - e$xmin) / (e$xmax - e$xmin) * ncol(rgb),
-                ymin = (ymin_proj - e$ymin) / (e$ymax - e$ymin) * nrow(rgb),
+                ymin = -(ymax_proj - e$ymax) / (e$ymax - e$ymin) * nrow(rgb),
                 xmax = (xmax_proj - e$xmin) / (e$xmax - e$xmin) * ncol(rgb),
-                ymax = (ymax_proj - e$ymin) / (e$ymax - e$ymin) * nrow(rgb),
+                ymax = -(ymin_proj - e$ymax) / (e$ymax - e$ymin) * nrow(rgb),
                 height = height,
                 score = NA,
                 label = "Tree",
                 plot_name = "NIWO_017_2019") %>% 
+  # sf::st_drop_geometry() %>%
+  dplyr::select(xmin, ymin, xmax, ymax, plot_name)
+
+
+# NeonTreeEvaluation::download()
+
+rgb_path <- get_data(plot_name = "NIWO_017_2019", type="rgb")
+rgb <- terra::rast(rgb_path)
+res <- terra::res(rgb)
+e <- sf::st_bbox(terra::ext(rgb))
+
+boxes_for_20m_plot <- 
+  NeonTreeEvaluation::boxes_to_spatial_polygons(boxes = crowns, raster_object = raster::raster(rgb)) %>% 
+  dplyr::filter(sf::st_within(x = ., y = interior_20m_plot, sparse = FALSE))
+  
+
+terra::plotRGB(rgb)
+plot(sf::st_geometry(boxes_for_20m_plot), col = "blue", add = TRUE)
+plot(sf::st_geometry(crowns), col = "red", add = TRUE)
+
+full_40m_plot <- sf::st_as_sfc(e) %>% sf::st_set_crs(sf::st_crs(crowns))
+
+tos_trees <-
+  NeonTreeEvaluation::field %>% 
+  NeonTreeEvaluation:::clean_field_data() %>%
+  dplyr::filter(plotID == "NIWO_017") %>%
+  sf::st_as_sf(coords = c("itcEasting","itcNorthing"),
+               crs = sf::st_crs(crowns))
+
+crowns_for_40m_plot <-
+  crowns %>% 
+  dplyr::filter(sf::st_within(x = ., y = full_40m_plot, sparse = FALSE)) %>% 
   sf::st_drop_geometry() %>% 
-  dplyr::select(xmin, ymin, xmax, ymax, plot_name) %>% 
-  as_tibble()
+  dplyr::mutate(plot_name = "NIWO_017_2018")
 
-# tos_trees <-
-  # NeonTreeEvaluation:::clean_field_data(NeonTreeEvaluation::field) %>%
-  # NeonTreeEvaluation::field %>% 
-  # dplyr::filter(plotID == "NIWO_017") %>% 
-  # as_tibble()
-# 
-# plot(st_geometry(tos_trees), col = "red", pch = 19)
+boxes_for_40m_plot <- 
+  NeonTreeEvaluation::boxes_to_spatial_polygons(boxes = crowns, raster_object = raster::raster(rgb)) %>% 
+  dplyr::filter(sf::st_within(x = ., y = full_40m_plot, sparse = FALSE))
 
-crowns %>% filter(plot_name == "NIWO_017_2019")
-NeonTreeEvaluation:::process_plot
-NeonTreeEvaluation:::process_plot(predictions = df, 
-             plot_name = "NIWO_017", show = TRUE, image_name = "NIWO_017_2019")
+results <- evaluate_image_crowns(predictions = crowns_for_40m_plot, 
+                                 project = TRUE, show = TRUE, summarize = TRUE)
 
-df %>% as_tibble
-crowns
-spatial_boxes <- crowns %>% NeonTreeEvaluation::boxes_to_spatial_polygons(., raster::raster(rgb)) %>% sf::st_as_sf() %>% mutate(height = predictions$height, 
-                                                                                                                score = predictions$score)
+deepforest_boxes <- 
+  NeonTreeEvaluation::get_data(plot_name = "NIWO_017_2018", type = "annotations") %>% 
+  NeonTreeEvaluation::xml_parse() %>% 
+  NeonTreeEvaluation::boxes_to_spatial_polygons(raster_object = raster::raster(rgb))
 
-results3 <- evaluate_field_stems(predictions = as_tibble(df), project = FALSE, show = TRUE, summarize = TRUE)
+rownames(boxes_for_40m_plot) <- 1:nrow(boxes_for_40m_plot)
+boxes_for_40m_plot$crown_id <- 1:nrow(boxes_for_40m_plot)
 
-results3 <- evaluate_field_stems(predictions = crowns, project = FALSE, show = TRUE, summarize = TRUE)
-results <- evaluate_image_crowns(predictions = df, project = FALSE, show = T, summarize = TRUE)
+low_thresh_results <- NeonTreeEvaluation::compute_precision_recall(ground_truth = deepforest_boxes, predictions = boxes_for_40m_plot, threshold = 0.1)
 
+2 * (low_thresh_results["precision"] * low_thresh_results["recall"]) / (low_thresh_results["precision"] + low_thresh_results["recall"])
 
-df<-submission %>% filter(plot_name %in% c("NIWO_017_2018"))
-
-#Compute total recall and precision for the overlap data
-results <- evaluate_image_crowns(predictions = df, project = T, show=TRUE, summarize = T)
-drone_results <- evaluate_image_crowns(predictions = crowns, project = T, show = TRUE, summarize = T)
-
-
-results<-evaluate_image_crowns(predictions = df,project = T, show=F, summarize = T)
-?NeonTreeEvaluation::compute_precision_recall()
-?evaluate_field_stems
+terra::plotRGB(rgb)
+plot(st_geometry(deepforest_boxes), col = "blue", add = TRUE)
+plot(st_geometry(boxes_for_40m_plot), col = "red", add = TRUE)
