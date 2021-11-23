@@ -55,7 +55,7 @@ neon_trees <-
 
 drone_trees <- 
   sf::st_read("data/drone/L3a/geometric/niwo_017/2019-10-09/niwo_017_2019-10-09_ttops.gpkg") %>% 
-  sf::st_transform(local_utm) %>% 
+  sf::st_transform(local_utm) %>%
   dplyr::filter(sf::st_intersects(x = ., y = interior_plot, sparse = FALSE))
 
 drone_crowns <-
