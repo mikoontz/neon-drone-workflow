@@ -1,4 +1,4 @@
-# remotes::install_github('earthlab/neonhs')
+# devtools::install_github('earthlab/neonhs')
 library(neonhs)
 library(dplyr)
 library(hdf5r)
@@ -8,17 +8,23 @@ library(ggplot2)
 library(sf)
 library(tidyr)
 library(viridis)
+# note some packages are still using data types from the {raster} package
+# so we include it in this script, but try to convert to {terra} data
+# types when possible (so we include that package too)
+library(raster)
+library(terra)
 
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
 # create necessary directories
 dir.create("data/out/AOP", recursive = TRUE, showWarnings = FALSE)
-dir.create(file.path("data", "drone", "L3a", "spectral", site_name, flight_datetime))
+dir.create(file.path("data", "drone", "L3a", "spectral", site_name, flight_datetime), 
+           showWarnings = FALSE)
 
 # files to be read using this script
 mission_footprint_fname <- "data/drone/L0/mission-footprint/niwo_017/2019-10-09/niwo_017_2019-10-09_constrained-site-bounds.gpkg"
-cropped_ortho_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif"))
+cropped_ortho_fname <- file.path("data", "drone", "L2", "radiometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif"))
 micasense_rededge3_characteristics_fname <-  "data/out/micasense-rededge3_sensor-characteristics.csv"
 
 # files to be written using this script
@@ -113,19 +119,21 @@ neon_speclib <- hsdar::speclib(spectra = neon_aop_spectral_crop,
 # data in a SpecLib format, it is straightforward to use the {hsdar} package
 # to spectrally resample the NEON AOP data to "look" like what might be sensed
 # from the Micasense Rededge3 sensor
-neon_resampled_to_rededge <- spectralResampling(x = neon_speclib, 
-                                                response_function = rededge_speclib)
+neon_resampled_to_rededge <- 
+  spectralResampling(x = neon_speclib, 
+                     response_function = rededge_speclib)
 
 # The result of the spectral resampling is another SpecLib, but we can retrieve
 # the raster version of those results
 neon_resampled_r <- 
   neon_resampled_to_rededge@spectra@spectra_ra %>% 
+  terra::rast() %>% 
   setNames(hsdar::idSpeclib(rededge_speclib))
 
 # read in necessary data products from drone-mounted micasense Rededge3
 # processed data
 ortho <- 
-  raster::brick(cropped_ortho_fname) %>% 
+  terra::rast(cropped_ortho_fname) %>% 
   setNames(micasense_rededge3_characteristics$band)
 
 # Calculate NDVI from both products
@@ -135,8 +143,8 @@ neon_resampled_ndvi <-
 drone_ndvi <- (ortho[["nir"]] - ortho[["red"]]) / (ortho[["nir"]] + ortho[["red"]])
 
 # Write NDVI products to disk
-raster::writeRaster(x = drone_ndvi, filename = ndvi_drone_fname)
-raster::writeRaster(x = neon_resampled_ndvi, filename = ndvi_neon_fname)
+terra::writeRaster(x = drone_ndvi, filename = ndvi_drone_fname)
+terra::writeRaster(x = neon_resampled_ndvi, filename = ndvi_neon_fname)
 
 # Plot side by side
 png(filename = "figs/ndvi_neon-spectral-resampled-v-drone-original.png", res = 400, width = 6, height = 4, units = "in")

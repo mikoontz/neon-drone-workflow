@@ -4,7 +4,7 @@
 library(tidyverse)
 library(sf)
 library(lidR)
-library(raster)
+library(terra)
 
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
@@ -19,12 +19,12 @@ constrained_site_bounds_fname <- file.path(mission_footprint_dir, paste(site_nam
 gcp_fname <- file.path("data", "out", paste(site_name, "gcp-locations.gpkg", sep = "_"))
 
 # Used for cropping to slightly wider area if desired
-# site_bounds_fname <- file.path(mission_footprint_dir, paste(site_name, flight_datetime, "site-bounds.gpkg", sep = "_"))
+site_bounds_fname <- file.path(mission_footprint_dir, paste(site_name, flight_datetime, "site-bounds.gpkg", sep = "_"))
 
-ortho_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho.tif"))
+ortho_fname <- file.path("data", "drone", "L2", "radiometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho.tif"))
 
 # if RGB camera was also used in addition to Micasense Rededge sensor
-# ortho_rgb_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_rgb.tif"))
+ortho_rgb_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_rgb.tif"))
 
 
 dsm_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm.tif"))
@@ -37,10 +37,10 @@ dense_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_da
 sparse_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_sparse-point-cloud.las"))
 
 # files to be written using this script
-cropped_ortho_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif"))
+cropped_ortho_fname <- file.path("data", "drone", "L2", "radiometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif"))
 
 #  if RGB camera was also used in addition to Micasense Rededge sensor
-# cropped_rgb_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_rgb_cropped.tif"))
+cropped_rgb_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_rgb_cropped.tif"))
 
 cropped_dsm_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm_cropped.tif"))
 
@@ -75,46 +75,47 @@ site_bounds <-
 # GeoTIFF: This is a 5-layer, 16-bit ortho-rectified GeoTIFF file. A GIS application is needed to open this type of file. The pixel values are proportional to % reflectance, with a pixel value of 32768 being equal to 100% reflectance (65535 is equal to 200% reflectance). In order to extract the reflectance values you will need to divide by 32768.
 
 # Then, we multiply through by 256 to put the 0 to 1 values back on a standard 256 color ramp
-ortho <- raster::brick(ortho_fname) / 32768
-cropped_ortho <- raster::crop(x = ortho, y = constrained_site_bounds)
+ortho <- terra::rast(ortho_fname) / 32768
+cropped_ortho <- terra::crop(x = ortho, y = constrained_site_bounds)
 
 # Digital surface model
-dsm <- raster::raster(dsm_fname)
-cropped_dsm <- raster::crop(x = dsm, y = constrained_site_bounds)
+dsm <- terra::rast(dsm_fname)
+cropped_dsm <- terra::crop(x = dsm, y = constrained_site_bounds)
 
 # RGB orthomosaic (if RGB camera was also used in addition to Micasense Rededge sensor)
-# rgb <- raster::brick(ortho_rgb_fname)
-# cropped_rgb <- raster::crop(x = rgb, y = site_bounds)
+rgb <- terra::rast(ortho_rgb_fname)
+cropped_rgb <- terra::crop(x = rgb, y = site_bounds)
 
 # RGB DSM (if RGB camera was also used and you want the DSM derived from RGB photos)
-dsm_rgb <- raster::raster(dsm_rgb_fname)
-cropped_dsm_rgb <- raster::crop(x = dsm_rgb, y = site_bounds)
+dsm_rgb <- terra::rast(dsm_rgb_fname)
+cropped_dsm_rgb <- terra::crop(x = dsm_rgb, y = site_bounds)
 
 # Point cloud is exported from Metashape in a local coordinate reference system (CRS) in order to properly 
 # meet some .las file standards (like the scaling for the X and Y dimension)
 # Because of this, we need to crop the point cloud using a site boundary polygon that is in the same CRS
-
 dense_point_cloud_catalog <- lidR::catalog(folder = dense_point_cloud_fname)
-cropped_dense_point_cloud <- lidR::lasclip(dense_point_cloud_catalog, sf::st_transform(constrained_site_bounds, dense_point_cloud_catalog@proj4string))
+cropped_dense_point_cloud <- lidR::clip_roi(las = dense_point_cloud_catalog, 
+                                            geometry = sf::st_transform(constrained_site_bounds, sf::st_crs(dense_point_cloud_catalog)))
 
 sparse_point_cloud_catalog <- lidR::catalog(folder = sparse_point_cloud_fname)
-cropped_sparse_point_cloud <- lidR::lasclip(sparse_point_cloud_catalog, sf::st_transform(constrained_site_bounds, sparse_point_cloud_catalog@proj4string))
+cropped_sparse_point_cloud <- lidR::clip_roi(las = sparse_point_cloud_catalog, 
+                                             geometry = sf::st_transform(constrained_site_bounds, sf::st_crs(sparse_point_cloud_catalog)))
 
 # Write the cropped geospatial data to files for rapid recall and use in segmentation algorithm validation against ground data
 # ortho
-writeRaster(x = cropped_ortho, filename = cropped_ortho_fname, overwrite = TRUE)
+terra::writeRaster(x = cropped_ortho, filename = cropped_ortho_fname, overwrite = TRUE)
 
 # dsm
-writeRaster(x = cropped_dsm, filename = cropped_dsm_fname, overwrite = TRUE)
+terra::writeRaster(x = cropped_dsm, filename = cropped_dsm_fname, overwrite = TRUE)
 
 # RGB orthomosaic
-# writeRaster(x = cropped_rgb, filename = cropped_rgb_fname, overwrite = TRUE)
+terra::writeRaster(x = cropped_rgb, filename = cropped_rgb_fname, overwrite = TRUE)
 
 # RGB DSM
-writeRaster(x = cropped_dsm_rgb, filename = cropped_dsm_rgb_fname, overwrite = TRUE)
+terra::writeRaster(x = cropped_dsm_rgb, filename = cropped_dsm_rgb_fname, overwrite = TRUE)
 
 # dense point cloud
-writeLAS(las = cropped_dense_point_cloud, file = cropped_dense_point_cloud_fname)
+lidR::writeLAS(las = cropped_dense_point_cloud, file = cropped_dense_point_cloud_fname)
 
 # sparse point cloud
-writeLAS(las = cropped_sparse_point_cloud, file = cropped_sparse_point_cloud_fname)
+lidR::writeLAS(las = cropped_sparse_point_cloud, file = cropped_sparse_point_cloud_fname)

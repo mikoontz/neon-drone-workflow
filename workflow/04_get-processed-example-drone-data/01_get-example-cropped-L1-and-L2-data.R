@@ -25,7 +25,7 @@ if(!dir.exists(file.path("data", "drone", "L1", site_name, flight_datetime))) {
 }
 
 # files to be downloaded from remote and named
-cropped_ortho_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif"))
+cropped_ortho_fname <- file.path("data", "drone", "L2", "radiometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif"))
 cropped_dsm_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm_cropped.tif"))
 cropped_dense_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dense-point-cloud_cropped.las"))
 cropped_sparse_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_sparse-point-cloud_cropped.las"))
@@ -36,7 +36,7 @@ cropped_dsm_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/n
 cropped_dense_point_cloud_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/", site_name, "_", flight_datetime, "_dense-point-cloud_cropped.las")
 cropped_sparse_point_cloud_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/", site_name, "_", flight_datetime, "_sparse-point-cloud_cropped.las")
 
-# get L1 products from S3 -------------------------------------------------
+# get L1 and L2 products from S3 -------------------------------------------------
 
 # orthomosaic -------------------------------------------------------------
 if(!file.exists(cropped_ortho_fname)) {
