@@ -13,9 +13,21 @@ cropped_crowns_fname <- file.path("data", "drone", "L3a", "geometric", site_name
 gcp_locations_fname <- paste0("data/out/", site_name, "_gcp-locations.gpkg")
 
 gcp <- sf::st_read(gcp_locations_fname)
-crowns <- sf::st_read(cropped_crowns_fname)
+crowns_raw <- sf::st_read(cropped_crowns_fname)
 
 gcp <- sf::st_transform(gcp, sf::st_crs(crowns))
+
+# Get the data from the NeonTreeEvaluation package (it's big! Almost 4 GB)
+# NeonTreeEvaluation::download()
+
+rgb_path <- get_data(plot_name = "NIWO_017_2019", type="rgb")
+rgb <- terra::rast(rgb_path)
+res <- terra::res(rgb)
+
+# This is the extent of the RGB image represented as an sf polygon
+# We can use this to represent the 40 x 40 m plot, as it is clipped for
+# the DeepForest uses
+e <- sf::st_bbox(terra::ext(rgb))
 
 # trees are only mapped on the ground within the innermost 20 x 20m plot
 interior_20m_plot <-
@@ -23,16 +35,17 @@ interior_20m_plot <-
   dplyr::filter(pointID %in% c(49, 51, 33, 31)) %>% 
   sf::st_geometry() %>%
   sf::st_union() %>% 
-  sf::st_cast("POLYGON")
+  sf::st_cast("POLYGON") %>% 
+  sf::st_transform(sf::st_crs(crowns_raw))
 
 target_trees <-
-  crowns %>% 
+  crowns_raw %>% 
   sf::st_drop_geometry() %>% 
-  sf::st_as_sf(coords = c("x", "y"), crs = sf::st_crs(crowns)) %>% 
+  sf::st_as_sf(coords = c("x", "y"), crs = sf::st_crs(crowns_raw)) %>% 
   dplyr::filter(sf::st_intersects(x = ., y = interior_20m_plot, sparse = FALSE))
 
 crowns <-
-  crowns %>% 
+  crowns_raw %>% 
   # dplyr::filter(sf::st_intersects(x = ., y = interior_20m_plot, sparse = FALSE)) %>%
   # dplyr::filter(sf::st_intersects(x = ., y = full_tos_plot, sparse = FALSE)) %>%
   # dplyr::filter(sf::st_within(x = ., y = interior_20m_plot, sparse = FALSE)) %>%
@@ -58,24 +71,13 @@ crowns <-
                 ymin = -(ymax_proj - e$ymax) / (e$ymax - e$ymin) * nrow(rgb),
                 xmax = (xmax_proj - e$xmin) / (e$xmax - e$xmin) * ncol(rgb),
                 ymax = -(ymin_proj - e$ymax) / (e$ymax - e$ymin) * nrow(rgb),
+                crown_id = 1:nrow(.),
                 height = height,
                 score = NA,
                 label = "Tree",
                 plot_name = "NIWO_017_2019") %>% 
   # sf::st_drop_geometry() %>%
-  dplyr::select(xmin, ymin, xmax, ymax, plot_name)
-
-# Get the data from the NeonTreeEvaluation package (it's big! Almost 4 GB)
-# NeonTreeEvaluation::download()
-
-rgb_path <- get_data(plot_name = "NIWO_017_2019", type="rgb")
-rgb <- terra::rast(rgb_path)
-res <- terra::res(rgb)
-
-# This is the extent of the RGB image represented as an sf polygon
-# We can use this to represent the 40 x 40 m plot, as it is clipped for
-# the DeepForest uses
-e <- sf::st_bbox(terra::ext(rgb))
+  dplyr::select(treeID, crown_id, xmin, ymin, xmax, ymax, plot_name)
 
 # We can turn our crown polygons into boxes and overlay them relative to the 
 # raster object of interest (in this case the RGB image).
@@ -84,10 +86,26 @@ e <- sf::st_bbox(terra::ext(rgb))
 boxes_for_20m_plot <- 
   NeonTreeEvaluation::boxes_to_spatial_polygons(boxes = crowns, raster_object = raster::raster(rgb)) %>% 
   dplyr::filter(sf::st_within(x = ., y = interior_20m_plot, sparse = FALSE))
-  
+
+crowns_for_20m_plot <-
+  crowns %>% 
+  # dplyr::filter(sf::st_intersects(x = ., y = interior_20m_plot, sparse = FALSE)) %>%
+  # dplyr::filter(sf::st_intersects(x = ., y = full_tos_plot, sparse = FALSE)) %>%
+  # dplyr::filter(sf::st_within(x = ., y = interior_20m_plot, sparse = FALSE)) %>%
+  dplyr::filter(treeID %in% target_trees$treeID) %>%
+  # dplyr::filter(crown_id %in% boxes_for_20m_plot$crown_id) %>% 
+  sf::st_drop_geometry()
+
 terra::plotRGB(rgb)
 plot(sf::st_geometry(boxes_for_20m_plot), col = "blue", add = TRUE)
 plot(sf::st_geometry(crowns), col = "red", add = TRUE)
+
+# Evaluate our drone-predicted tree boxes based on the NEON field-measured
+# tree locations
+field_stem_results_20m <- NeonTreeEvaluation::evaluate_field_stems(predictions = crowns_for_20m_plot,
+                                                                  project = TRUE,
+                                                                  show = TRUE,
+                                                                  summarize = TRUE)
 
 # The 40 x 40 m plot is the full TOS plot. This is the extent of the annotations
 # from the DeepForest project, and it's the extent that we want to use to
