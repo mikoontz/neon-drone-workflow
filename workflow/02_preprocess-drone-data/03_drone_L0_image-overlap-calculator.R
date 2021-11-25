@@ -28,13 +28,11 @@ flight_datetime <- "2019-10-09"
 
 # files to be read within this script
 rgb_photo_meta_fname <- paste0("data/drone/L0/", site_name, "_", flight_datetime, "_rgb-photos_metadata.csv")
-photo_points_plot_fname <- paste0("figs/", site_name, "_multispec-photo-points.pdf")
 multispec_photos_metadata_fname <- paste0("data/drone/L0/", site_name, "_", flight_datetime, "_multispec-photos_metadata.csv")
-gcp_locations_fname <- paste0("data/out/", site_name, "_gcp-locations.gpkg")
 
 # files to be written from this script
-multispec_photo_overlap_count_fname <- paste0("figs/niwo_017_multispec-photo-overlap-count.png")
-multispec_photo_overlap_pct_fname <- paste0("figs/niwo_017_multispec-photo-overlap-percent.png")
+multispec_photo_overlap_count_fname <- file.path("data", "out", paste0(site_name, "_", flight_datetime, "_", "multispec-photo-overlap-count.tif"))
+multispec_photo_overlap_pct_fname <- file.path("data", "out", paste0(site_name, "_", flight_datetime, "_", "multispec-photo-overlap-percent.tif"))
 
 # function to create image footprint around point locations of each image ---------------------
 # based on AGL, camera properties, and yaw (angles the footprint)
@@ -147,8 +145,6 @@ x3_meta <-
   x3_meta %>% 
   st_transform(unique(.$epsg))
 
-image_centers <- st_geometry(x3_meta)
-
 x3_footprints <- 
   x3_meta %>% 
   image_footprint(rad = FALSE)
@@ -211,30 +207,24 @@ multispec_meta <-
   multispec_meta %>% 
   st_transform(unique(.$epsg))
 
-image_centers <- st_geometry(multispec_meta)
-
 footprints <- 
   multispec_meta %>% 
   image_footprint()
 
-photo_count <- fasterize(sf = footprints, raster = raster(footprints, res = 0.5), fun = "count")
+photo_count <- 
+  fasterize(sf = footprints, raster = raster(footprints, res = 0.5), fun = "count") %>% 
+  terra::rast()
+
 photo_overlap <- 1 - (1 / photo_count)
 
-photo_overlap_threshold <- photo_overlap
-photo_overlap_threshold[photo_overlap_threshold[] < 0.95] <- NA
+photo_overlap_threshold <- terra::classify(x = photo_overlap,
+                                           rcl = matrix(c(0, 0.95, NA), byrow = TRUE, nrow = 1),
+                                           include.lowest = TRUE)
 
-neon_plot_anchors <- 
-  sf::st_read(gcp_locations_fname) %>% 
-  sf::st_transform(st_crs(footprints))
 
-png(multispec_photo_overlap_count_fname, width = 10, height = 10, res = 600, units = "in")
-par(mar = c(5, 5, 5, 5))
-plot(photo_count, col = viridis(100), xlab = "easting", ylab = "northing", main = "Count of photos covering area around NEON plot")
-plot(st_geometry(neon_plot_anchors), add = TRUE, col = "red", pch = 19)
-dev.off()
-
-png(multispec_photo_overlap_pct_fname, width = 10, height = 10, res = 600, units = "in")
-par(mar = c(5, 5, 5, 5))
-plot(photo_overlap_threshold, col = viridis(100), xlab = "easting", ylab = "northing", main = "Equivalent percent overlap")
-plot(st_geometry(neon_plot_anchors), add = TRUE, col = "red", pch = 19)
-dev.off()
+terra::writeRaster(x = photo_count, 
+                    filename = multispec_photo_overlap_count_fname,
+                    overwrite = TRUE)
+terra::writeRaster(x = photo_overlap_threshold, 
+                    filename = multispec_photo_overlap_pct_fname,
+                    overwrite = TRUE)
