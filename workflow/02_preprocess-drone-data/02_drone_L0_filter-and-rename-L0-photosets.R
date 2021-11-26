@@ -226,6 +226,7 @@ exif_data <-
              mission_photo = suas_at_altitude & suas_within_footprint)}) %>% 
   do.call("rbind", .)
 
+# visual check on how photo points are being classified as "mission photos" or note
 photo_points_gg <- 
   ggplot(exif_data, aes(x = GPSLongitude, y = GPSLatitude, color = mission_photo)) +
   geom_point() +
@@ -234,8 +235,6 @@ photo_points_gg <-
        y = "Latitude",
        color = "Mission photo?") +
   scale_color_manual(values = c("red", "black"))
-
-ggsave(filename = photo_points_plot_fname)
 
 exif_data %>% 
   group_by(band_name) %>% 

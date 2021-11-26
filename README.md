@@ -15,8 +15,8 @@
 - Double grid pattern flown
 - RGB triggering every 2 seconds; forward flight speed ~3.1 m/s for a forward overlap of 95%
 - Side overlap set to 90%
-- Rededge3 camera triggering every second; narrower field of view compared to RGB camera translates to XXXX% forward overlap
-- Rededge3 camera horizontal field of view narrower than RGB camera, so side overlap translates to XXXX% side overlap
+- Rededge3 camera triggering every second; narrower field of view compared to RGB camera translates to 95.2% forward overlap
+- Rededge3 camera horizontal field of view narrower than RGB camera, so side overlap translates to 80.3% side overlap
 
 ## Data sources
 
