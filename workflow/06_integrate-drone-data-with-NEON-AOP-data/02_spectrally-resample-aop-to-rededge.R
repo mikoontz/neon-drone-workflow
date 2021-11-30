@@ -13,6 +13,7 @@ library(viridis)
 # types when possible (so we include that package too)
 library(raster)
 library(terra)
+library(tmap)
 
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
@@ -134,7 +135,8 @@ neon_resampled_r <-
 # processed data
 ortho <- 
   terra::rast(cropped_ortho_fname) %>% 
-  setNames(micasense_rededge3_characteristics$band)
+  setNames(micasense_rededge3_characteristics$band) %>% 
+  terra::project(y = sf::st_crs(as.numeric(crs_epsg))$wkt)
 
 # Calculate NDVI from both products
 neon_resampled_ndvi <-
@@ -145,6 +147,15 @@ drone_ndvi <- (ortho[["nir"]] - ortho[["red"]]) / (ortho[["nir"]] + ortho[["red"
 # Write NDVI products to disk
 terra::writeRaster(x = drone_ndvi, filename = ndvi_drone_fname)
 terra::writeRaster(x = neon_resampled_ndvi, filename = ndvi_neon_fname)
+
+drone_ndvi_tmap <-
+  tmap::tm_shape(drone_ndvi) +
+  tmap::tm_raster(style = "cont", palette = viridis(100), title = "NDVI", midpoint = NA) +
+  tmap::tm_grid(alpha = 0.2) +
+  tmap::tm_xlab(text = "Easting (m)") +
+  tmap::tm_ylab(text = "Northing (m)")
+
+drone_ndvi_tmap
 
 # Plot side by side
 png(filename = "figs/ndvi_neon-spectral-resampled-v-drone-original.png", res = 400, width = 6, height = 4, units = "in")
