@@ -6,16 +6,26 @@ library(raster)
 library(hdf5r)
 library(hsdar)
 library(readr)
+library(patchwork)
 
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
 
 # Get the Micasense RedEdge 3 relative spectral response data
 micasense_rededge3_rsr <- 
-  read_csv(file = "data/out/micasense-rededge3-relative-spectral-response.csv") %>% 
+  read_csv(file = file.path("data", "out", "micasense-rededge3-relative-spectral-response.csv")) %>% 
   mutate(source = "rededge3",
-         channel = paste(source, as.numeric(as.factor(band)), sep = "_")) %>% 
+         channel = paste(source, as.numeric(as.factor(band)), sep = "_"),
+         band_fullname = factor(band_fullname, levels = c("blue", "green", "red", "red edge", "near infrared"))) %>% 
   dplyr::select(channel, band_fullname, wavelength_nm, relative_spectral_response, source)
+
+micasense_rededge3_characteristics <- 
+  read.csv(file.path("data", "out", "micasense-rededge3_sensor-characteristics.csv")) %>% 
+  dplyr::mutate(lb = center - fwhm / 2,
+                ub = center + fwhm / 2)
+
+micasense_wavelength_range <- 
+  c(floor(min(micasense_rededge3_characteristics$lb)), ceiling(max(micasense_rededge3_characteristics$ub)))
 
 # Get NEON AOP spectrometer file(s) that were downloaded in previous script
 fname_h5 <- list.files("data/raw/AOP", recursive = TRUE, full.names = TRUE, pattern = ".h5$")
@@ -61,7 +71,7 @@ neon_hs_params_long <-
                             }
   )) %>% 
   tidyr::unnest(cols = "data") %>% 
-  mutate(source = "neon",
+  mutate(source = "NEON",
          band_fullname = channel,
          channel = paste(source, channel, sep = "_")) %>% 
   dplyr::select(channel, band_fullname, wavelength_nm, relative_spectral_response, source)
@@ -72,17 +82,31 @@ neon_micasense_rsr_zoom <-
   neon_micasense_rsr %>% 
   dplyr::filter(wavelength_nm > 650 & wavelength_nm < 750) %>% 
   dplyr::filter(relative_spectral_response > 0.01) %>% 
-  mutate(source = ifelse(source == "neon", yes = "NEON", no = "Micasense RedEdge 3"))
+  mutate(source = ifelse(source == "rededge3", yes = band_fullname, no = source),
+         source = factor(source, levels = c("NEON", "red", "red edge")))
+
+### The plots for a 2-panel figure
+full_redege_rsr_gg <- 
+  ggplot(micasense_rededge3_rsr, aes(x = wavelength_nm, y = relative_spectral_response, color = band_fullname)) +
+  geom_line() +
+  scale_color_manual(values = c("blue", "green", "red", "#ff0055", "darkred")) +
+  labs(color = "Band name",
+       x = "Wavelength (nm)",
+       y = "Relative spectral response") +
+  theme_bw()
 
 neon_micasense_rsr_gg <-
   ggplot(neon_micasense_rsr_zoom, 
        aes(x = wavelength_nm, y = relative_spectral_response, color = source, group = channel)) + 
   geom_line() +
-  scale_color_manual(values = c("red", "black")) +
+  scale_color_manual(values = c("black", "red", "#ff0055")) +
   theme_bw() +
   labs(x = "Wavelength (nm)",
-       y = "Relative spectral response",
-       color = "Instrument")
+       y = "Relative spectral response") +
+  theme(legend.position = "none")
 
-ggsave(filename = "figs/relative-spectral-response_micasense-rededge3-vs-neon-aop.png", 
-       plot = neon_micasense_rsr_gg)
+
+two_panel <- ((full_redege_rsr_gg + geom_vline(xintercept = c(650, 750), lty = 2)) / (neon_micasense_rsr_gg + geom_vline(xintercept = c(650, 750), lty = 2)))
+two_panel <- (two_panel + patchwork::plot_layout(guides = "collect") + patchwork::plot_annotation(tag_levels = "a"))
+
+ggsave(filename = file.path("figs", "fig02_relative-spectral-response-rededge3-and-neon-aop.png"), plot = two_panel, dpi = 300, width = 180, units = "mm")

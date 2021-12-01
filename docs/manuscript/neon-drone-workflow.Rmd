@@ -329,7 +329,7 @@ In fact, the NEON AOP does exactly this for their daily flight reports.
 ### Flight planning
 
 One of the key benefits of UAS operations is the ability to program missions to be automatically followed by the vehicle’s onboard flight software.
-For optical data collection such as that required for structure from motion photogrammetry, the mission typically involves aerial transects with images captured at regular time or distance intervals (`r fig_nums(name = "fig-crosshatch", display = "cite")`) so that objects in a scene are imaged from many viewing angles (often in excess of 100; `r fig_nums(name = "fig-photo-overlap", display = "cite")`).
+For optical data collection such as that required for structure from motion photogrammetry, the mission typically involves aerial transects with images captured at regular time or distance intervals so that objects in a scene are imaged from many viewing angles (often in excess of 100; (`r fig_nums(name = "fig-crosshatch", display = "cite")`)).
 Successful flight planning requires consideration of the flight pattern, sensor angle, flight planning software, and operation routine.
 
 Flight patterns are typically described in terms of their front overlap (a function of flight speed, flight altitude, frequency of image capture, and vertical field of view of the sensor) and side overlap (a function of flight altitude, horizontal field of view of the sensor, and distance between transects).
@@ -354,20 +354,14 @@ We highly recommend developing and using some kind of checklist for UAS operatio
 For our mission, we used Map Pilot for DJI by DronesMadeEasy, which enables full control of front/side overlap and camera angle, as well as allows for cross-hatch flight patterns, terrain following, and caching of data for use in the field when an internet connection isn’t available.
 
 ```{r}
-fig_nums(name = "fig-crosshatch", "Points depicting the UAS position for each photo captured during the flight. 
-         The color of each point indicates whether the corresponding photo was retained for the data processing steps (black points) or not (red points).")
+fig_nums(name = "fig-crosshatch", "Black points depict the UAS position for each photo captured during the flight.
+Red points in the “X” formation at the center are the high-precision geolocations of the NEON vegetation plot monuments.
+The background color represents the approximate number of photos captured over each point in the surveyed area based on idealized image footprints projected on the ground surrounding the geolocation of each photo point (i.e., the black points).
+Each point needs to be imaged a large number of times (likely more than 100 for denser vegetation), which means that some areas with image capture at the edges of the flown area won’t have coverage suitable for structure from motion data processing. 
+Your flight area should therefore be larger than your area of interest to ensure sufficient data coverage.")
 ```
 
 ![`r fig_nums(name = "fig-crosshatch")`](../../figs/fig01_photo-points-overlap-and-gcps.png)
-
-```{r}
-fig_nums(name = "fig-photo-overlap", "Approximate number of photos captured over each point in the surveyed area based on idealized image footprints projected on the ground surrounding the geolocation of each photo point. 
-         Red points in the “X” formation at the center are the high-precision geolocations of the NEON vegetation plot monuments. 
-         Each point needs to be imaged a large number of times (likely more than 100 for denser vegetation), which means that some areas with image capture at the edges of the flown area won’t have coverage suitable for structure from motion data processing. 
-         Your flight area should therefore be larger than your area of interest to ensure sufficient data coverage.")
-```
-
-<!-- ![`r fig_nums(name = "fig-photo-overlap")`](../../figs/niwo_017_multispec-photo-overlap-count.png) -->
 
 ### Regulations (airspace and pilot)
 
@@ -428,10 +422,11 @@ Emergency operating procedures should be understood should a mishap occur, inclu
 
 
 ```{r}
-fig_nums(name = "fig-rededge-rsr", "Relative spectral response of the Micasense RedEdge 3 camera in 5 distinct spectral bands based on the quantum efficiency of the image sensor per wavelength and the bandpass filter transmission per wavelength.")
+fig_nums(name = "fig-rededge-rsr-neon-aop", "a) Relative spectral response of the Micasense RedEdge 3 camera in 5 distinct spectral bands based on the quantum efficiency of the image sensor per wavelength and the bandpass filter transmission per wavelength. b) Relative spectral responses for two channels of the Micasense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer.
+Several channels of the NEON AOP instrument comprise each of the Micasense RedEdge 3 channels, so the reflectance data from the NEON AOP are resampled (weighted, in effect) such that they can be used as though the NEON instrument exhibited the same spectral sensitivity as the Micasense RedEdge 3 instrument.")
 ```
 
-![`r fig_nums(name = "fig-rededge-rsr")`](../../figs/micasense-rededge3-relative-spectral-response.png)
+![`r fig_nums(name = "fig-rededge-rsr-neon-aop")`](../../figs/fig02_relative-spectral-response-rededge3-and-neon-aop.png)
 
 ### Radiometric Calibration and Corrections
 
@@ -524,8 +519,9 @@ Even with RTK and PPK corrections, it is still considered good practice to lay o
 
 ```{r}
 fig_nums(name = "fig-gcps", "Aerial RGB photograph captured using a DJI Phantom 4 Pro on January 23, 2020 at 120m of altitude above ground level.
-The photo depicts three ground control points (GCPs) each of two different types in the center of the image: 1 meter long spray painted orange cotton drop cloth in an “X” pattern and 1 x 1 meter squares of cotton drop cloth spray painted with black triangles.
-The GCPs are progressively more conspicuous under the canopy, in the shrub field, and on the dirt road.")
+The photo depicts three ground control points (GCPs) each of two different types in the center of the image: 1 m long spray painted orange cotton drop cloth in an “X” pattern and 1 x 1 m squares of cotton drop cloth spray painted with black triangles.
+The GCPs are progressively more conspicuous under the canopy, in the shrub field, and on the dirt road.
+The size of the area covered by the main photograph is approximately 180 m wide x 120 m high.")
 ```
 
 ![`r fig_nums(name = "fig-gcps")`](../../figs/example-gcps-with-inset.png)
@@ -579,12 +575,12 @@ We classified the dense point cloud into "ground" and "non-ground" points using 
 We used a local maximum filter to detect individual trees [@popescu2004] as implemented in the `lidR` package and a marker controlled watershed segmentation algorithm to segment individual tree crowns [@plowright2018].
 We used the `hsdar` package to spectrally resample the NEON imaging spectrometer data to match the spectral resolution of the Micasense RedEdge 3 camera [@lehnert2019].
 
-```{r}
-fig_nums(name = "fig-spectral-overlap", "Relative spectral responses for two channels of the Micasense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer.
-Several channels of the NEON AOP instrument comprise each of the Micasense RedEdge 3 channels, so the reflectance data from the NEON AOP are resampled (weighted, in effect) such that they can be used as though the NEON instrument exhibited the same spectral sensitivity as the Micasense RedEdge 3 instrument.")
-```
+<!-- ```{r} -->
+<!-- fig_nums(name = "fig-spectral-overlap", "Relative spectral responses for two channels of the Micasense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer. -->
+<!-- Several channels of the NEON AOP instrument comprise each of the Micasense RedEdge 3 channels, so the reflectance data from the NEON AOP are resampled (weighted, in effect) such that they can be used as though the NEON instrument exhibited the same spectral sensitivity as the Micasense RedEdge 3 instrument.") -->
+<!-- ``` -->
 
-![`r fig_nums(name = "fig-spectral-overlap")`](../../figs/relative-spectral-response_micasense-rededge3-vs-neon-aop.png)
+<!-- ![`r fig_nums(name = "fig-spectral-overlap")`](../../figs/relative-spectral-response_micasense-rededge3-vs-neon-aop.png) -->
 
 ```{r}
 fig_nums(name = "fig-comparing-scenes", "NDVI derived from the NEON AOP spectral imager using data collected in August of 2019 (data collection flights over NIWO on August 14, 15, 19, and 26 of 2019) and the Micasense RedEdge 3 camera using data collected on October 09, 2019.
@@ -614,7 +610,7 @@ The Matrice 100 has a relatively high lift capacity that allows for a payload to
 
 ### Payload
 We used a Micasense RedEdge3 sensor, which captures reflectance information in 5 distinct channels.
-Using the quantum efficiency and filter bandpass sensitivity of an average RedEdge3 sensor provided by Micasense, we can estimate the relative spectral response of the instrument which characterizes how the sensor captures reflectance information across the electromagnetic spectrum (`r fig_nums(name = "fig-rededge-rsr", display = "cite")`).
+Using the quantum efficiency and filter bandpass sensitivity of an average RedEdge3 sensor provided by Micasense, we can estimate the relative spectral response of the instrument which characterizes how the sensor captures reflectance information across the electromagnetic spectrum (`r fig_nums(name = "fig-rededge-rsr-neon-aop", display = "cite")`).
 
 ### Environment
 Our data collection took place on a single day under mostly sunny, light wind conditions on October 9th, 2019 starting at 2pm mountain daylight time.
