@@ -292,9 +292,9 @@ In fact, despite the typical focus on the drone vehicle, the payload is at least
 For ecologists interested in optical data, the payload may be a simple camera or a more general remote sensing sensor sensitive to reflectance of electromagnetic light.
 The scientific questions will dictate the data requirements, which will in turn drive the payload decision.
 Typically, the selection of a sensor represents a trade-off between spatial resolution (the size of pixels in the imagery at a set altitude), spectral resolution (the number of distinct portions of the electromagnetic spectrum that the sensor can detect), spectral extent (how much of the electromagenetic spectrum the sensor can detect), and cost.
-For example, while hyperspectral data provide high spectral resolution and extent that may allow you to identify the prevalence of specific chemical compounds in vegetation [e.g., foliar nitrogen; @knyazikhin2013], a multispectral instrument with fewer spectral channels [@koontz2021] or even an RGB camera [@scholl2020] may be more than sufficient for classifying vegetation to species.
+For example, while hyperspectral data provide high spectral resolution and extent that may allow measurement of specific chemical compounds in vegetation [e.g., foliar nitrogen; @knyazikhin2013], a multispectral instrument with fewer spectral channels [@koontz2021] or even an RGB camera [@scholl2020] may be more than sufficient for classifying vegetation to species.
 Similarly, sensors with high spatial resolution can capture fine detail in their imagery but may reduce the ability to measure a variable of interest, such as individual trees, as post-processing steps can be negatively affected by the movement of those fine details in the wind [@young2021].
-Hyperspectral instruments and high resolution cameras are relatively expensive in terms of purchase cost, post-processing time, and data storage requirements, but simple red-green-blue (RGB) and multispectral cameras can be affordably bought off-the-shelf so it is worth considering whether they would suffice for your particular scientific question.
+Hyperspectral instruments and high resolution cameras are relatively expensive in terms of purchase cost, post-processing time, and data storage requirements, but simple red-green-blue (RGB) and multispectral cameras can be affordably bought off-the-shelf so it is worth considering whether they would suffice for the scientific question of interest.
 
 It is also important to consider how the payload will be integrated with the vehicle, which generally requires considering the combination of the vehicle and payload simultaneously.
 In some cases, the payload can operate entirely independently from the vehicle, and integration only requires a means of physically attaching the components together.
@@ -333,7 +333,7 @@ For optical data collection such as that required for structure from motion phot
 Successful flight planning requires consideration of the flight pattern, sensor angle, flight planning software, and operation routine.
 
 Flight patterns are typically described in terms of their front overlap (a function of flight speed, flight altitude, frequency of image capture, and vertical field of view of the sensor) and side overlap (a function of flight altitude, horizontal field of view of the sensor, and distance between transects).
-Higher overlap (in excess of 80% for both front and side overlap [@dandois2015] and even as high as 95% front overlap [@torres-sanchez2018; @frey2018] is required for successful photogrammetric reconstructions of more complex vegetation such as denser forests using commonly available photo processing software.
+Higher overlap (in excess of 80% for both front and side overlap [@dandois2015] and even as high as 95% front overlap [@torres-sanchez2018; @frey2018] is required for successful photogrammetric reconstructions of more complex vegetation (such as denser forests) using commonly available photo processing software.
 Lower overlap may be sufficient for 2-D mapping quality, though the processed product may not penetrate deeply into canopy gaps [@dandois2015] and image artifacts such as “leaning” objects which were only imaged from an oblique angle are more prevalent.
 Additional overlap can be achieved by augmenting parallel transects with a second set of parallel transects rotated 90 degrees to the first (a cross hatch pattern; `r fig_nums(name = "fig-crosshatch", display = "cite")`).
 Additional viewing angles can be achieved by tilting the sensor off nadir in order to capture oblique imagery which can aid in scene reconstruction [@james2014; @cunliffe2016].
@@ -345,12 +345,18 @@ Terrain following enables the vehicle to ascend and descend to match topographic
 This serves two key functions: it ensures the safety of the vehicle and it maintains approximately the same ground sampling distance for imagery which aids in processing.
 Some missions are most easily created once in the field in order to incorporate better information on the area of interest, takeoff/landing locations, and visibility throughout flight.
 An ability for the software to function offline and to cache background map imagery can be critical for real-world UAS use.
-Finally, flight software can be resource intensive enough to require higher computing power of the computer or tablet being used.
-Crashing the flight software mid-flight due to compute resource overload is undesirable, so it is likely worth using a device with faster processors and/or more RAM.
+Flight software is resource intensive and generally requires a computer or tablet with relatively high computing power.
+We've experienced software glitches and freezing mid-flight due to compute resource overload when using tablets that weren't up to the task, which can create a hazardous situation.
+It is likely worth investing in a device with faster processors and/or more RAM.
+Finally, some flight software provide additional functionality if the tablet has geolocation services-- an ability to determine its location on Earth by connecting with satellite networks.
+For instance, the flight software may display the tablet's location on the background map during flight or even update the "home point" location for the UAS during the mission as the pilot moves around.
+The home point is the location to which the UAS returns and lands after a mission is completed, a battery is depleted, or the pilot triggers a manual "return to home" command.
+An updating home point might allow the pilot to traverse the landscape to stay closer to the UAS, thereby better maintaining visual line of sight or allowing the UAS to collect more data per flight since the travel distance to the landing point is minimized (during which time data typically aren't collected).
+Not all tablets have geolocation services; as of this writing, the Cellular+WiFi version of the Apple iPad Pro has geolocation services, but the WiFi-only version does not.
 
 A final consideration for successful flight planning is the routine used to execute missions.
 Consistent repetition of routine steps prior to, during, and after a flight ensures that all components of the UAS work as intended in concert with each other, and checklists facilitate this consistency [@degani1993].
-We highly recommend developing and using some kind of checklist for UAS operations such as the one we used for this manuscript (Supplementary Information)-- there is good reason they are part of standard operations for a range of aviators from pilots of small private aircraft to NEON AOP to NASA astronauts! Some applications (such as Kittyhawk; https://kittyhawk.io/) allow for automatic logging of checklist run throughs, which further reduces barriers to their use.
+We highly recommend developing and using some kind of checklist for UAS operations (Supplementary Information)-- there is good reason they are part of standard operations for a range of aviators from pilots of small private aircraft to NEON AOP to NASA astronauts! Some applications (such as Kittyhawk; https://kittyhawk.io/) allow for automatic logging of checklist run throughs, which further reduces barriers to their use.
 For our mission, we used Map Pilot for DJI by DronesMadeEasy, which enables full control of front/side overlap and camera angle, as well as allows for cross-hatch flight patterns, terrain following, and caching of data for use in the field when an internet connection isn’t available.
 
 ```{r}
@@ -358,7 +364,7 @@ fig_nums(name = "fig-crosshatch", "Black points depict the UAS position for each
 Red points in the “X” formation at the center are the high-precision geolocations of the NEON vegetation plot monuments.
 The background color represents the approximate number of photos captured over each point in the surveyed area based on idealized image footprints projected on the ground surrounding the geolocation of each photo point (i.e., the black points).
 Each point needs to be imaged a large number of times (likely more than 100 for denser vegetation), which means that some areas with image capture at the edges of the flown area won’t have coverage suitable for structure from motion data processing. 
-Your flight area should therefore be larger than your area of interest to ensure sufficient data coverage.")
+The flight area should therefore be larger than the area of interest to ensure sufficient data coverage.")
 ```
 
 ![`r fig_nums(name = "fig-crosshatch")`](../../figs/fig01_photo-points-overlap-and-gcps.png)
@@ -367,59 +373,24 @@ Your flight area should therefore be larger than your area of interest to ensure
 
 In the United States, use of UAS is constrained by regulations on pilot credentials, airspace in which operations take place, and vehicle type.
 This is an oft-cited hurdle to adoption of UAS for research use [@vincent2015].
-There are currently three main sets of regulations for UAS operations within the United States: Part 107 for individuals, a Certificate of Authorization for organizations, and hobbyists who are flying strictly for recreational purposes.
-Because the rules within each of these categories are actively changing, and drone pilots are responsible for staying aware of these updates.
+There are currently three main sets of regulations for UAS operations within the United States: Title 14 of the Code of Federal Regulations Part 107 for individuals (14 CFR Part 107, colloquially referred to as "Part 107"), a Certificate of Authorization (COA) for organizations, and hobbyists who are flying strictly for recreational purposes (with rules described in 14 CFR Part 101).
+The rules within each of these categories are actively changing, and drone pilots are responsible for staying aware of these updates.
+In general, most UAS flights for research purposes won't qualify for operating under the hobbyist/recreational rules, though some strictly educational flights might (e.g., using UAS in a university course).
+COAs for organizations are generally labor intensive to set up and maintain, as they require ongoing coordination with the Federal Aviation Administration (FAA), but they can allow for operations not typically permitted under other regulatory frameworks.
+Part 107 credentials can be readily obtained by individuals without the need for complex organizational overhead as would be required for a COA.
+Obtaining Part 107 credentials-- a "remote pilot certificate" from the FAA-- requires successful completion of an initial knowledge exam and needs renewing every 2 years.
+Unlike permissions granteed under a COA, the Part 107 credentials stay with the pilot and are transferable if the pilot changes organizations (e.g., a graduate student can't operate a UAS for research under a university's COA after they graduate, but they would still retain their ability to operate under Part 107).
+As of this writing, the rules for flying under Part 107 are broadly permissive and allow for myriad opportunities to use UAS to collect ecological data.
+Two of the most relevant restrictions for ecologists operating under Part 107 are: 1) the UAS must be within visual line-of-sight of the pilot in command (or within visual line of sight of another crew member acting as a "visual observer" as long as that observer has direct communication with the pilot in command), 2) the UAS must fly no higher than 400 feet above ground level (approximately 122 m).
+
 Special waivers are needed to fly in "controlled" airspace (i.e., class B/C/D/E airspace, typically near airports), to fly a UAS above 55 lbs, and to fly a UAS beyond line-of-sight.
+Some of these waivers are relatively easy to obtain (e.g., flying in class E airspace near an infrequently-used airport), while others are nearly impossible and are likely beyond the reach of an ecological data collection campaign (e.g., beyond visual line-of-sight flights).
 It is important to always call the appropriate land manager before flying on public land to obtain appropriate site access if necessary, to check for temporary closures (e.g., bird nesting), and to be a good neighbor.
 Because NEON does not own the land on which they operate, flying NEON sites will require contacting and obtaining permission from the site host; contact information is available on the NEON webpage for each site, and NEON staff may also help facilitate those connections.
 Additional, non-NEON research is allowed at some but not all sites.
 If permission is obtained, it is important not to disturb any existing research being conducted at those sites, to maintain a 20m buffer around any NEON distributed plot, and to completely avoid the area of the tower airshed (which is also delineated on the NEON webpage for each site; e.g., https://www.neonscience.org/data-samples/data/spatial-data-maps).
-Clear communication with concerned parties of UAS flights for research, even if you have every legal right to fly at a particular location, is important for building community credibility and longevity for UAS as a tool for ecologists.
-The pilot should have an equipment list and an operations checklist to make sure safety procedures are followed.
-Emergency operating procedures should be understood should a mishap occur, including: crash, battery fire, flyaway, airspace violation, or propellor injury.
-
-```{r}
-# table_nums(name = "table-regulations", "Summary of rules/regulations considerations for UAS-enabled ecology in the United States.")
-```
-
-```{r regulations_table_print, echo = FALSE, include = TRUE, results = 'asis'}
-# regulations_table_print <-
-#   tibble::tibble(Consideration = c("", "", "", "Vehicle", "", "", ""), 
-#                  Options = c("Rotocopter",
-#                              "",
-#                              "",
-#                              
-#                              "Fixed wing", 
-#                              "",
-#                              
-#                              "VTOL fixed wing",
-#                              "(Hybrid)"),
-#                  Advantages = c("Ease of take-off and landing",
-#                                 "Hover capability, maneuverability",
-#                                 "Affordable", 
-#                                 
-#                                 "Longer flight time (2+ hours)",
-#                                 "Cover large spatial extent", 
-#                                 
-#                                 "Simpler takeoff/landing",
-#                                 "Longer flight time"),
-#                  Disadvantages = c("Shorter flight time (~20 minutes)", 
-#                                    "",
-#                                    "",
-#                                    
-#                                    "Minimum flight speed to keep it aloft (affecting overlap, image quality)",
-#                                    "Complex takeoff/landing", 
-#                                    
-#                                    "Newer technology",
-#                                    "Expensive"),
-#                  `Reference(s)` = c("", "", "", "@anderson2013b; @goodbody2017; @padua2017", "", "", ""))
-#   
-# pandoc.table(regulations_table_print, 
-#              split.tables = Inf,
-#              caption = table_nums(name = "table-regulations"),
-#              keep.line.breaks = TRUE)
-```
-
+Clear communication with concerned parties of UAS flights for research, even if there is every legal right to fly at a particular location, is important for building community credibility and longevity for UAS as a tool for ecologists.
+Finally, as with flight planning, it is best practice to develop a routine and a checklist (see Supplementary Information) for determining whether UAS flights are allowed in the intended survey area under the relevant regulatory framework.
 
 ```{r}
 fig_nums(name = "fig-rededge-rsr-neon-aop", "a) Relative spectral response of the Micasense RedEdge 3 camera in 5 distinct spectral bands based on the quantum efficiency of the image sensor per wavelength and the bandpass filter transmission per wavelength. b) Relative spectral responses for two channels of the Micasense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer.
@@ -430,45 +401,45 @@ Several channels of the NEON AOP instrument comprise each of the Micasense RedEd
 
 ### Radiometric Calibration and Corrections
 
-NEON implements a complex algorithm to convert its imaging spectrometer data to units of reflectance [@karpowicz2015].
-This compensates for the scattering and absorption of light as it travels through the atmosphere (e.g., haze, water vapor) on its optical path to the AOP.
-As individual researchers collecting UAS imagery, we are responsible for converting our otherwise arbitrary image pixel values into meaningful, standardized units like reflectance.
+Optical data from UAS-mounted sensors must be radiometrically calibrated in order to convert otherwise arbitrary image pixel values into meaningful, standardized units like reflectance.
 Applying image preprocessing steps (e.g., correcting for camera artifacts such as vignetting and dark noise) and subsequent radiometric calibration allows our UAS data to be comparable with high-quality scientific data products derived from the NEON AOP.
 The Empirical Line Method (ELM) has proved to be a simple and accurate UAS radiometric calibration option [@wang2015].
-ELM requires the placement of at least two materials such as calibrated reflectance panels with known reflectance in the scene, which are used to map image pixel values to reflectance for each spectral band.
-Many sensor vendors and photogrammetry software options only provide or enable a single panel for radiometric calibration.
+ELM requires the placement of at least two materials such as calibrated reflectance panels with known reflectance in the scene, which are imaged while the sensor is in flight.
+These images containing the calibrated reflectance panels are then used to translate image pixel values to reflectance for each spectral band for the whole survey area.
+For some sensors, particularly low cost multispectral sensors designed for agriculture, a downwelling light sensor (DLS a.k.a. sunshine sensor) also records data about the illumination levels at the exact moment that each image is captured.
+This information is often incorporated into the SfM processing to partially correct for varying light conditions throughout the flight.
+Importantly, the DLS can help account for varying illumination from image-to-image, but it doesn't allow for conversion of the image pixel values into a standardized unit of reflectance the way that calibrated reflectance panels can.
 
-To give your UAS image data the best possible chances of being calibrated using any method in the future, we recommend using 3 panels with varying gray levels.
-Ideally, your panels should be large enough to be imaged during flight and contain an area of 10 x 10 pixels [@wang2015].
+NEON implements a complex algorithm to convert its imaging spectrometer data to units of reflectance [@karpowicz2015] that is founded on a similar principle as ELM.
+A series of vicarious calibration flights are conducted with the NEON AOP before and after every field season [@leisso2014].
+They fly over two large tarps with 48% (medium gray) and 3% (black) reflectance, collect ground-based reflectance measurements of these tarps with an ASD, and use these data to verify the radiometric calibration of the NEON AOP Imaging Spectrometer (https://www.neonscience.org/data-collection/imaging-spectrometer).
+The reflectance of these tarps is meant to represent the upper and lower bounds of reflectance typically seen in nature.
+NEON's algorithm also compensates for the scattering and absorption of light as it travels through the atmosphere (e.g., haze, water vapor) on its optical path to the AOP.
+
+Using three panels with varying gray levels will allow for the most flexibility in calibration methodology for UAS image data.
+Ideally, panels should be large enough to be imaged during flight and contain an area of 10 x 10 pixels [@wang2015].
 Panels should be matte (as opposed to shiny or glossy) with a smooth, horizontal surface [@smith1999].
-Your panel colors should be shades of black (near 0% reflectance) and gray, ideally covering the range of reflectance for your subject of interest.
+Panel colors should be shades of black (near 0% reflectance) and gray, ideally covering the range of reflectance for the subject of interest.
 White (near 100% reflectance) panels are not recommended since they can saturate and cause other issues [@cao2019].
- For plant surveys, we recommend a medium grey, dark grey, and black target since vegetation tends to be about 50% average reflectance or medium gray.
-You can purchase calibrated reflectance panels from vendors, or make your own.
+For plant surveys, we recommend a medium grey, dark grey, and black target since vegetation tends to be about 50% average reflectance or medium gray.
+Calibrated reflectance panels often come with the sensor to be integrated on the vehicle, but they can also be purchased separately from vendors or made at home.
+Care must be taken with homemade panels because even though they may appear a particular shade to the human eye (visible spectrum), they may not be a similar reflectance across all wavelengths observed by a multi-spectral or hyperspectral sensor.
 Many studies have identified promising materials for homemade panels: plywood covered with matte paint [@rosas2020], gray linoleum, and black fine-weave cotton fabric [@cao2019].
-However, care must be taken with homemade panels because even though they may appear a particular shade to the human eye (visible spectrum), they may not be a similar reflectance across all wavelengths observed by a multi-spectral or hyperspectral sensor.
- 
-Regardless of panel cost, color, or material, it is critical to clean, re-measure, re-calibrate, and/or replace them over time to ensure the most accurate reflectance calibration possible for your UAS imagery.
-This is especially important when your field work involves exposing panels to harsh environmental conditions with dirt, dust, sand, sun, and any other types of physical damage or degradation.
+
+Researchers have vastly different constraints for their budget, environmental conditions in the field, and equipment availability, so “good enough” may be more realistically attainable than the “ideal” radiometric calibration practices described above.
+If in-flight panel photos are not possible or if only a small panel is available (as is often the case with panels that come with a sensor), photos of the panel can be captured either before or after flight.
+Many off-the-shelf multispectral sensors only come with one small calibration panel, but having one panel is better than none even though this may limit the data calibration possibilities in the future.
+Further, popular commercial SfM software like Agisoft Metashape and Pix4D may only accommodate one panel, so correcting UAS imagery with a single panel may be the only practical option.
+When only a single calibration panel is used, choosing a gray panel (rather than a white or black one) helps to avoid crushing or clipping in under/over exposed images.
+
+Regardless of panel cost, color, or material, it is critical to clean, re-measure, re-calibrate, and/or replace them over time to ensure the most accurate reflectance calibration possible.
+This is especially important when field work involves exposing panels to harsh environmental conditions with dirt, dust, sand, sun, and any other types of physical damage or degradation.
 To illustrate this point, we re-measured a calibrated reflectance panel after three years of field work using a handheld Analytical Spectral Devices (ASD, ASD Inc., a Malvern PANalytical Company, Longmont, Colorado) FieldSpec 4 spectrometer (USGS data release DOI available upon publication).
 We present the vendor-provided panel reflectance from the time of purchase in 2017 with the averaged ASD handheld reflectance collected three years later in 2020 (`r fig_nums(name = "fig-calibration-panel", display = "cite")`).
 The reflectance of the panel has decreased by as much as 10% due to the presence of dirt and dust.
 This decrease in reflectance is especially noticeable in the shorter wavelengths.
 If we use the vendor-provided panel reflectance data from 2017 for current and future flights, we will introduce significant error into our reflectance calibration.
 According to the manufacturer, this make and model of calibration panel is not able to be cleaned (though newer panels from this manufacturer can be cleaned; see https://support.micasense.com/hc/en-us/articles/360005163934-Calibrated-Reflectance-Panel-Care-Instructions) as this will force debris further into the pores of the panel material, so it is important to use the updated reflectance measurement for this panel during radiometric calibration.
-
-NEON in essence does this scene-based radiometric calibration too.
-A series of vicarious calibration flights are conducted with the NEON AOP before and after every field season [@leisso2014].
-They fly over two large tarps with 48% (medium gray) and 3% (black) reflectance, collect ground truth reflectance measurements of these tarps with an ASD, and use these data to verify the radiometric calibration of the NEON AOP Imaging Spectrometer (https://www.neonscience.org/data-collection/imaging-spectrometer).
-The reflectance of these tarps is meant to represent the upper and lower bounds of reflectance typically seen in nature.
-
-We recognize that each researcher has vastly different constraints for their budget, environmental conditions in the field, and equipment availability, so “good enough” may be more realistically attainable than the “ideal” radiometric calibration practices described above.
-Having one calibration panel is better than none; choose gray rather than white or black to avoid crushing or clipping in under/over exposed images.
-Commercial SfM software like Agisoft Metashape and Pix4D accommodate at least one panel, so you can correct the imagery with a single panel although this may limit the data calibration possibilities using other methods.
-If in-flight panel photos are not possible or if you have a small panel, be sure to take photos before/after flight.
-A downwelling light sensor (DLS), also known as a sunshine sensor, records data about the current illumination levels during flight and is standard equipment on low cost multispectral sensors designed for agriculture.
-The information collected by them is often incorporated into the SfM processing.
-DLS data can help to correct each image based on changing light conditions during flight.
 
 ```{r}
 fig_nums(name = "fig-calibration-panel", "Comparison of reflectance spectra (A) for a calibrated reflectance panel (B).
@@ -606,7 +577,9 @@ We use the previous section's "core considerations" as a framework for describin
 
 We flew a DJI Matrice 100 vehicle, which is a rotocopter style drone with four propellers and a proven track record of safe, predictable flights.
 The vertical take offs and landings of the rotocopter style allowed us to operate the vehicle from a clearing as small as the width of the dirt access road to the site.
+We used a piece of plywood laid on the ground as a flat, stable takeoff platform that would also help to minimize the amount of dust kicked up by the rotor wash during takeoff and landing. 
 The Matrice 100 has a relatively high lift capacity that allows for a payload to be integrated, and is heavier than many consumer rotocopters which makes it both more stable in windy conditions and more challenging to transport beyond a road.
+
 
 ### Payload
 We used a Micasense RedEdge3 sensor, which captures reflectance information in 5 distinct channels.
@@ -617,18 +590,21 @@ Our data collection took place on a single day under mostly sunny, light wind co
 We ideally would have flown closer to solar noon to minimize shadows in the imagery, particularly this late in the year.
 
 ### Flight Planning
-We used 
+We used Map Pilot for DJI, an Apple iPad iOS app, for planning the flight.
+Map Pilot is a reliable, full-featured flight planning application that allows us to set 
 
 ### Regulations
 
-We obtained permission to access the NIWO NEON site from the site host, the Mountain Research Station as well as NEON itself.
+We obtained permission to access the NIWO NEON site from the site host, the University of Colorado Boulder Mountain Research Station, as well as NEON itself.
+We flew under the FAA Part 107 rules for commercial drone operations, which isa broadly permissive set of regulations for capturing optical data.
+
 The airspace over NIWO is Class G uncontrolled up to 1,200 feet above ground level.
 
 ### Radiometric Calibration
 
 ### Georeferencing
 
-We laid out orange cloth X's over the 9 permanent markers within the NIWO_017 field site.
+We laid out orange cloth X's over the 9 permanent markers within the NIWO_017 field site (red points in `r fig_nums(name = "fig-crosshatch", display = "cite")`).
 Five of these points ended up being visible from the air.
 These ground control points were located within the center of the flight area, without any geolocation representation at the edges which wasn't ideal.
 
@@ -672,9 +648,13 @@ We conclude with a research agenda for UAS/NEON integration, which we hope provi
 1. Replacing high-cost NEON AOP flights with lower-cost alternatives (e.g., if the drone-derived data are "good enough" compared to the AOP, can we reduce the operational costs of the AOP)
 1. Using NEON data as a common currency for validating new methods 
 
+
+1. Phenology of individual trees linked to phenocam and multiple, frequent UAS flights
+1. Predicting snow retention by enhancing NEON forest structure/topography measurements with UAS finer-scale measurements
+
 ## Acknowledgements
 
-Funding for the 2019 NEON Science Summit was provided by NSF Award #1906144. Additional funding was provided by Earth Lab through the University of Colorado, Boulder’s Grand Challenge Initiative, the Cooperative Institute for Research in Environmental Sciences, and the North Central Climate Adaptation Science Center. We would also like to acknowledge the National Aeronautics and Space Administration (NASA) New Investigator Program (NIP) grant 80NSSC18K0750 to M. E. Cattau. The National Ecological Observatory Network is a program sponsored by the National Science Foundation and operated under cooperative agreement by Battelle. This material is based in part upon work supported by the National Science Foundation through the NEON Program.
+Funding for the 2019 NEON Science Summit was provided by NSF Award #1906144. Additional funding was provided by Earth Lab through the University of Colorado, Boulder’s Grand Challenge Initiative, the Cooperative Institute for Research in Environmental Sciences, and the North Central Climate Adaptation Science Center. We would also like to acknowledge the National Aeronautics and Space Administration (NASA) New Investigator Program (NIP) grant 80NSSC18K0750 to M. E. Cattau. The National Ecological Observatory Network is a program sponsored by the National Science Foundation and operated under cooperative agreement by Battelle. This material is based in part upon work supported by the National Science Foundation through the NEON Program. We thank Chelsea Nagy, Jeff Sloan, and two anonymous reviewers for their feedback, which greatly improved the manuscript.
 
 ## Data availability
 All data and code required to reproduce the analysis and the workflow presented in this manuscript can be found on the Open Science Framework at (available upon publication) and on GitHub (available upon publication)
