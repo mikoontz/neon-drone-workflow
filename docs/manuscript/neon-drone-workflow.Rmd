@@ -174,6 +174,7 @@ On the other hand, fixed wing aircraft have longer flight times with better batt
 For example, covering the full extent of a given AOP footprint (147.6 +/- 107.2  km^2^ for core and relocatable sites) may be most efficiently conducted with a fixed-wing or hybrid vehicle.
 They are also more stable in adverse conditions (e.g., high winds) and have a safer recovery from motor power loss.
 VTOL fixed wing systems can combine the efficiency of a fixed wing with the small takeoff/landing footprint of a rotocopter.
+A summary of the advantages and disadvantages of these vehicle types is found in `r table_nums(name = "table-vehicle-payload", display = "cite")`.
 
 A flat surface clear of obstructions (e.g., on dirt rather than grass, away from forest canopy) is ideal for UAS takeoffs and landings.
 VTOL systems require a smaller takeoff and landing footprint, which may be satisfied with only a small canopy gap, compared to vehicles that use fixed wings for lift, which require a “runway” for fixed wing vehicles.
@@ -267,6 +268,7 @@ Typically, the selection of a sensor represents a trade-off between spatial reso
 For example, while hyperspectral data provide high spectral resolution and extent that may allow measurement of specific chemical compounds in vegetation [e.g., foliar nitrogen; @knyazikhin2013], a multispectral instrument with fewer spectral channels [@koontz2021] or even an RGB camera [@scholl2020] may be more than sufficient for classifying vegetation to species.
 Similarly, sensors with high spatial resolution can capture fine detail in their imagery but may reduce the ability to measure a variable of interest, such as individual trees, as post-processing steps can be negatively affected by the movement of those fine details in the wind [@young2021].
 Hyperspectral instruments and high resolution cameras are relatively expensive in terms of purchase cost, post-processing time, and data storage requirements, but simple red-green-blue (RGB) and multispectral cameras can be affordably bought off-the-shelf so it is worth considering whether they would suffice for the scientific question of interest.
+A summary of the advantages and disadvantages of these different payload types for collecting optical data can be found in `r table_nums(name = "table-vehicle-payload", display = "cite")`.
 
 It is also important to consider how the payload will be integrated with the vehicle, which generally requires considering the combination of the vehicle and payload simultaneously.
 In some cases, the payload can operate entirely independently from the vehicle, and integration only requires a means of physically attaching the components together.
@@ -302,13 +304,16 @@ In fact, the NEON AOP does exactly this for their daily flight reports.
 
 One of the key benefits of UAS operations is the ability to program missions to be automatically followed by the vehicle’s onboard flight software.
 For optical data collection such as that required for structure from motion photogrammetry, the mission typically involves aerial transects with images captured at regular time or distance intervals so that objects in a scene are imaged from many viewing angles (often in excess of 100; `r fig_nums(name = "fig-crosshatch", display = "cite")`).
-Successful flight planning requires consideration of the flight pattern, sensor angle, flight planning software, and operation routine.
+Successful flight planning requires consideration of the flight parameters, flight planning software, and operation routine.
 
-Flight patterns are typically described in terms of their front overlap (a function of flight speed, flight altitude, frequency of image capture, and vertical field of view of the sensor) and side overlap (a function of flight altitude, horizontal field of view of the sensor, and distance between transects).
-Higher overlap (in excess of 80% for both front and side overlap [@dandois2015] and even as high as 95% front overlap [@torres-sanchez2018; @frey2018] is required for successful photogrammetric reconstructions of more complex vegetation (such as denser forests) using commonly available photo processing software.
+The flight parameters are crucial determinants of whether or not the SfM photogrammetry will successfully create a digital model of the survey area.
+Flight parameters are typically described in terms of the front and side overlap of the resulting imagery, as well as the sensor angle.
+The front overlap is a function of flight speed, flight altitude, frequency of image capture, and the vertical field of view of the sensor, while the side overlap is a function of flight altitude, horizontal field of view of the sensor, and distance between transects.
+Overlap in excess of 80% for both front and side overlap [@dandois2015] and even as high as 95% front overlap [@torres-sanchez2018; @frey2018] is required for successful photogrammetric reconstructions of more complex vegetation (such as denser forests) using commonly available photo processing software.
 Lower overlap may be sufficient for 2-D mapping quality, though the processed product may not penetrate deeply into canopy gaps [@dandois2015] and image artifacts such as “leaning” objects which were only imaged from an oblique angle are more prevalent.
 Additional overlap can be achieved by augmenting parallel transects with a second set of parallel transects rotated 90 degrees to the first (a cross hatch pattern; `r fig_nums(name = "fig-crosshatch", display = "cite")`).
 Additional viewing angles can be achieved by tilting the sensor off nadir in order to capture oblique imagery which can aid in scene reconstruction [@james2014; @cunliffe2016].
+Published work exists that determines optimal flight parameters for creating digital representations specific survey areas [@dandois2013; @ni2018; @frey2018; @torres-sanchez2018; @nesbit2019; @diaz2020; @swayze2021; @young2021], but it still may require some trial and error (or a new study) to optimize parameters for a new study area or system.
 
 Flight planning is typically achieved using specialized software, sometimes run on a separate device like a tablet computer.
 Most flight software allows for setting the altitude as well as the desired forward and side overlap for a given aircraft and sensor.
@@ -474,38 +479,30 @@ The size of the area covered by the main photograph is approximately 180 m wide 
 Image data collected from a UAS can quickly become "big data", and being intentional about data management will ease friction points at every step in the science workflow, from data collection to manuscript writing (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`).
 Having a ballpark idea of the total anticipated data storage requirements will help guide data storage hardware purchases such as Secure Digital memory cards (SD cards), external hard drives, internal hard drives, network attached storage (NAS), third-party cloud storage allotments, or university/organization-provided cloud storage allotments. 
 Given the desired flight plan, number of survey areas, and payload (as determined by what meets the science requirements), it should be possible to estimate the amount of data that will be collected per flight, per survey area, and in total for the whole project.
-It is best practice to adhere as close as possible to the "3-2-1 Backup Rule", where three copies of the data exist with a local, accessible copy on two different devices (e.g., local computer and an external hard drive) and one copy off-site (e.g., a cloud backup service) [@ruggiero2012]. 
+It is best practice to adhere as closely as possible to the "3-2-1 Backup Rule", where three copies of the data exist with a local, accessible copy on two different devices (e.g., local computer and an external hard drive) and one copy off-site (e.g., a cloud backup service) [@ruggiero2012]. 
 
 UAS optical data are typically collected on SD cards inserted in the sensor, so it is important to have enough empty SD cards prior to flights to accommodate the data being collected in the field.
 Swapping out the SD card after each flight for an empty one is advisable, so that the only copy of freshly-collected imagery data isn't lost in the event of a UAS mishap on the next flight.
 Frequently transferring data from the SD cards to both a laptop hard drive and an external hard drive in the field satisfies the backup rule on having data stored on "two different devices."
+Storing those two devices in different locations while in the field (e.g., in two different vehicles, or in the trunk and under the car seat) might prevent some types of data loss (e.g., theft of one of the devices).
 Once those data are transferred to other devices, it is safe to delete the images on the SD cards in order to reuse them.
+It’s recommended to perform quality assurance (QA) checks on the images while it is still possible to re-collect data.
+This could mean viewing the images on a laptop on-site, or while still on location near the field study site.
+Check the data for obvious artifacts such as over or under exposure in images, that the number of images expected were collected, that file sizes appear consistent and reasonable, and that necessary metadata was capture with each image (e.g., the geolocation).
+Generally a full QA assessment cannot be performed in the field due to time and computation limitations, but the field QA should be sufficient to ensure the images can be processed into desired products.
+Some NEON sites (e.g., NIWO) have a field house that may be accessed, with permission, for laptop friendly workspaces and/or charging options.
 
-Once the data collection is completed, data management can be broken into a quick access phase and a slower access phase based on how readily available they need to be.
-The first phase immediately post data collection while data are being processed
-The second phase deals with longer-term storage of both the data and metadata.
+Once the data collection is completed, data management can be broken into a quick access phase when data need to be readily available, and a slower access phase which concerns the longer-term storage of both data and metadata.
+During quick access phase, the data should be as "close" to the workstation doing the SfM processing as possible-- ideally on a fast internal hard drive (e.g., a solid state drive) on the same computer as the SfM software.
+Having a good long-term storage solution for the imagery (and derived data products) are important for the slower access phase, and having a copy of those data off-site will satisfy the 3-2-1 Backup Rule.
+Some universities/organizations might already have storage infrastructure capable of accommodating vast data volumes (and off-site backups).
+If university/organization storage infrastructure isn't an option, third-party cloud storage (e.g., Cyverse) or data storage-specific compute hardware (e.g., network attached storage) are also good options.
+For such high volumes of data, establishing "data levels" that characterize how derived each new processed product is makes them easier to navigate and work with [@wyngaard2019].
+Typically, Level 0 represents raw data (the original images from the sensor in the case of optical data) and higher levels are derived from lower levels (e.g., Figure 4 in @koontz2021 shows data levels for optical data collected for a forest ecology project).
 
-For data processing, it 
-
-For such high volumes of data, it is sound data management practice to establish "data levels" that characterize how derived each new processed product is, with Level 0 representing raw data and higher levels being derived from lower levels [@wyngaard2019; @koontz2021].
-
-For long-term storage, you will want to consider which data products from the mission to publish and how you’ll want to make these products publicly available.
-
-
-We suggest publishing the raw images taken from UAS missions which may be processed to even higher quality products given the rapid advances in structure from motion photogrammetry.
-
-You’ll also want to figure out good long-term storage for the raw data at your institution or elsewhere. 
-
-
-as well as a laptop and an external hard drive(s) to transfer the data immediately, and back them up.
-
-
-
-
-
-
-
-
+For public-facing storage, we suggest publishing all data product levels to a long-term data repository with a digital object identifier (DOI) in the open science spirit of broadening access to research.
+Ideally, this includes the original raw images taken from UAS missions, which may be processed in the future to even higher quality products given the rapid advances in SfM photogrammetry software.
+This can prove costly With particularly high data volumes, but it may be possible to rely on university/organization cyberinfrastructure resources, or other options that cater specifically to researchers aiming to practice open science principles (e.g., Cyverse, Open Science Framework). 
 
 
 ```{r}
@@ -520,18 +517,25 @@ For example, whereas building your own data management system may be more afford
 
 ### Data processing
 
-It’s recommended to perform quality assurance (QA) checks on the images while you’re in the field, as a reality check before you leave and start processing (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`).
-This could mean viewing the images on a laptop on-site, or while still on location near the field study site.
-Check the data for obvious artifacts such as over or under exposure in images, that the number of images expected were collected, and that file sizes appear consistent and reasonable.
-Generally a full QA assessment cannot be performed in the field due to time and computation limitations, but the field QA should be sufficient to ensure the images can be processed into desired products.
-Some NEON sites (e.g., NIWO) have a field house that may be accessed, with permission, for laptop friendly workspaces and / or charging options.
-Contact the site host at each site for more information.
-Processing UAS imagery to create an orthomosaic or point cloud can be CPU, RAM, and GPU-intensive, so a workstation that balances these hardware components is ideal.
-One may have a workstation powerful enough to process images locally, or they may want to invest in a cloud-processing option [e.g., Cyverse-- see @swetnam2018] (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`).
-Be sure to be consistent with the datum/projection for each of your datasets (GNSS positions of GCPs, GNSS locations of UAS camera), and transform where necessary.
+One common approach for processing UAS-derived imagery such that it can be integrated with other data sources (e.g., NEON) is SfM photogrammetry, which converts the original images into data products such as a two-dimensional orthomosaic and a three-dimensional point cloud.
+Many software applications are available for SfM photogrammetry that produce results of similar quality [@forsmoo2019], and many have steep discounts for research or educational use (e.g., Agisoft Metashape, Pix4DMapper).
+Some free, open source options are also available (e.g., OpenDroneMap) and are steadily improving.
+SfM photogrammetry can be CPU, RAM, disk drive, and GPU-intensive, so a workstation that balances these hardware components is ideal.
+Higher-end gaming desktops are often sufficiently powerful workstations for processing images locally, but cloud-processing options also exist [e.g., university high performance compute resources, add-on capabilities of the specific SfM software purchased, Cyverse-- see @swetnam2018].
+Even if most of the processing takes place in the cloud, it can still be beneficial to have a relatively powerful local machine in order to readily view and manipulate the resulting data products.
 
-Many software applications are available for structure from motion photogrammetry processing that produce results of similar quality [@forsmoo2019].
-You must select the appropriate post-processing (i.e., photogrammetry) software license for you needs and resources (e.g., Agisoft Metashape, Pix4D), and take note of what processing steps you take from raw data to final products, for sake of reproducibility.
+SfM workflows require myriad decisions about processing parameters, all of which might affect the quality of the resulting data products.
+An excellent SfM guide has been published by the USGS for the Agisoft Metashape software [@over2021], and some researchers have experimented with various SfM processing parameter combinations to empirically determine optimal parameter sets for particular use cases [@tinkham2021; @young2021] though some trial and error may still be required for new study systems.
+Some software allows for automating the SfM processing using coding scripts, which then serve as the transparent and reproducible record of the workflow.
+Other software workflows are based on a point-and-click graphical user interface (GUI), which requires the user to take note of the processing steps.
+Finally, it will eliminate some friction points with resulting SfM products (particularly the three-dimensional point cloud) to work in a coordinate reference system that measures local distances in true units of distance (e.g., distance measured in meters with the Universal Transverse Mercator (UTM) coordinate reference system).
+In any case, it is important to be consistent with the coordinate reference system for each of your data products (e.g., GNSS positions of GCPs, GNSS locations of UAS camera).
+
+Many free, open source software tools exist for working with SfM data products including QGIS for visualization and GUI-based geospatial manipulation, CloudCompare for visualization and GUI-based manipulation of point clouds, and a suite of R packages [@atkins2022].
+
+neonhs [@joseph2021a], lidR [@roussel2020; @roussel2021], ForestTools [@plowright2021], hsdar [@atkins2022]
+
+
 
 ```{r}
 fig_nums(name = "fig-comparing-scenes", "NDVI derived from the NEON AOP spectral imager using data collected in August of 2019 (data collection flights over NIWO on August 14, 15, 19, and 26 of 2019) and the Micasense RedEdge 3 camera using data collected on October 09, 2019.
@@ -610,9 +614,9 @@ We used the Open Science Framework for public-facing storage (available upon pub
 
 ### Data Processing
 
-We followed the USGS workflow to process our raw Micasense RedEdge 3 imagery into an orthomosaic and a dense point cloud (https://uas.usgs.gov/nupo/pdf/USGSAgisoftPhotoScanWorkflow.pdf).
-We classified the dense point cloud into "ground" and "non-ground" points using a cloth simulation filter algorithm [@zhang2016] implemented in the `lidR` [@roussel2019] package.
-We used a local maximum filter to detect individual trees [@popescu2004] as implemented in the `lidR` package and a marker controlled watershed segmentation algorithm to segment individual tree crowns [@plowright2018].
+We followed the USGS workflow to process our raw Micasense RedEdge 3 imagery into an orthomosaic and a dense point cloud [@over2021].
+We classified the dense point cloud into "ground" and "non-ground" points using a cloth simulation filter algorithm [@zhang2016] implemented in the `lidR` [@roussel2021] package.
+We used a local maximum filter to detect individual trees [@popescu2004] as implemented in the `lidR` package and a marker controlled watershed segmentation algorithm to segment individual tree crowns [@plowright2021].
 We used the `hsdar` package to spectrally resample the NEON imaging spectrometer data to match the spectral resolution of the Micasense RedEdge3 camera [@lehnert2019].
 
 `r fig_nums(name = "fig-comparing-scenes", display = "cite")` shows the comparison between NDVI as captured by the NEON AOP flight in August with our UAS-derived NDVI from our flight in October.
