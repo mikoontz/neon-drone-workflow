@@ -334,7 +334,7 @@ Not all tablets have geolocation services; as of this writing, the Cellular+WiFi
 A final consideration for successful flight planning is to create a routine for consistently executing missions.
 Consistent repetition of routine steps prior to, during, and after a flight ensures that all components of the UAS work as intended in concert with each other, and checklists facilitate this consistency [@degani1993].
 We highly recommend developing and using some kind of checklist for UAS operations (Supplementary Information)-- there is good reason they are part of standard operations for a range of aviators from pilots of small private aircraft to NEON AOP to NASA astronauts! Some applications (such as Kittyhawk; https://kittyhawk.io/) allow for automatic logging of checklist run throughs, which further reduces barriers to their use.
-For our mission, we used Map Pilot for DJI by DronesMadeEasy, which enables full control of front/side overlap and camera angle, as well as allows for cross-hatch flight patterns, terrain following, and caching of data for use in the field when an internet connection isn’t available.
+For our mission, we used Map Pilot for DJI by DronesMadeEasy, which enables full control of front/side overlap and camera angle, as well as allows for crosshatch flight patterns, terrain following, and caching of data for use in the field when an internet connection isn’t available.
 
 ```{r}
 fig_nums(name = "fig-crosshatch", "Black points depict the UAS position for each photo captured during the flight.
@@ -356,9 +356,10 @@ In general, most UAS flights for research purposes won't qualify for operating u
 COAs for organizations are generally labor intensive to set up and maintain, as they require ongoing coordination with the Federal Aviation Administration (FAA), but they can allow for operations not typically permitted under other regulatory frameworks.
 Part 107 credentials can be readily obtained by individuals without the need for complex organizational overhead as would be required for a COA.
 Obtaining Part 107 credentials-- a "remote pilot certificate" from the FAA-- requires successful completion of an initial knowledge exam and needs renewing every 2 years.
-Unlike permissions granteed under a COA, the Part 107 credentials stay with the pilot and are transferable if the pilot changes organizations (e.g., a graduate student can't operate a UAS for research under a university's COA after they graduate, but they would still retain their ability to operate under Part 107).
+Unlike permissions granted under a COA, the Part 107 credentials stay with the pilot and are transferable if the pilot changes organizations (e.g., a graduate student can't operate a UAS for research under a university's COA after they graduate, but they would still retain their ability to operate under Part 107).
 As of this writing, the rules for flying under Part 107 are broadly permissive and allow for myriad opportunities to use UAS to collect ecological data.
 Two of the most relevant restrictions for ecologists operating under Part 107 are: 1) the UAS must be within visual line-of-sight of the pilot in command (or within visual line of sight of another crew member acting as a "visual observer" as long as that observer has direct communication with the pilot in command), 2) the UAS must fly no higher than 400 feet above ground level (approximately 122 m).
+Part 107 does constrain operations in other ways (e.g., UAS can't fly faster than 87 knots [161 km/h], UAS must be at least 500 feet [152 m] below clouds and 2000 feet [609 m] horizontally from clouds), but high quality optical data collection usually requires UAS operations to be well within these limits.
 
 Special waivers are needed to fly in "controlled" airspace (i.e., class B/C/D/E airspace, typically near airports), to fly a UAS above 55 lbs, and to fly a UAS beyond line-of-sight.
 Some of these waivers are relatively easy to obtain (e.g., flying in class E airspace near an infrequently-used airport), while others are nearly impossible and are likely beyond the reach of an ecological data collection campaign (e.g., beyond visual line-of-sight flights).
@@ -370,8 +371,8 @@ Clear communication with concerned parties of UAS flights for research, even if 
 Finally, as with flight planning, it is best practice to develop a routine and a checklist (see Supplementary Information) for determining whether UAS flights are allowed in the intended survey area under the relevant regulatory framework.
 
 ```{r}
-fig_nums(name = "fig-rededge-rsr-neon-aop", "a) Relative spectral response of the Micasense RedEdge 3 camera in 5 distinct spectral bands based on the quantum efficiency of the image sensor per wavelength and the bandpass filter transmission per wavelength. b) Relative spectral responses for two channels of the Micasense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer.
-Several channels of the NEON AOP instrument comprise each of the Micasense RedEdge 3 channels, so the reflectance data from the NEON AOP are resampled (weighted, in effect) such that they can be used as though the NEON instrument exhibited the same spectral sensitivity as the Micasense RedEdge 3 instrument.")
+fig_nums(name = "fig-rededge-rsr-neon-aop", "a) Relative spectral response of the MicaSense RedEdge 3 camera in 5 distinct spectral bands based on the quantum efficiency of the image sensor per wavelength and the bandpass filter transmission per wavelength. b) Relative spectral responses for two channels of the MicaSense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer.
+Several channels of the NEON AOP instrument comprise each of the MicaSense RedEdge 3 channels, so the reflectance data from the NEON AOP are resampled (weighted, in effect) such that they can be used as though the NEON instrument exhibited the same spectral sensitivity as the MicaSense RedEdge 3 instrument.")
 ```
 
 ![`r fig_nums(name = "fig-rededge-rsr-neon-aop")`](../../figs/fig02_relative-spectral-response-rededge3-and-neon-aop.png)
@@ -420,7 +421,7 @@ According to the manufacturer, this make and model of calibration panel is not a
 
 ```{r}
 fig_nums(name = "fig-calibration-panel", "Comparison of reflectance spectra (A) for a calibrated reflectance panel (B).
-The panel vendor provides a reflectance spectrum describing the panel’s reflectance at the time of purchase (black reflectance profile, “Micasense, 2017”).
+The panel vendor provides a reflectance spectrum describing the panel’s reflectance at the time of purchase (black reflectance profile, “MicaSense, 2017”).
 After three years of using the panel repeatedly for field work, we re-measured the panel using a handheld spectrometer (blue reflectance profile, “ASD, 2020”) to evaluate the change in spectral reflectance for the panel.
 The spectra in (A) are reflectance values as a function of wavelength across the visible and near infrared.
 The MicaSense RedEdge 3 spectral band ranges (blue, green, red, red edge, near infrared) are illustrated here as vertical bars of color.
@@ -464,7 +465,6 @@ This can result in massive time savings, particularly when surveying large areas
 For instance, @gillan2021 was able to survey and process data covering over 190 hectares of rangeland in approximately 30 days versus an estimated 141 days using a conventional UAS workflow, with an estimated 47 days saved just from using an RTK system versus GCPs.
 Even with RTK and PPK corrections, it is still considered good practice to lay out some GCPs at precisely known locations, then quantify geolocation error in the final SfM products by measuring the difference between the field- and UAS-measured GCP locations.
 
-
 ```{r}
 fig_nums(name = "fig-gcps", "Aerial RGB photograph captured using a DJI Phantom 4 Pro on January 23, 2020 at 120m of altitude above ground level.
 The photo depicts three ground control points (GCPs) each of two different types in the center of the image: 1 m long spray painted orange cotton drop cloth in an “X” pattern and 1 x 1 m squares of cotton drop cloth spray painted with black triangles.
@@ -504,7 +504,6 @@ For public-facing storage, we suggest publishing all data product levels to a lo
 Ideally, this includes the original raw images taken from UAS missions, which may be processed in the future to even higher quality products given the rapid advances in SfM photogrammetry software.
 This can prove costly With particularly high data volumes, but it may be possible to rely on university/organization cyberinfrastructure resources, or other options that cater specifically to researchers aiming to practice open science principles (e.g., Cyverse, Open Science Framework). 
 
-
 ```{r}
 fig_nums(name = "fig-data-management-schematic", "Planning a data management pipeline is a large upfront investment but can save time and money in the long-run, making it well-worth prioritizing up-front.
 Considering the storage, backup, and sharing needs of the datasets you anticipate collecting and processing ensure data persistency and availability.
@@ -531,15 +530,15 @@ Other software workflows are based on a point-and-click graphical user interface
 Finally, it will eliminate some friction points with resulting SfM products (particularly the three-dimensional point cloud) to work in a coordinate reference system that measures local distances in true units of distance (e.g., distance measured in meters with the Universal Transverse Mercator (UTM) coordinate reference system).
 In any case, it is important to be consistent with the coordinate reference system for each of your data products (e.g., GNSS positions of GCPs, GNSS locations of UAS camera).
 
-Many free, open source software tools exist for working with SfM data products including QGIS for visualization and GUI-based geospatial manipulation of raster and vector data types, CloudCompare for visualization and GUI-based manipulation of point clouds, and a suite of packages [@atkins2022] for the R programming language [@rcoreteam2021].
-
-neonhs [@joseph2021a], lidR [@roussel2020; @roussel2021], ForestTools [@plowright2021], hsdar [@atkins2022]
-
-
+After the SfM workflow is completed, there are many options for further processing the resulting data products (e.g., orthomosaics, point clouds) such that they can be integrated with NEON.
+Many free, open source software tools exist for working with geospatial data products produced by UAS and NEON including QGIS (https://qgis.org/en/site/) for visualization and GUI-based manipulation of raster and vector data types, CloudCompare (https://www.danielgm.net/cc/) for visualization and GUI-based manipulation of point clouds, and a suite of packages (https://cran.r-project.org/web/views/Spatial.html) for the `R` programming language [@rcoreteam2021].
+Several packages have also been developed specifically for working with NEON data, including `neonUtilities` [@lunch2021], `neonhs` [@joseph2021a], `geoNEON` [@nationalecologicalobservatorynetwork2020], and `NeonTreeEvaluation` [@weinstein2021a].
+A recent review by @atkins2022 describes the ecosystem of `R` packages available for working with forestry data, many of which are relevant for the types of geospatial data produced by UAS and NEON.
+More generally, working with these kinds of high-resolution geospatial data, which are often classically "big", can benefit from following the few simple rules recently outlined by @joseph2021.
 
 ```{r}
-fig_nums(name = "fig-comparing-scenes", "NDVI derived from the NEON AOP spectral imager using data collected in August of 2019 (data collection flights over NIWO on August 14, 15, 19, and 26 of 2019) and the Micasense RedEdge 3 camera using data collected on October 09, 2019.
-The NEON AOP data were first spectrally resampled into the equivalent red and near infrared bands of the Micasense RedEdge 3 camera based on the relative spectral response of the RedEdge 3 instrument.
+fig_nums(name = "fig-comparing-scenes", "NDVI derived from the NEON AOP spectral imager using data collected in August of 2019 (data collection flights over NIWO on August 14, 15, 19, and 26 of 2019) and the MicaSense RedEdge 3 camera using data collected on October 09, 2019.
+The NEON AOP data were first spectrally resampled into the equivalent red and near infrared bands of the MicaSense RedEdge 3 camera based on the relative spectral response of the RedEdge 3 instrument.
 The higher spatial resolution of the drone-derived data are highlighted.
 Note that the difference in NDVI between the images may derive from three main sources: phenological differences in the vegetation, differences in the flight conditions such as time of day and cloud cover, or differences in instrumentation.")
 ```
@@ -555,20 +554,29 @@ NEON collects field-based forest inventory data in their Terrestrial Observation
 The field-based data are restricted to 20 x 20m field plots, while the AOP data cover dozens of square kilometers but at moderately coarse resolution (10 cm for RGB imagery, 1 m for imaging spectrometer data, 1 m for LiDAR data).
 UAS have the capacity to fill in missing scales of observation for creating forest inventories by capturing a broader spatial extent than field-based NEON data, but at a finer spatial resolution than NEON AOP data.
 With this as a motivation, here we present a case study where we collect and process UAS data coincident with a NEON TOS plot to create a forest inventory.
+We then benchmark that forest inventory against the NEON TOS field data, and describe how to extract individual tree-scale spectral information that is comparable to that collected by the NEON AOP.
 We use the previous section's "core considerations" as a framework for describing our workflow, and provide all data and code to further aid our mental model building. 
 
 ### Vehicle
 
-We flew a DJI Matrice 100 vehicle, which is a rotocopter style drone with four propellers and a proven track record of safe, predictable flights.
-The vertical take offs and landings of the rotocopter style allowed us to operate the vehicle from a clearing as small as the width of the dirt access road to the site.
+Our vehicle was a DJI Matrice 100 rotocopter with four propellers and a proven track record of safe, predictable flights.
+The vertical take offs and landings of the rotocopter style drone allowed us to operate the vehicle from a clearing as small as the width of the dirt access road to the site.
 We used a piece of plywood laid on the ground as a flat, stable takeoff platform that would also help to minimize the amount of dust kicked up by the rotor wash during takeoff and landing. 
 The Matrice 100 has a relatively high lift capacity that allows for a payload to be integrated, and is heavier than many consumer rotocopters which makes it both more stable in windy conditions and more challenging to transport beyond a road.
 
-
 ### Payload
 
-We used a Micasense RedEdge3 sensor, which captures reflectance information in 5 distinct channels.
-Using the quantum efficiency and filter bandpass sensitivity of an average RedEdge3 sensor provided by Micasense, we can estimate the relative spectral response of the instrument which characterizes how the sensor captures reflectance information across the electromagnetic spectrum (`r fig_nums(name = "fig-rededge-rsr-neon-aop", display = "cite")`).
+We captured imagery using two co-mounted sensors: a gimbal-stabilized DJI Zenmuse X3 RGB camera, and a MicaSense RedEdge 3 sensor, which captures reflectance information in 5 distinct channels.
+The DJI Zenmuse X3 camera has a focal length of 3.6 mm, a sensor width of 6.17 mm, and a sensor height of 4.55 mm.
+The MicaSense RedEdge 3 sensor has a focal length of 5.5 mm, a sensor width of 4.8 mm, and a sensor height of 3.6 mm.
+We used a fixed mount and a prebuilt integration kit for the MicaSense RedEdge 3 made by the sensor manufacturer to integrate with our vehicle.
+This particular mount is angled such that the sensor faces exactly downward when the aircraft is tilted forward in flight, and the integration kit allows the sensor to share power with the vehicle batteries.
+The RedEdge 3 sensor image capture mechanism is independent from the flight planning app or the vehicle's flight computer, though deeper integration with specific vehicles is possible with newer versions of the sensor.
+Prior to flight, we connected to the RedEdge 3 sensor with a laptop via its built-in WiFi to verify that the sensor's onboard GNSS receiver was functioning properly and to initiate image capture.
+We set the RedEdge 3 sensor to capture images at a rate of 1 image per second.
+We set the DJI Zenmuse X3 camera to capture images at a rate of 0.5 images per second.
+Using the quantum efficiency and filter bandpass sensitivity of an average RedEdge 3 sensor provided by MicaSense, we estimated the relative spectral response of the instrument which characterizes how the sensor captures reflectance information across the electromagnetic spectrum (`r fig_nums(name = "fig-rededge-rsr-neon-aop", display = "cite")`).
+We provide the relative spectral response data in a format that makes it interoperable with the hsdar package [@lehnert2019].
 
 ### Environment
 Our data collection took place on a single day under mostly sunny, light wind conditions on October 9th, 2019 starting at 2pm mountain daylight time.
@@ -576,51 +584,110 @@ We ideally would have flown closer to solar noon to minimize shadows in the imag
 
 ### Flight Planning
 We used Map Pilot for DJI, an Apple iPad iOS app, for planning the flight.
-Map Pilot is a reliable, full-featured flight planning application that allows us to set 
+Map Pilot is a reliable, full-featured flight planning application that allows us to set flight parameters such as forward overlap, side overlap, and sensor angle.
+We flew at an altitude of 100 m, and set the forward overlap to 95% and side overlap to 80% (based on the built-in DJI RGB camera, the Zenmuse X3).
+We used a zero-degree sensor angle (i.e., downward/nadir facing), and added a perpendicular set of aerial transects to create a crosshatch flight pattern (`r fig_nums(name = "fig-crosshatch", display = "cite")`).
+We opted to plan flights with particularly high overlap so that we had the option to remove photos at different intervals prior to SfM processing in order to test how various photo densities affected our UAS-derived forest inventory benchmark against NEON TOS field data.
+The Map Pilot software determines flight parameters such as flight speed and distance between aerial transects based on the user-desired front/side overlap, which are themselves based on the built-in DJI camera.
+We calculated these flight parameters as follows:
+
+\begin{align*}
+x_{ground, x3} &= a_{vehicle} \frac{x_{sensor, x3}}{f_{sensor, x3}} \\
+y_{ground, x3} &= a_{vehicle} \frac{y_{sensor, x3}}{f_{sensor, x3}} \\ 
+t_{vehicle} &= (1 - o_{side, x3})(x_{ground, x3}) \\
+s_{vehicle} &= (1 - o_{front, x3})(y_{ground, x3})(s_{shutter, x3}) \\
+\end{align*}
+
+Where $x_{ground, x3}$ is the horizontal dimension of the Zenmuse X3 sensor's ground footprint in m, $y_{ground, x3}$ is the vertical dimension of the Zenmuse X3 sensor's ground footprint in m, $a_{vehicle}$ is the vehicle's altitude during image capture in m, $x_{sensor, x3}$ is the width of the Zenmuse X3 sensor in mm, $y_{sensor, x3}$ is the height of the Zenmuse X3 sensor in mm, $f_{sensor, x3}$ is the focal length of the Zenmuse X3 sensor, $t_{vehicle}$ is the transect spacing between aerial transects of the vehicle in m, $o_{side, x3}$ is the planned side overlap of the Zenmuse X3 imagery as a fraction, $o_{front, x3}$ is the planned front overlap of the Zenmuse X3 imagery as a fraction, $s_{vehicle}$ is the speed of the vehicle in m/s, and $s_{shutter, x3}$ is the planned shutter speed of the Zenmuse X3 sensor.
+
+Because the MicaSense RedEdge 3 has a different optical geometry than the Zenmuse X3 camera, we can use the flight parameters calculated above to determine the actual overlap of the imagery from the MicaSense RedEdge 3:
+
+\begin{align*}
+x_{ground, RE3} &= a_{vehicle} \frac{x_{sensor, RE3}}{f_{sensor, RE3}} \\
+y_{ground, RE3} &= a_{vehicle} \frac{y_{sensor, RE3}}{f_{sensor, RE3}} \\
+o_{side, RE3} &= 1 - \frac{t_{vehicle}}{x_{ground, RE3}} \\
+o_{front, RE3} &= 1 - \frac{s_{vehicle}}{(s_{shutter, RE3})(y_{ground, RE3})} \\
+\end{align*}
+
+Where $x_{ground, RE3}$ is the horizontal dimension of the MicaSense RedEdge 3 sensor's ground footprint in mm, $y_{ground, RE3}$ is the vertical dimension of the RedEdge 3 sensor's ground footprint in m, $x_{sensor,RE3}$ is the width of the RedEdge 3 sensor in mm, $y_{sensor, RE3}$ is the height of the RedEdge 3 sensor in mm, $f_{sensor, RE3}$ is the focal length of the RedEdge 3 sensor, $o_{side, RE3}$ is the calculated side overlap of the RedEdge 3 imagery as a fraction, $o_{front, RE3}$ is the calculated front overlap of the RedEdge 3 imagery as a fraction, and $s_{shutter, RE3}$ is the planned shutter speed of the RedEdge 3 sensor.
+
+Using the front and side overlap, we can estimate the approximate number of images captured of each point within the survey area for the Zenmuse X3 sensor, $p_{x3}$, and the MicaSense RedEdge 3 sensor, $p_{RE3}$, as:
+
+\begin{align*}
+p_{x3} &= \frac{1}{(1 - o_{side, x3})(1 - o_{front, x3})} \\
+p_{RE3} &= \frac{1}{(1 - o_{side, RE3})(1 - o_{front, RE3})}
+\end{align*}
+
+The code for these calculations can be found at https://github.com/mikoontz/neon-drone-workflow/blob/master/workflow/02_preprocess-drone-data/03_drone_L0_image-overlap-calculator.R.
+
+Our aerial transects were 17.14 m apart, our vehicle flew at 3.16 m/s, the side overlap of the RedEdge 3 imagery was 80.4%, and the front overlap of the RedEdge 3 imagery was 95.2%.
+The estimated number of photos per point in the survey area was 200 for the Zenmuse X3 camera, and 105.5 for the MicaSense RedEdge 3 sensor.
+The crosshatch flight plan effectively doubles the expected number of photos per point to 400 for the X3 camera and 211.0 for the RedEdge 3 (`r fig_nums(name = "fig-crosshatch", display = "cite")`).
 
 ### Regulations
 
 We obtained permission to access the NIWO NEON site from the site host, the University of Colorado Boulder Mountain Research Station, as well as NEON itself.
-We flew under the FAA Part 107 rules for commercial drone operations, which isa broadly permissive set of regulations for capturing optical data.
-
-The airspace over NIWO is Class G uncontrolled up to 1,200 feet above ground level.
+We flew under the FAA Part 107 rules for commercial drone operations with a current remote pilot certificate, and ensured that the airspace was free for operating the UAS.
 
 ### Radiometric Calibration
 
-The Micasense RedEdge3 multispectral camera comes with a small, grey calibrated reflectance panel that reflects approximately 60% of light across the entire spectral extent captured by the sensor.
+The MicaSense RedEdge 3 multispectral camera comes with a small, grey calibrated reflectance panel that reflects approximately 60% of light across the entire spectral extent captured by the sensor.
 We held the UAS over the panel and captured an image of the calibration panel prior to flight ensuring our shadow didn't cover the panel.
-The RedEdge3 also integrates a DLS, which faces upwards and measures illumination at the same time as the downward-facing image capture.
+The RedEdge 3 also integrates a DLS, which faces upwards and measures illumination at the same time as the downward-facing image capture.
 We included the calibration panel photos in the SfM processing workflow and also enabled the image-to-image corrections from the DLS.
-When including the calibration panel photos, we set the "known reflectance" of the panel in each of the five spectral channels to be those that we measured for
-
-
+When loading the calibration panel photos into the SfM software, we set the "known reflectance" of the panel in each of the five spectral channels to be those that we measured for this particular panel (`r fig_nums(name = "fig-calibration-panel", display = "cite")`) rather than those provided by the manufacturer.
 
 ### Georeferencing
 
 We laid out orange cloth X's over the 9 permanent markers within the NIWO_017 field site (red points in `r fig_nums(name = "fig-crosshatch", display = "cite")`).
-Five of these points ended up being visible from the air.
-These ground control points were located within the center of the flight area, without any geolocation representation at the edges which wasn't ideal.
+Five of these points were visible from the air.
+These ground control points were located within the center of the flight area, without any geolocation representation at the edges which wasn't ideal [@zimmerman2020; @santana2021].
 
 ### Data Collection
 
 For data collection, we recorded each flight’s imagery on a separate 32 GB SD card rated at >90 MB/s write speed.
-For multi-day trips or if SD cards need to be reused, we transfer imagery from the SD cards to a portable solid state hard drive (Samsung T series).
-
-Upon returning from the field, we transferred images from the SD cards (or portable solid state hard drive, as the case may be) to two locations: 1) the solid state hard drive on a local desktop gaming computer for short term storage, and 2) a Network Attached Storage (NAS) with 6 spinning disk hard drives in a RAID array for long-term storage.
+For multi-day trips or if SD cards need to be reused, we transfer imagery from the SD cards to at least one portable solid state hard drive (Samsung T series).
+Upon returning from the field, we transferred images from the SD cards (or portable solid state hard drive, as the case may be) to two locations: 1) the solid state hard drive on a local desktop gaming computer for short term storage and processing, and 2) a Network Attached Storage (NAS) with 6 spinning disk hard drives in a RAID array for long-term storage.
 Both the short-term storage (local desktop) and long-term storage (NAS) solutions are backed up to the cloud using a 3rd party backup client (Backblaze) at a cost of ~$5.00 USD per terabyte per month.
-We used the local desktop (Alienware Aurora R7 with an Intel i7-8700k 3.70 GHz hexacore processor and 64 GB of RAM) for data processing.
-We use the same data levels as @koontz2021, except we didn't process our data to Level 3b or Level 4.
+We use the same data levels as @koontz2021, except we didn't process our data to Level 4.
+To allow for future data collection to integrate easily into this project, we compartmentalized each data product to a folder for the specific flight date (2019-10-09), which was housed in a folder for the specific flight location (NIWO_017).
 We used the Open Science Framework for public-facing storage (available upon publication).
 
 ### Data Processing
 
-We followed the USGS workflow to process our raw Micasense RedEdge 3 imagery into an orthomosaic and a dense point cloud [@over2021].
+We used a local desktop computer (Alienware Aurora R7 with an Intel i7-8700k 3.70 GHz hexacore processor and 64 GB of RAM) for data processing.
+We followed the USGS workflow to process our raw MicaSense RedEdge 3 imagery into a digital surface model, an orthomosaic and a dense point cloud using Agisoft Metashape version 1.6.1 [@over2021].
+We noted each step in the SfM process, as well as the parameter choices we made, in a .txt file (https://github.com/mikoontz/neon-drone-workflow/blob/master/workflow/03_structure-from-motion-of-drone-data/01_drone_agisoft-metashape-processing-steps.txt).
+We created a script to allow readers to download cropped versions of these SfM products that are relatively small in size in order to follow along with our post-SfM processing steps (https://github.com/mikoontz/neon-drone-workflow/blob/master/workflow/04_get-processed-example-drone-data/01_get-example-cropped-L1-and-L2-data.R).
+We used `R` for all post-SfM steps, particularly the `sf` package for working with vector data [@pebesma2018] and the `terra` package [@hijmans2021] for working with raster data.
+The `terra` package is intended to be a replacement for the `raster` package [@hijmans2021a], but some other `R` packages haven't yet migrated their codebase to use `terra`.
+In these cases, we coerce `terra` objects to be `raster` objects in order to preserve the interoperability of the various packages.
+
 We classified the dense point cloud into "ground" and "non-ground" points using a cloth simulation filter algorithm [@zhang2016] implemented in the `lidR` [@roussel2021] package.
-We used a local maximum filter to detect individual trees [@popescu2004] as implemented in the `lidR` package and a marker controlled watershed segmentation algorithm to segment individual tree crowns [@plowright2021].
-We used the `hsdar` package to spectrally resample the NEON imaging spectrometer data to match the spectral resolution of the Micasense RedEdge3 camera [@lehnert2019].
+Using the ground points, we interpolated a digital terrain model (DTM) representing the height of the ground (without the vegetation).
+We subtracted this DTM from the SfM-derived digital surface model to create a canopy height model (CHM) representing the height of the vegetation in the survey area.
+We used a variable window filter to detect individual trees, which searches for all of the maximum heights in a CHM within a circle of variable radius defined by the height of each pixel in that CHM in turn [@popescu2004].
+That is, pixels in the CHM representing taller vegetation will have a broader search radius within which the location of the maximum height is determined. 
+We used the `ForestTools` package to implement this algorithm and used the optimal tree detection parameter set determined by @young2021, with a variable search window defined using the following function: 
+
+\begin{align*}
+r &= 0.04x
+\end{align*}
+
+Where $r$ is the radius of the variable search window, and $x$ is the canopy height of the focal pixel.
+
+Using the detected trees, we implemented a marker controlled watershed segmentation algorithm using the `ForestTools` package to segment individual tree crowns [@plowright2021].
+We used the `NeonTreeEvaluation` package
+
+
+`neonUtilities` [@lunch2021], `neonhs` [@joseph2021a], `geoNEON` [@nationalecologicalobservatorynetwork2020], and `NeonTreeEvaluation` [@weinstein2021a].
+
+We used the `hsdar` package to spectrally resample the NEON imaging spectrometer data to match the spectral resolution of the MicaSense RedEdge 3 camera [@lehnert2019].
 
 `r fig_nums(name = "fig-comparing-scenes", display = "cite")` shows the comparison between NDVI as captured by the NEON AOP flight in August with our UAS-derived NDVI from our flight in October.
-For the NEON-derived NDVI, the constituent red and near infrared reflectance are spectrally resampled in order to match the red and near infrared spectral response of the Micasense RedEdge3 sensor.
+For the NEON-derived NDVI, the constituent red and near infrared reflectance are spectrally resampled in order to match the red and near infrared spectral response of the MicaSense RedEdge 3 sensor.
+
+lidR [@roussel2020; @roussel2021], ForestTools [@plowright2021]
 
 ## Discussion
 

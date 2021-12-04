@@ -128,6 +128,8 @@ x3_v_footprint_actual_agl_m <- (x3_sensor_height_mm / x3_focal_length_mm) * (agl
 x3_actual_side_overlap_agl <- 1 - (transect_spacing / x3_h_footprint_actual_agl_m)
 x3_actual_forward_overlap_agl <- 1 - (flight_speed / x3_shutter_speed / x3_v_footprint_actual_agl_m)
 
+x3_estimated_photo_count <- 1 / ((1 - x3_actual_side_overlap_agl) * (1 - x3_actual_forward_overlap_agl))
+
 # Actual overlap based on image locations and their footprints
 x3_meta <- 
   read_csv(rgb_photo_meta_fname) %>% 
@@ -188,7 +190,9 @@ re_planned_side_overlap_agl <- 1 - (transect_spacing / re_h_footprint_planned_ag
 re_planned_forward_overlap_agl <- 1 - (flight_speed / re_shutter_speed / re_v_footprint_planned_agl_m)
 
 re_actual_side_overlap_agl <- 1 - (transect_spacing / re_h_footprint_actual_agl_m)
-re_actual_forward_overlap_agl <- 1 - (flight_speed / re_shutter_speed / re_v_footprint_actual_agl_m)
+re_actual_forward_overlap_agl <- 1 - (flight_speed / (re_shutter_speed * re_v_footprint_actual_agl_m))
+
+re_estimated_photo_count <- 1 / ((1 - re_actual_side_overlap_agl) * (1 - re_actual_forward_overlap_agl))
 
 multispec_meta <- 
   read.csv(multispec_photos_metadata_fname) %>% 
