@@ -531,7 +531,7 @@ Other software workflows are based on a point-and-click graphical user interface
 Finally, it will eliminate some friction points with resulting SfM products (particularly the three-dimensional point cloud) to work in a coordinate reference system that measures local distances in true units of distance (e.g., distance measured in meters with the Universal Transverse Mercator (UTM) coordinate reference system).
 In any case, it is important to be consistent with the coordinate reference system for each of your data products (e.g., GNSS positions of GCPs, GNSS locations of UAS camera).
 
-Many free, open source software tools exist for working with SfM data products including QGIS for visualization and GUI-based geospatial manipulation, CloudCompare for visualization and GUI-based manipulation of point clouds, and a suite of R packages [@atkins2022].
+Many free, open source software tools exist for working with SfM data products including QGIS for visualization and GUI-based geospatial manipulation of raster and vector data types, CloudCompare for visualization and GUI-based manipulation of point clouds, and a suite of packages [@atkins2022] for the R programming language [@rcoreteam2021].
 
 neonhs [@joseph2021a], lidR [@roussel2020; @roussel2021], ForestTools [@plowright2021], hsdar [@atkins2022]
 
