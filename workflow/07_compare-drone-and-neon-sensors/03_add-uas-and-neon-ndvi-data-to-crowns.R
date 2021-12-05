@@ -28,8 +28,8 @@ neon_resampled_ndvi <- terra::rast(ndvi_neon_fname)
 # from within each tree crown
 crowns_with_neon_ndvi <- 
   exactextractr::exact_extract(x = neon_resampled_ndvi, y = crowns_raw,
-                                                      fun = c("mean", "stdev"),
-                                                      append_cols = "treeID") %>% 
+                               fun = c("mean", "stdev"),
+                               append_cols = "treeID") %>% 
   dplyr::rename(ndvi_mean_neon = mean,
                 ndvi_stdev_neon = stdev)
 
@@ -37,8 +37,8 @@ crowns_with_neon_ndvi <-
 # processing of the MicaSense RedEdge 3 imagery) from within each tree crown
 crowns_with_uas_ndvi <- 
   exactextractr::exact_extract(x = drone_ndvi, y = crowns_raw, 
-                                                     fun = c("mean", "stdev"),
-                                                     append_cols = "treeID") %>% 
+                               fun = c("mean", "stdev"),
+                               append_cols = "treeID") %>% 
   dplyr::rename(ndvi_mean_uas = mean, ndvi_stdev_uas = stdev)
 
 # join the two dataframes together along with all the original attributes of the
@@ -59,6 +59,13 @@ ndvi_two_source_gg <-
   ggplot(crowns, aes(x = ndvi_mean_uas, y = ndvi_mean_neon)) +
   geom_point() +
   geom_abline(slope = 1, intercept = 0, color = "red") +
+  geom_smooth() +
+  theme_bw() +
+  labs(x = "Mean UAS-derived NDVI",
+       y = "Mean NEON-derived NDVI")
+
+ggplot(crowns, aes(x = ndvi_mean_uas, y = diff_ndvi)) +
+  geom_point() +
   geom_smooth() +
   theme_bw() +
   labs(x = "Mean UAS-derived NDVI",
