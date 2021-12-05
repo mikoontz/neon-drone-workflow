@@ -37,8 +37,13 @@ header-includes:
   - \usepackage{caption}
   - \captionsetup[figure]{labelformat=empty}
   - \captionsetup[table]{labelformat=empty}
+  - \usepackage{amsmath}
 
-output: pdf_document
+output:
+  pdf_document
+  # bookdown::word_document2: default
+  # bookdown::html_document2: default
+
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -620,7 +625,7 @@ Within the NIWO_017 plot, we detected 60% of the field-measured stems (i.e., a r
 Comparison with the annotated crowns using the `compute_precision_recall()` function in the `NeonTreeEvaluation` package also provides precision scores, which measures the amount of false positive tree identifications and which can be combined with the recall score in an integrated measure of predictive ability called the F-score:
 
 \begin{align*}
-F &= \frac{2 * p * r)}{p + r}
+F &= \frac{2 * p * r}{p + r}
 \end{align*}
 
 Where $F$ is the F-score, $p$ is the precision, and $r$ is the recall.
