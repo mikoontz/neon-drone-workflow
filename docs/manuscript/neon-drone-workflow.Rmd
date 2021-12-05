@@ -371,7 +371,9 @@ Clear communication with concerned parties of UAS flights for research, even if 
 Finally, as with flight planning, it is best practice to develop a routine and a checklist (see Supplementary Information) for determining whether UAS flights are allowed in the intended survey area under the relevant regulatory framework.
 
 ```{r}
-fig_nums(name = "fig-rededge-rsr-neon-aop", "a) Relative spectral response of the MicaSense RedEdge 3 camera in 5 distinct spectral bands based on the quantum efficiency of the image sensor per wavelength and the bandpass filter transmission per wavelength. b) Relative spectral responses for two channels of the MicaSense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer.
+fig_nums(name = "fig-rededge-rsr-neon-aop", "a) Relative spectral response of the MicaSense RedEdge 3 camera in 5 distinct spectral bands based on the quantum efficiency of the image sensor per wavelength and the bandpass filter transmission per wavelength. 
+The dashed vertical lines in a) demarcate the spectral extent of panel b).
+b) Relative spectral responses for two channels of the MicaSense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer.
 Several channels of the NEON AOP instrument comprise each of the MicaSense RedEdge 3 channels, so the reflectance data from the NEON AOP are resampled (weighted, in effect) such that they can be used as though the NEON instrument exhibited the same spectral sensitivity as the MicaSense RedEdge 3 instrument.")
 ```
 
@@ -527,8 +529,10 @@ SfM workflows require myriad decisions about processing parameters, all of which
 An excellent SfM guide has been published by the USGS for the Agisoft Metashape software [@over2021], and some researchers have experimented with various SfM processing parameter combinations to empirically determine optimal parameter sets for particular use cases [@tinkham2021; @young2021] though some trial and error may still be required for new study systems.
 Some software allows for automating the SfM processing using coding scripts, which then serve as the transparent and reproducible record of the workflow.
 Other software workflows are based on a point-and-click graphical user interface (GUI), which requires the user to take note of the processing steps.
-Finally, it will eliminate some friction points with resulting SfM products (particularly the three-dimensional point cloud) to work in a coordinate reference system that measures local distances in true units of distance (e.g., distance measured in meters with the Universal Transverse Mercator (UTM) coordinate reference system).
+It will eliminate some friction points with resulting SfM products (particularly the three-dimensional point cloud) to work in a coordinate reference system that measures local distances in true units of distance (e.g., distance measured in meters with the Universal Transverse Mercator (UTM) coordinate reference system).
 In any case, it is important to be consistent with the coordinate reference system for each of your data products (e.g., GNSS positions of GCPs, GNSS locations of UAS camera).
+When working with optical data, it may be necessary to "spectrally resample" the high spectral resolution NEON AOP in order to match the sensor payload of the UAS, whose spectral resolution is likely coarser .
+Finally, calculating derived spectral indices such as the Normalized Difference Vegetation Index (NDVI; @rouse1973) from the original reflectance channels can help with data harmonization across multiple sensors by reducing some of their individual reflectance inaccuracies [@cao2019].
 
 After the SfM workflow is completed, there are many options for further processing the resulting data products (e.g., orthomosaics, point clouds) such that they can be integrated with NEON.
 Many free, open source software tools exist for working with geospatial data products produced by UAS and NEON including QGIS (https://qgis.org/en/site/) for visualization and GUI-based manipulation of raster and vector data types, CloudCompare (https://www.danielgm.net/cc/) for visualization and GUI-based manipulation of point clouds, and a suite of packages (https://cran.r-project.org/web/views/Spatial.html) for the `R` programming language [@rcoreteam2021].
@@ -666,9 +670,11 @@ In these cases, we coerce `terra` objects to be `raster` objects in order to pre
 We classified the dense point cloud into "ground" and "non-ground" points using a cloth simulation filter algorithm [@zhang2016] implemented in the `lidR` [@roussel2021] package.
 Using the ground points, we interpolated a digital terrain model (DTM) representing the height of the ground (without the vegetation).
 We subtracted this DTM from the SfM-derived digital surface model to create a canopy height model (CHM) representing the height of the vegetation in the survey area.
+
+To integrate our UAS data with NEON TOS field data, we used the CHM to detect and segment individual tree crowns.
 We used a variable window filter to detect individual trees, which searches for all of the maximum heights in a CHM within a circle of variable radius defined by the height of each pixel in that CHM in turn [@popescu2004].
 That is, pixels in the CHM representing taller vegetation will have a broader search radius within which the location of the maximum height is determined. 
-We used the `ForestTools` package to implement this algorithm and used the optimal tree detection parameter set determined by @young2021, with a variable search window defined using the following function: 
+We used the `ForestTools` package to implement this algorithm and used the optimal tree detection parameter set determined by @young2021 for a structurally complex mixed-conifer forest, with a variable search window defined using the following function: 
 
 \begin{align*}
 r &= 0.04x
@@ -677,17 +683,42 @@ r &= 0.04x
 Where $r$ is the radius of the variable search window, and $x$ is the canopy height of the focal pixel.
 
 Using the detected trees, we implemented a marker controlled watershed segmentation algorithm using the `ForestTools` package to segment individual tree crowns [@plowright2021].
-We used the `NeonTreeEvaluation` package
+For each tree crown, we created a new geometry representing its bounding box (i.e., the smallest rectangle that fully contains the irregularly-shaped crown polygon) in order to compare UAS-derived crown segments to those derived using deep learning approaches [@weinstein2019].
+We benchmarked our tree detection using the `NeonTreeEvaluation` package [@weinstein2021a] to compare our tree detections with the NEON TOS field-collected tree locations and with previously-annotated crown bounding boxes derived from NEON AOP imagery [@weinstein2021a].
+Within the NIWO_017 plot, we detected 60% of the field-measured stems (i.e., a recall score of 0.6).
+Comparison with the annotated crowns using the `compute_precision_recall()` function in the `NeonTreeEvaluation` package also provides precision scores, which measures the amount of false positive tree identifications and which can be combined with the recall score in an integrated measure of predictive ability called the F-score:
 
+\begin{align*}
+F &= \frac{2 * p * r)}{p + r}
+\end{align*}
 
-`neonUtilities` [@lunch2021], `neonhs` [@joseph2021a], `geoNEON` [@nationalecologicalobservatorynetwork2020], and `NeonTreeEvaluation` [@weinstein2021a].
+Where $F$ is the F-score, $p$ is the precision, and $r$ is the recall.
 
-We used the `hsdar` package to spectrally resample the NEON imaging spectrometer data to match the spectral resolution of the MicaSense RedEdge 3 camera [@lehnert2019].
+For our comparison, we set the threshold argument of the `compute_precision_recall()` function to 0.1 such that a predicted tree was considered correctly predicted if the intersection of its bounding box with an annotated crown's bounding box divided by the area of the union of those bounding boxes is greater than 0.1.
+Our UAS-derived map of detected trees had a recall of 0.788 and a precision of 0.276, resulting in an F-score of 0.409.
+For comparison, the DeepForest algorithm's predictions for the locations of trees at NIWO_017 [@weinstein2021a] had a recall of 0.861, a precision of 0.798, and an F-score of 0.828.
+The poorer performance of the UAS-derived tree detection approach suggests that a different combination of flight parameters, SfM photogrammetry parameters, or tree detection algorithm/parameters might be better suited to the subalpine forest at NIWO [@young2021].
 
+`neonUtilities` [@lunch2021], , `geoNEON` [@nationalecologicalobservatorynetwork2020], and `NeonTreeEvaluation` .
+
+To integrate our UAS data with NEON AOP reflectance data, we calculated NDVI from each sensor.
+We used the `neonUtilities` package to download the NEON AOP imaging spectrometer data (data product DP3.30006.001) that covers the NIWO_017 site from 2019, using the easting and northing of the centroid of the NIWO_017 plot and a 20 m buffer to search with the `byTileAOP()` function [@lunch2021].
+We used the `neonhs` [@joseph2021a] package to convert the raw NEON AOP data product into a raster object more readily manipulatable in `R`. 
+Because the imaging spectrometer spectral response overlaps with, but doesn't perfectly align with the spectral response of the MicaSense RedEdge 3 sensor, we spectrally resampled the NEON AOP data to match the spectral resolution of the MicaSense RedEdge 3 sensor using the `hsdar` package [@lehnert2019] and the relative spectral response that we derived (`r fig_nums(name = "fig-rededge-rsr-neon-aop", display = "cite")`).
+We used the UAS-derived orthomosaic and the spectrally-resampled NEON AOP orthomosaic to calculate NDVI.
 `r fig_nums(name = "fig-comparing-scenes", display = "cite")` shows the comparison between NDVI as captured by the NEON AOP flight in August with our UAS-derived NDVI from our flight in October.
-For the NEON-derived NDVI, the constituent red and near infrared reflectance are spectrally resampled in order to match the red and near infrared spectral response of the MicaSense RedEdge 3 sensor.
+We used the `exactextractr` package to extract the mean and standard deviation of NDVI derived from the UAS as well as the spectrally resampled NEON AOP for each segmented tree crown [@danielbaston2021].
+`r fig_nums(name = "fig-crown-ndvi-compare", display = "cite")` shows the comparison of NDVI derived from the NEON AOP and the UAS at an individual tree scale. 
 
-lidR [@roussel2020; @roussel2021], ForestTools [@plowright2021]
+```{r}
+fig_nums(name = "fig-crown-ndvi-compare", "NDVI for each detected tree crown in the NIWO_017 plot as derived from the NEON AOP imaging spectrometer versus NDVI derived from the MicaSense RedEdge 3 sensor.
+The one-to-one line is red, and the best fit curve from a general additive model is shown in blue with a 95% confidence interval shown in grey.
+The NEON AOP data, collected closer to peak growing season, mostly has higer per-tree values of NDVI.
+The nonlinear model fit highlights how, at the individual tree scale, spectral responses vary differently throughout the year which might prove useful for future work (e.g., classifying trees to species based on how variable their spectral response is through the year).")
+```
+
+![`r fig_nums(name = "fig-crown-ndvi-compare")`](../../figs/uas-vs-neon-ndvi-per-crown.png)
+
 
 ## Discussion
 
