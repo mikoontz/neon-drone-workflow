@@ -531,7 +531,7 @@ Some software allows for automating the SfM processing using coding scripts, whi
 Other software workflows are based on a point-and-click graphical user interface (GUI), which requires the user to take note of the processing steps.
 It will eliminate some friction points with resulting SfM products (particularly the three-dimensional point cloud) to work in a coordinate reference system that measures local distances in true units of distance (e.g., distance measured in meters with the Universal Transverse Mercator (UTM) coordinate reference system).
 In any case, it is important to be consistent with the coordinate reference system for each of your data products (e.g., GNSS positions of GCPs, GNSS locations of UAS camera).
-When working with optical data, it may be necessary to "spectrally resample" the high spectral resolution NEON AOP in order to match the sensor payload of the UAS, whose spectral resolution is likely coarser .
+When working with optical data, it may be necessary to "spectrally resample" the high spectral resolution NEON AOP in order to match the sensor payload of the UAS, whose spectral resolution is likely coarser and not aligned with that of the NEON instrument (`r fig_nums(name = "fig-rededge-rsr-neon-aop", display = "cite")`).
 Finally, calculating derived spectral indices such as the Normalized Difference Vegetation Index (NDVI; @rouse1973) from the original reflectance channels can help with data harmonization across multiple sensors by reducing some of their individual reflectance inaccuracies [@cao2019].
 
 After the SfM workflow is completed, there are many options for further processing the resulting data products (e.g., orthomosaics, point clouds) such that they can be integrated with NEON.
