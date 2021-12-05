@@ -38,7 +38,7 @@ header-includes:
   - \captionsetup[figure]{labelformat=empty}
   - \captionsetup[table]{labelformat=empty}
 
-output: pdf_document
+output: word_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -195,67 +195,14 @@ table_nums(name = "table-vehicle-payload", "Summary of vehicle and payload consi
 ```
 
 
-```{r vehicle_payload_table_print, echo = FALSE, include = TRUE, results = 'asis'}
-vehicle_payload_table_print <-
-  tibble::tibble(Consideration = c("", "", "", "Vehicle", "", "", "",
-                                   "", "", "", "Payload", "", "", ""),
-                 Options = c("Rotocopter",
-                             "",
-                             "",
-                             "Fixed wing",
-                             "",
-                             "VTOL fixed wing",
-                             "(Hybrid)",
-                             "RGB camera",
-                             "",
-                             "",
-                             "Multispectral sensor",
-                             "",
-                             "Hyperspectral/",
-                             "Imaging spectrometer"),
-                 Advantages = c("Ease of takeoff and landing",
-                                "Hover capability",
-                                "maneuverability",
-                                "Affordable",
-
-                                "Longer flight time (2+ hours)",
-                                "Cover large spatial extent",
-
-                                "Simpler takeoff/landing",
-                                "Longer flight time",
-                                "Small size, Affordable",
-                                "Fine spatial resolution",
-
-                                "Small size",
-                                "More precise spectral information",
-
-                                "High spectral resolution",
-                                "High spectral extent"),
-                 Disadvantages = c("Shorter flight time (~20 minutes)",
-                                   "",
-                                   "",
-
-                                   "Minimum flight speed to keep it aloft (affecting overlap, image quality)",
-                                   "Complex takeoff/landing",
-
-                                   "Newer technology",
-                                   "Expensive",
-                                   "Limited spectral extent to visible wavelengths",
-                                   "",
-                                   "",
-
-                                   "Limited spectral sampling typically in visible and infrared wavelengths",
-                                   "Complex data acquisition and post-processing",
-
-                                   "Heavy",
-                                   "Expensive"),
-                 `Reference(s)` = c("", "", "", "@anderson2013b; @goodbody2017; @padua2017", "", "", "",
-                                    "@padua2017", "", "", "@padua2017", "", "", "@adao2017"))
+```{r vehicle_payload_table_print, echo = FALSE, include = TRUE, message = FALSE, results = 'asis'}
+vehicle_payload_table_print <- readr::read_csv("../../tables/table1-vehicle-payload-considerations.csv",
+                                               na = character())
 
 pander::pandoc.table(vehicle_payload_table_print,
-             split.tables = Inf,
-             caption = table_nums(name = "table-vehicle-payload"),
-             keep.line.breaks = TRUE)
+                     split.tables = Inf,
+                     caption = table_nums(name = "table-vehicle-payload"),
+                     keep.line.breaks = TRUE)
 ```
 
 ### Payload
