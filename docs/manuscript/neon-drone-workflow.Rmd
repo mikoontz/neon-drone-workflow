@@ -38,7 +38,7 @@ header-includes:
   - \captionsetup[figure]{labelformat=empty}
   - \captionsetup[table]{labelformat=empty}
 
-output: word_document
+output: pdf_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -487,15 +487,6 @@ Several packages have also been developed specifically for working with NEON dat
 A recent review by @atkins2022 describes the ecosystem of `R` packages available for working with forestry data, many of which are relevant for the types of geospatial data produced by UAS and NEON.
 More generally, working with these kinds of high-resolution geospatial data, which are often classically "big", can benefit from following the few simple rules recently outlined by @joseph2021.
 
-```{r}
-fig_nums(name = "fig-comparing-scenes", "NDVI derived from the NEON AOP spectral imager using data collected in August of 2019 (data collection flights over NIWO on August 14, 15, 19, and 26 of 2019) and the MicaSense RedEdge 3 camera using data collected on October 09, 2019.
-The NEON AOP data were first spectrally resampled into the equivalent red and near infrared bands of the MicaSense RedEdge 3 camera based on the relative spectral response of the RedEdge 3 instrument.
-The higher spatial resolution of the drone-derived data are highlighted.
-Note that the difference in NDVI between the images may derive from three main sources: phenological differences in the vegetation, differences in the flight conditions such as time of day and cloud cover, or differences in instrumentation.")
-```
-
-![`r fig_nums(name = "fig-comparing-scenes")`](../../figs/ndvi_neon-spectral-resampled-v-drone-original.png)
-
 ## Case study
 
 ### Science Requirements
@@ -632,6 +623,7 @@ Where $r$ is the radius of the variable search window, and $x$ is the canopy hei
 Using the detected trees, we implemented a marker controlled watershed segmentation algorithm using the `ForestTools` package to segment individual tree crowns [@plowright2021].
 For each tree crown, we created a new geometry representing its bounding box (i.e., the smallest rectangle that fully contains the irregularly-shaped crown polygon) in order to compare UAS-derived crown segments to those derived using deep learning approaches [@weinstein2019].
 We benchmarked our tree detection using the `NeonTreeEvaluation` package [@weinstein2021a] to compare our tree detections with the NEON TOS field-collected tree locations and with previously-annotated crown bounding boxes derived from NEON AOP imagery [@weinstein2021a].
+The stem locations of the trees in the NEON TOS sites can be determined using a combination of the `neonUtilities` package [@lunch2021] to download the and the `geoNEON` package [@nationalecologicalobservatorynetwork2020], but they are also directly available in the `NeonTreeEvaluation` package.
 Within the NIWO_017 plot, we detected 60% of the field-measured stems (i.e., a recall score of 0.6).
 Comparison with the annotated crowns using the `compute_precision_recall()` function in the `NeonTreeEvaluation` package also provides precision scores, which measures the amount of false positive tree identifications and which can be combined with the recall score in an integrated measure of predictive ability called the F-score:
 
@@ -646,16 +638,24 @@ Our UAS-derived map of detected trees had a recall of 0.788 and a precision of 0
 For comparison, the DeepForest algorithm's predictions for the locations of trees at NIWO_017 [@weinstein2021a] had a recall of 0.861, a precision of 0.798, and an F-score of 0.828.
 The poorer performance of the UAS-derived tree detection approach suggests that a different combination of flight parameters, SfM photogrammetry parameters, or tree detection algorithm/parameters might be better suited to the subalpine forest at NIWO [@young2021].
 
-`neonUtilities` [@lunch2021], , `geoNEON` [@nationalecologicalobservatorynetwork2020], and `NeonTreeEvaluation` .
-
 To integrate our UAS data with NEON AOP reflectance data, we calculated NDVI from each sensor.
-We used the `neonUtilities` package to download the NEON AOP imaging spectrometer data (data product DP3.30006.001) that covers the NIWO_017 site from 2019, using the easting and northing of the centroid of the NIWO_017 plot and a 20 m buffer to search with the `byTileAOP()` function [@lunch2021].
+We used the `neonUtilities` package to download the NEON AOP imaging spectrometer data (data product DP3.30006.001) that covers the NIWO_017 site from 2019, using the easting and northing of the centroid of the NIWO_017 plot and a 20 m buffer as argumeents to the `byTileAOP()` function [@lunch2021].
 We used the `neonhs` [@joseph2021a] package to convert the raw NEON AOP data product into a raster object more readily manipulatable in `R`. 
 Because the imaging spectrometer spectral response overlaps with, but doesn't perfectly align with the spectral response of the MicaSense RedEdge 3 sensor, we spectrally resampled the NEON AOP data to match the spectral resolution of the MicaSense RedEdge 3 sensor using the `hsdar` package [@lehnert2019] and the relative spectral response that we derived (`r fig_nums(name = "fig-rededge-rsr-neon-aop", display = "cite")`).
 We used the UAS-derived orthomosaic and the spectrally-resampled NEON AOP orthomosaic to calculate NDVI.
 `r fig_nums(name = "fig-comparing-scenes", display = "cite")` shows the comparison between NDVI as captured by the NEON AOP flight in August with our UAS-derived NDVI from our flight in October.
 We used the `exactextractr` package to extract the mean and standard deviation of NDVI derived from the UAS as well as the spectrally resampled NEON AOP for each segmented tree crown [@danielbaston2021].
 `r fig_nums(name = "fig-crown-ndvi-compare", display = "cite")` shows the comparison of NDVI derived from the NEON AOP and the UAS at an individual tree scale. 
+
+
+```{r}
+fig_nums(name = "fig-comparing-scenes", "NDVI derived from the NEON AOP spectral imager using data collected in August of 2019 (data collection flights over NIWO on August 14, 15, 19, and 26 of 2019) and the MicaSense RedEdge 3 camera using data collected on October 09, 2019.
+The NEON AOP data were first spectrally resampled into the equivalent red and near infrared bands of the MicaSense RedEdge 3 camera based on the relative spectral response of the RedEdge 3 instrument.
+The higher spatial resolution of the drone-derived data are highlighted.
+Note that the difference in NDVI between the images may derive from three main sources: phenological differences in the vegetation, differences in the flight conditions such as time of day and cloud cover, or differences in instrumentation.")
+```
+
+![`r fig_nums(name = "fig-comparing-scenes")`](../../figs/ndvi_neon-spectral-resampled-v-drone-original.png)
 
 ```{r}
 fig_nums(name = "fig-crown-ndvi-compare", "NDVI for each detected tree crown in the NIWO_017 plot as derived from the NEON AOP imaging spectrometer versus NDVI derived from the MicaSense RedEdge 3 sensor.
