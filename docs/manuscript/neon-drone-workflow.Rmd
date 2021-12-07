@@ -5,21 +5,25 @@ params:
   title: "Democratizing macroecology: integrating uncrewed aerial systems with the National Ecological Observatory Network"
   author: |
     Michael J. Koontz^1\*^,
-    Victoria M. Scholl^1,2,3^,
-    Anna I. Spiers^1,4^,
-    Megan E. Cattau^5^,
-    John Adler^2,6^,
-    Joseph McGlinchy^1^,
-    Tristan Goulden^6^,
-    Brett A. Melbourne^4^,
+    Victoria M. Scholl^1,2^,
+    Anna I. Spiers^1,3^,
+    Megan E. Cattau^4^,
+    John Adler^2,5^,
+    Joseph McGlinchy^1,6^,
+    Tristan Goulden^5^,
+    Brett A. Melbourne^3^,
     Jennifer K. Balch^1,2^
   affiliation: |
     ^1^Earth Lab, University of Colorado; Boulder, CO, USA  
     ^2^Department of Geography, University of Colorado; Boulder, CO, USA  
-    ^3^Geosciences and Environmental Change Science Center, U.S. Geological Survey; Lakewood, CO, USA  
-    ^4^Department of Ecology and Evolutionary Biology, University of Colorado; Boulder, CO, USA  
-    ^5^Department of Human-Environment Systems, Boise State University; Boise, ID, USA  
-    ^6^Battelle, National Ecological Observatory Network (NEON); Boulder, CO, USA  
+    ^3^Department of Ecology and Evolutionary Biology, University of Colorado; Boulder, CO, USA  
+    ^4^Department of Human-Environment Systems, Boise State University; Boise, ID, USA  
+    ^5^Battelle, National Ecological Observatory Network (NEON); Boulder, CO, USA  
+    ^6^Hydrosat Inc., Washington, DC 20036, USA
+    # ^3^Geosciences and Environmental Change Science Center, US Geological Survey; Lakewood, CO, USA  
+    # ^4^Department of Ecology and Evolutionary Biology, University of Colorado; Boulder, CO, USA  
+    # ^5^Department of Human-Environment Systems, Boise State University; Boise, ID, USA  
+    # ^6^Battelle, National Ecological Observatory Network (NEON); Boulder, CO, USA  
 
   correspondence: |
     mikoontz@gmail.com
@@ -90,15 +94,15 @@ With this mental model, we advance the democratization of macroecology by making
 Macroecology is the study of spatially extensive systems whose biological, geophysical, and social components interact dynamically both within and across spatiotemporal scales [@heffernan2014].
 Macroecology, in its explicit consideration of scale, extends from a rich history of basic ecological research seeking to explain patterns in nature [@turner1989; @levin1992]. 
 At the same time, macroecology is highly relevant to applied ecology, as the broader spatial extents studied reflect the scale at which many societally relevant challenges, and perhaps their solutions, arise [@heffernan2014; @larue2021]. 
-The causes and consequences of phenomena under investigation in macroecology can span many spatial scales, which motivates a characteristic feature of the data to be brought to bear: they must often be simultaneously fine in grain (i.e., resolution) and broad in extent [@beck2012].
+The causes and consequences of phenomena under investigation in macroecology can span many spatial scales, which motivates a characteristic feature of the data to be brought to bear: they must often be simultaneously fine in grain (i.e., spatial resolution) and broad in extent [@beck2012].
 
 Ecologists typically face a data collection tradeoff between grain and extent that constrains the observational domain of their research [@ernest2018; @estes2018]. 
-Indeed, the spatial and temporal observational domains of most ecology research is narrow [@estes2018]
+Indeed, the spatial and temporal observational domains of most ecology research is narrow [@estes2018].
 The grain/extent tradeoff can sometimes be overcome, but at a high cost.
 For example, the Global Airborne Observatory collects high spatial and spectral resolution data at broad extents [@asner2007; @asner2012], but the price of data acquisition and processing tallies in the millions of US dollars, even though the per-area cost is low [@asner2013].
 As another example, the US Forest Service Forest Inventory and Analysis program maintains a regular network of over 350,000 fine-grain field plots regularly spaced over the entire forested area of the United States (over 9.1 million km^2^; approximately 1 plot every 2400 hectares) at an annual cost of tens of millions of dollars [@gillespie1999; @alvarez2020].
 Most science studies have relatively modest budgets and are conducted by just a few individuals [@heidorn2008].
-The modal NSF Division of Environmental Biology award was about $200,000 USD between 2005 and 2010 [@hampton2013].
+The modal award size from the National Science Foundation's (NSF) Division of Environmental Biology was about $200,000 USD between 2005 and 2010 [@hampton2013].
 While the fine-grain, broad-extent observational domain is invaluable for macroecology, it can be inaccessible to ecologists with resource or funding limitations.
 
 Macroecology can be democratized when barriers to research participation are reduced [@guston2004], such as by innovating past limitations to or lowering the cost of access to relevant scales of observation.
@@ -111,8 +115,8 @@ Thus, democratized research stimulates revolutionary science.
 
 In its democratic aim, the National Ecological Observatory Network (NEON) is revolutionary [@nsf2013; @balch2020].
 NEON is a continental-scale observation facility in the United States comprising 81 sites within 20 ecoclimatically distinct domains and an operational lifespan on the order of decades [@schimel2013; @keller2008].
-NEON is designed to collect rigorous, consistent, long-term, and open access data to better understand how U.S. ecosystems are changing, using a combination of field measurements by trained personnel, ground-based automated sensors, and the Airborne Observation Platform (AOP) which uses plane-based instruments to collect both active and passive remotely-sensed data [@kampe2010; @nsf2013].
-NEON observations span spatial scales, from measurements of individual organisms within small field plots to 10 cm resolution RGB imagery and 1 m hyperspectral and lidar imagery across hundreds of square kilometers, with measurements replicated across  sites that span the  continental extent of the Observatory [@keller2008].
+NEON is designed to collect rigorous, consistent, long-term, and open access data to better understand how US ecosystems are changing, using a combination of field measurements by trained personnel, ground-based automated sensors, and the Airborne Observation Platform (AOP) which uses plane-based instruments to collect both active and passive remotely-sensed data [@kampe2010; @nsf2013].
+NEON observations span spatial scales, from measurements of individual organisms within small field plots to 10 cm resolution red-green-blue (RGB) imagery and 1 m hyperspectral and lidar imagery across hundreds of square kilometers, with measurements replicated across  sites that span the  continental extent of the Observatory [@keller2008].
 A stated goal of NEON is to democratize access to ecological research, particularly at broad extents [@nsf2013]-- its promise is continental-scale ecology for everyone.
 NEON pairs publicly available data with a strong outreach and education effort to help realize this promise.
 In this way, NEON broadens access to macroecology by reducing barriers to entry, particularly cost, fieldwork requirements, and technical expertise [@nagyInpress].
@@ -153,7 +157,7 @@ Specifically, we focus on optical data collected by each tool over terrestrial s
 
 Both NEON- and UAS-enabled ecology have faced criticism for having “backwards” approaches to science.
 Critics suggest that clear science questions take a back seat to high-quality but rote data collection in the case of NEON [@lindenmayer2018] or perpetual methodological refinement in the case of UAS [@gillan2021].
-In light of this, we echo @assmann2019 in emphasizing that the main consideration to keep in mind while when integrating UAS with NEON is: what are the science requirements for the data to be collected and what data collection efforts are "good enough" to meet those requirements?
+In light of this, we echo @assmann2019 in emphasizing that the main consideration to keep in mind while integrating UAS with NEON is: what are the science requirements for the data to be collected and what data collection efforts are "good enough" to meet those requirements?
 A clear science question helps guide the data collection needs, which can minimize the amount of researcher time and energy spent on developing tools that ultimately prove to be superfluous [@joseph2021].
 
 ### Vehicle
@@ -205,13 +209,13 @@ pander::pandoc.table(vehicle_payload_table_print,
 ### Payload
 
 The payload is the equipment carried by the UAS that collects data and combines with the vehicle to constitute the system (the "S" in "UAS").
-In fact, despite the typical focus on the drone vehicle, the payload is at least as an important component, since the main purpose of the vehicle is merely to position the payload where it needs to be in order to capture appropriate data.
+In fact, despite the typical focus on the drone vehicle, the payload component is at least as important, since the main purpose of the vehicle is merely to position the payload where it needs to be in order to capture appropriate data.
 For ecologists interested in optical data, the payload may be a simple camera or a more general remote sensing sensor sensitive to reflectance of electromagnetic light.
 The scientific questions will dictate the data requirements, which will in turn drive the payload decision.
-Typically, the selection of a sensor represents a trade-off between spatial resolution (the size of pixels in the imagery at a set altitude), spectral resolution (the number of distinct portions of the electromagnetic spectrum that the sensor can detect), spectral extent (how much of the electromagenetic spectrum the sensor can detect), and cost.
+Typically, the selection of a sensor represents a trade-off between spatial resolution (the size of pixels in the imagery at a set altitude), spectral resolution (the number of distinct portions of the electromagnetic spectrum that the sensor can detect), spectral extent (how much of the electromagnetic spectrum the sensor can detect), and cost.
 For example, while hyperspectral data provide high spectral resolution and extent that may allow measurement of specific chemical compounds in vegetation [e.g., foliar nitrogen; @knyazikhin2013], a multispectral instrument with fewer spectral channels [@koontz2021] or even an RGB camera [@scholl2020] may be more than sufficient for classifying vegetation to species.
 Similarly, sensors with high spatial resolution can capture fine detail in their imagery but may reduce the ability to measure a variable of interest, such as individual trees, as post-processing steps can be negatively affected by the movement of those fine details in the wind [@young2021].
-Hyperspectral instruments and high resolution cameras are relatively expensive in terms of purchase cost, post-processing time, and data storage requirements, but simple red-green-blue (RGB) and multispectral cameras can be affordably bought off-the-shelf so it is worth considering whether they would suffice for the scientific question of interest.
+Hyperspectral instruments and high resolution cameras are relatively expensive in terms of purchase cost, post-processing time, and data storage requirements, but simple RGB and multispectral cameras can be affordably bought off-the-shelf so it is worth considering whether they would suffice for the scientific question of interest.
 A summary of the advantages and disadvantages of these different payload types for collecting optical data can be found in `r table_nums(name = "table-vehicle-payload", display = "cite")`.
 
 It is also important to consider how the payload will be integrated with the vehicle, which generally requires considering the combination of the vehicle and payload simultaneously.
@@ -228,7 +232,7 @@ While some vehicles are designed to withstand light precipitation and dust, many
 Heavy winds can push the UAS off-course or require the UAS to work harder to maintain its course, which drains battery faster and reduces endurance.
 Variable terrain within the survey area may also affect vehicle endurance, as more energy is required to ascend and descend while also traversing along flight transects in the horizontal plane.
 Managing the temperature of the mission critical electronics is just as important as that of the vehicle’s batteries during UAS operations.
-The vehicle remote controller and any other peripherals such as a tablet computer are susceptible to extremely warm or cold temperatures drain battery life, and cold temperature can cause the vehicle and/or sensor to malfunction.
+The vehicle remote controller and any other peripherals such as a tablet computer are susceptible to battery drain in extreme temperatures, and cold temperature can cause the vehicle and/or sensor to malfunction.
 The mean annual temperature for NEON AOP sites ranges from -12°C at the Utqiaġvik site in Alaska to 25°C at Lajas Experimental Station in Puerto Rico (NEON Field Site Metadata; https://www.neonscience.org/sites/default/files/NEON_Field_Site_Metadata_20210226_0.csv; accessed 2021-03-16).
 Expectations of unfavorable environmental conditions may be enough to dictate what equipment should comprise the UAS.
 For example, high-wind conditions at NIWO may warrant a fixed wing platform; however, the dense forest would make take off and landing much easier with a rotocopter.
@@ -241,7 +245,7 @@ Note that some SfM software guidelines specifically suggest *not* flying near so
 
 Prior to flights, it's important to ensure that weather will be favorable for data collection.
 A handheld instrument for measuring temperature, relative humidity, and wind speed may also aid in the reporting of flight conditions, though note that the wind speed at flight altitude may be different than what is measured on the ground.
-In many cases, taking a picture of the sky and a screenshot of the weather forecast from a reputable source (e.g., NOAA) is a convenient and sufficient way to ensure later reporting on flight conditions.
+In many cases, taking a picture of the sky and a screenshot of the weather forecast from a reputable source (e.g., the National Oceanic and Atmospheric Administration) is a convenient and sufficient way to ensure later reporting on flight conditions.
 In fact, the NEON AOP does exactly this for their daily flight reports.
 
 ### Flight planning
@@ -355,28 +359,29 @@ If in-flight panel photos are not possible or if only a small panel is available
 Many off-the-shelf multispectral sensors only come with one small calibration panel, but having one panel is better than none even though this may limit the data calibration possibilities in the future.
 Further, popular commercial SfM software like Agisoft Metashape and Pix4D may only accommodate one panel, so correcting UAS imagery with a single panel may be the only practical option.
 When only a single calibration panel is used, choosing a gray panel (rather than a white or black one) helps to avoid crushing or clipping in under/over exposed images.
-
 Regardless of panel cost, color, or material, it is critical to clean, re-measure, re-calibrate, and/or replace them over time to ensure the most accurate reflectance calibration possible.
 This is especially important when field work involves exposing panels to harsh environmental conditions with dirt, dust, sand, sun, and any other types of physical damage or degradation.
-To illustrate this point, we re-measured a calibrated reflectance panel after three years of field work using a handheld Analytical Spectral Devices (ASD, ASD Inc., a Malvern PANalytical Company, Longmont, Colorado) FieldSpec 4 spectrometer (USGS data release DOI available upon publication).
-We present the vendor-provided panel reflectance from the time of purchase in 2017 with the averaged ASD handheld reflectance collected three years later in 2020 (`r fig_nums(name = "fig-calibration-panel", display = "cite")`).
-The reflectance of the panel has decreased by as much as 10% due to the presence of dirt and dust.
-This decrease in reflectance is especially noticeable in the shorter wavelengths.
-If we use the vendor-provided panel reflectance data from 2017 for current and future flights, we will introduce significant error into our reflectance calibration.
-According to the manufacturer, this make and model of calibration panel is not able to be cleaned (though newer panels from this manufacturer can be cleaned; see https://support.micasense.com/hc/en-us/articles/360005163934-Calibrated-Reflectance-Panel-Care-Instructions) as this will force debris further into the pores of the panel material, so it is important to use the updated reflectance measurement for this panel during radiometric calibration.
+Depending on the manufacturer, some panel models cannot be cleaned as this will force debris further into the pores of the panel material (e.g., https://support.micasense.com/hc/en-us/articles/360005163934-Calibrated-Reflectance-Panel-Care-Instructions).
 
-```{r}
-fig_nums(name = "fig-calibration-panel", "Comparison of reflectance spectra (A) for a calibrated reflectance panel (B).
-The panel vendor provides a reflectance spectrum describing the panel’s reflectance at the time of purchase (black reflectance profile, “MicaSense, 2017”).
-After three years of using the panel repeatedly for field work, we re-measured the panel using a handheld spectrometer (blue reflectance profile, “ASD, 2020”) to evaluate the change in spectral reflectance for the panel.
-The spectra in (A) are reflectance values as a function of wavelength across the visible and near infrared.
-The MicaSense RedEdge 3 spectral band ranges (blue, green, red, red edge, near infrared) are illustrated here as vertical bars of color.
-The panel reflectance decreased between measurements collected in 2017 and 2020, with this decrease being more pronounced towards the shorter wavelengths.
-This is a result of the panel becoming dirty from dust and sand in the field, as seen on the plastic case for the panel (in the lower right corner of B).
-This change in reflectance demonstrates the necessity to clean, re-measure, or replace calibration panels when performing radiometric calibration.")
-```
+<!-- To illustrate this point, we re-measured a calibrated reflectance panel after three years of field work using a handheld Analytical Spectral Devices (ASD, ASD Inc., a Malvern PANalytical Company, Longmont, Colorado) FieldSpec 4 spectrometer (USGS data release DOI available upon publication). -->
+<!-- We present the vendor-provided panel reflectance from the time of purchase in 2017 with the averaged ASD handheld reflectance collected three years later in 2020 (`r fig_nums(name = "fig-calibration-panel", display = "cite")`). -->
+<!-- The reflectance of the panel has decreased by as much as 10% due to the presence of dirt and dust. -->
+<!-- This decrease in reflectance is especially noticeable in the shorter wavelengths. -->
+<!-- If we use the vendor-provided panel reflectance data from 2017 for current and future flights, we will introduce significant error into our reflectance calibration. -->
+<!-- According to the manufacturer, this make and model of calibration panel is not able to be cleaned (though newer panels from this manufacturer can be cleaned; see https://support.micasense.com/hc/en-us/articles/360005163934-Calibrated-Reflectance-Panel-Care-Instructions) as this will force debris further into the pores of the panel material, so it is important to use the updated reflectance measurement for this panel during radiometric calibration. -->
 
-![`r fig_nums(name = "fig-calibration-panel")`](../../figs/micasense-rededge3-calibrated-reflectance-panel-deterioration.png)
+<!-- ```{r} -->
+<!-- fig_nums(name = "fig-calibration-panel", "Comparison of reflectance spectra (A) for a calibrated reflectance panel (B). -->
+<!-- The panel vendor provides a reflectance spectrum describing the panel’s reflectance at the time of purchase (black reflectance profile, “MicaSense, 2017”). -->
+<!-- After three years of using the panel repeatedly for field work, we re-measured the panel using a handheld spectrometer (blue reflectance profile, “ASD, 2020”) to evaluate the change in spectral reflectance for the panel. -->
+<!-- The spectra in (A) are reflectance values as a function of wavelength across the visible and near infrared. -->
+<!-- The MicaSense RedEdge 3 spectral band ranges (blue, green, red, red edge, near infrared) are illustrated here as vertical bars of color. -->
+<!-- The panel reflectance decreased between measurements collected in 2017 and 2020, with this decrease being more pronounced towards the shorter wavelengths. -->
+<!-- This is a result of the panel becoming dirty from dust and sand in the field, as seen on the plastic case for the panel (in the lower right corner of B). -->
+<!-- This change in reflectance demonstrates the necessity to clean, re-measure, or replace calibration panels when performing radiometric calibration.") -->
+<!-- ``` -->
+
+<!-- ![`r fig_nums(name = "fig-calibration-panel")`](../../figs/micasense-rededge3-calibrated-reflectance-panel-deterioration.png) -->
 
 ### Georeferencing
 
@@ -458,7 +463,7 @@ There are trade-offs at each decision point, so it is important to understand yo
 For example, whereas building your own data management system may be more affordable and tailored to your needs, rented external storage systems will back up your data automatically and maintain the system and hardware requirements for you.")
 ```
 
-![`r fig_nums(name = "fig-data-management-schematic")`](../../figs/data-management-schematic.png)
+![`r fig_nums(name = "fig-data-management-schematic")`](../../figs/fig05_data-management-and-processing.png)
 
 ### Data processing
 
@@ -574,7 +579,7 @@ The MicaSense RedEdge 3 multispectral camera comes with a small, grey calibrated
 We held the UAS over the panel and captured an image of the calibration panel prior to flight ensuring our shadow didn't cover the panel.
 The RedEdge 3 also integrates a DLS, which faces upwards and measures illumination at the same time as the downward-facing image capture.
 We included the calibration panel photos in the SfM processing workflow and also enabled the image-to-image corrections from the DLS.
-When loading the calibration panel photos into the SfM software, we set the "known reflectance" of the panel in each of the five spectral channels to be those that we measured for this particular panel (`r fig_nums(name = "fig-calibration-panel", display = "cite")`) rather than those provided by the manufacturer.
+When loading the calibration panel photos into the SfM software, we set the "known reflectance" of the panel in each of the five spectral channels to be those provided by the panel manufacturer.
 
 ### Georeferencing
 
