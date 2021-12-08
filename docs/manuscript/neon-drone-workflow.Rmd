@@ -421,15 +421,15 @@ Check the data for obvious artifacts such as over or under exposure in images, t
 Generally a full QA assessment cannot be performed in the field due to time and computation limitations, but the field QA should be sufficient to ensure the images can be processed into desired products.
 Some NEON sites (e.g., NIWO) have a field house that may be accessed, with permission, for laptop friendly workspaces and/or charging options.
 
-Once the data collection is completed, data management can be broken into a quick access phase when data need to be readily available, and a slower access phase which concerns the longer-term storage of both data and metadata.
+Once the data collection is completed, data management can be broken into a quick access phase when data need to be readily available (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`, Short-term storage), and a slower access phase which concerns the longer-term storage of both data and metadata (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`, Long-term storage).
 During quick access phase, the data should be as "close" to the workstation doing the SfM processing as possible-- ideally on a fast internal hard drive (e.g., a solid state drive) on the same computer as the SfM software.
 Having a good long-term storage solution for the imagery (and derived data products) are important for the slower access phase, and having a copy of those data off-site will satisfy the 3-2-1 Backup Rule.
-Some universities/organizations might already have storage infrastructure capable of accommodating vast data volumes (and off-site backups).
+Some universities/organizations might already have storage infrastructure capable of accommodating vast data volumes and off-site backups (e.g., Research Computing storage).
 If university/organization storage infrastructure isn't an option, third-party cloud storage (e.g., Cyverse) or data storage-specific compute hardware (e.g., network attached storage) are also good options.
 For such high volumes of data, establishing "data levels" that characterize how derived each new processed product is makes them easier to navigate and work with [@wyngaard2019].
 Typically, Level 0 represents raw data (the original images from the sensor in the case of optical data) and higher levels are derived from lower levels (e.g., Figure 4 in @koontz2021 shows data levels for optical data collected for a forest ecology project).
 
-For public-facing storage, we suggest publishing all data product levels to a long-term data repository with a digital object identifier (DOI) in the open science spirit of broadening access to research.
+For public-facing storage, we suggest publishing all data product levels to a long-term data repository with a digital object identifier (DOI) in the open science spirit of broadening access to research (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`, Public-facing).
 Ideally, this includes the original raw images taken from UAS missions, which may be processed in the future to even higher quality products given the rapid advances in SfM photogrammetry software.
 This can prove costly with particularly high data volumes, but it may be possible to rely on university/organization cyberinfrastructure resources, or other options that cater specifically to researchers aiming to practice open science principles (e.g., Cyverse, Open Science Framework). 
 
