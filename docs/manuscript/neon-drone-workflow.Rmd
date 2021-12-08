@@ -427,7 +427,7 @@ Having a good long-term storage solution for the imagery (and derived data produ
 Some universities/organizations might already have storage infrastructure capable of accommodating vast data volumes and off-site backups (e.g., Research Computing storage).
 If university/organization storage infrastructure isn't an option, third-party cloud storage (e.g., Cyverse) or data storage-specific compute hardware (e.g., network attached storage) are also good options.
 For such high volumes of data, establishing "data levels" that characterize how derived each new processed product is makes them easier to navigate and work with [@wyngaard2019].
-Typically, Level 0 represents raw data (the original images from the sensor in the case of optical data) and higher levels are derived from lower levels (e.g., Figure 4 in @koontz2021 shows data levels for optical data collected for a forest ecology project).
+Typically, Level 0 represents raw data (the original images from the sensor in the case of optical data) and higher levels are derived from lower levels [e.g., Figure 4 in @koontz2021 shows data levels for optical data collected for a forest ecology project].
 
 For public-facing storage, we suggest publishing all data product levels to a long-term data repository with a digital object identifier (DOI) in the open science spirit of broadening access to research (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`, Public-facing).
 Ideally, this includes the original raw images taken from UAS missions, which may be processed in the future to even higher quality products given the rapid advances in SfM photogrammetry software.
