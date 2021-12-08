@@ -29,6 +29,8 @@ params:
     mikoontz@gmail.com
   keywords: |
     NEON, macroecology, UAS, drone    
+  word_count: |
+    abstract (260); intro (1605); core principles (866+1968+726+989+1026+813+656); case study (933+169+138+980+236+399); discussion (909) = 12413
   date_generated: !r format(Sys.Date(), "%B %d, %Y")
   
 geometry: margin=1in
