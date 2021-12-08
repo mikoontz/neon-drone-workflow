@@ -208,7 +208,7 @@ pander::pandoc.table(vehicle_payload_table_print,
 
 The payload is the equipment carried by the UAS that collects data and combines with the vehicle to constitute the system (the "S" in "UAS").
 In fact, despite the typical focus on the drone vehicle, the payload component is at least as important, since the main purpose of the vehicle is merely to position the payload where it needs to be in order to capture appropriate data.
-For ecologists interested in optical data, the payload may be a simple camera or a more general remote sensing sensor sensitive to reflectance of electromagnetic light.
+For ecologists interested in optical data, the payload may be a simple camera or a more specialized remote sensing sensor sensitive to particular wavelengths of electromagnetic radiation.
 The scientific questions will dictate the data requirements, which will in turn drive the payload decision.
 Typically, the selection of a sensor represents a trade-off between spatial resolution (the size of pixels in the imagery at a set altitude), spectral resolution (the number of distinct portions of the electromagnetic spectrum that the sensor can detect), spectral extent (how much of the electromagnetic spectrum the sensor can detect), and cost.
 For example, while hyperspectral data provide high spectral resolution and extent that may allow measurement of specific chemical compounds in vegetation [e.g., foliar nitrogen\; @knyazikhin2013], a multispectral instrument with fewer spectral channels [@koontz2021] or even an RGB camera [@scholl2020] may be more than sufficient for classifying vegetation to species.
@@ -233,7 +233,7 @@ Managing the temperature of the mission critical electronics is just as importan
 The vehicle remote controller and any other peripherals such as a tablet computer are susceptible to battery drain in extreme temperatures, and cold temperature can cause the vehicle and/or sensor to malfunction.
 The mean annual temperature for NEON AOP sites ranges from -12°C at the Utqiaġvik site in Alaska to 25°C at Lajas Experimental Station in Puerto Rico (NEON Field Site Metadata; https://www.neonscience.org/sites/default/files/NEON_Field_Site_Metadata_20210226_0.csv; accessed 2021-03-16).
 Expectations of unfavorable environmental conditions may be enough to dictate what equipment should comprise the UAS.
-For example, high-wind conditions at NIWO may warrant a fixed wing platform; however, the dense forest would make take off and landing much easier with a rotocopter.
+For example, high-wind conditions at NIWO may warrant a fixed wing platform; however, the dense forest would make takeoff and landing much easier with a rotocopter.
 In some cases, steps can be taken to mitigate the unfavorable environmental conditions, such as keeping equipment out of direct sunlight to prevent overheating (to the point of adding sun umbrellas or shade tarps to the required equipment list) and storing batteries in a cooler when not in use in order to insulate them against temperature extremes.
 
 Environmental conditions may also impact data collection on automated flights, particularly for optical data.
@@ -249,7 +249,7 @@ In fact, the NEON AOP does exactly this for their daily flight reports.
 ## Flight planning
 
 One of the key benefits of UAS operations is the ability to program missions to be automatically followed by the vehicle’s onboard flight software.
-For optical data collection such as that required for structure from motion photogrammetry, the mission typically involves aerial transects with images captured at regular time or distance intervals so that objects in a scene are imaged from many viewing angles (often in excess of 100; `r fig_nums(name = "fig-crosshatch", display = "cite")`).
+For optical data collection such as that required for SfM photogrammetry, the mission typically involves aerial transects with images captured at regular time or distance intervals so that objects in a scene are imaged from many viewing angles (often in excess of 100; `r fig_nums(name = "fig-crosshatch", display = "cite")`).
 Successful flight planning requires consideration of the flight parameters, flight planning software, and operation routine.
 
 The flight parameters are crucial determinants of whether or not the SfM photogrammetry will successfully create a digital model of the survey area.
@@ -279,7 +279,7 @@ Not all tablets have geolocation services; as of this writing, the Cellular+WiFi
 
 A final consideration for successful flight planning is to create a routine for consistently executing missions.
 Consistent repetition of routine steps prior to, during, and after a flight ensures that all components of the UAS work as intended in concert with each other, and checklists facilitate this consistency [@degani1993].
-We highly recommend developing and using some kind of checklist for UAS operations (Supplementary Information)-- there is good reason they are part of standard operations for a range of aviators from pilots of small private aircraft to NEON AOP to NASA astronauts! Some applications (such as Kittyhawk; https://kittyhawk.io/) allow for automatic logging of checklist run throughs, which further reduces barriers to their use.
+We highly recommend developing and using some kind of checklist for UAS operations (Supplementary Information)-- there is good reason they are part of standard operations for a range of aviators from pilots of small private aircraft to NEON AOP to NASA astronauts! Some applications (such as Kittyhawk; https://kittyhawk.io/) allow for automatic logging of checklist run-throughs, which further reduces barriers to their use.
 For our mission, we used Map Pilot for DJI by DronesMadeEasy, which enables full control of front/side overlap and camera angle, as well as allows for crosshatch flight patterns, terrain following, and caching of data for use in the field when an internet connection isn’t available.
 
 ```{r}
@@ -304,11 +304,11 @@ Part 107 credentials can be readily obtained by individuals without the need for
 Obtaining Part 107 credentials-- a "remote pilot certificate" from the FAA-- requires successful completion of an initial knowledge exam and needs renewing every 2 years.
 Unlike permissions granted under a COA, the Part 107 credentials stay with the pilot and are transferable if the pilot changes organizations (e.g., a graduate student can't operate a UAS for research under a university's COA after they graduate, but they would still retain their ability to operate under Part 107).
 As of this writing, the rules for flying under Part 107 are broadly permissive and allow for myriad opportunities to use UAS to collect ecological data.
-Two of the most relevant restrictions for ecologists operating under Part 107 are: 1) the UAS must be within visual line-of-sight of the pilot in command (or within visual line of sight of another crew member acting as a "visual observer" as long as that observer has direct communication with the pilot in command), 2) the UAS must fly no higher than 400 feet above ground level (approximately 122 m).
+Two of the most relevant restrictions for ecologists operating under Part 107 are: 1) the UAS must be within visual line-of-sight of the pilot in command (or within visual line of sight of another crew member acting as a "visual observer" as long as that observer has direct communication with the pilot in command), 2) the UAS must fly no higher than 400 feet (122 m) above ground level (AGL).
 Part 107 does constrain operations in other ways (e.g., UAS can't fly faster than 87 knots [161 km/h], UAS must be at least 500 feet [152 m] below clouds and 2000 feet [609 m] horizontally from clouds), but high quality optical data collection usually requires UAS operations to be well within these limits.
 
-Special waivers are needed to fly in "controlled" airspace (i.e., class B/C/D/E airspace, typically near airports), to fly a UAS above 55 lbs, and to fly a UAS beyond line-of-sight.
-Some of these waivers are relatively easy to obtain (e.g., flying in class E airspace near an infrequently-used airport), while others are nearly impossible and are likely beyond the reach of an ecological data collection campaign (e.g., beyond visual line-of-sight flights).
+Additional authorizations are needed to fly in "controlled" airspace (i.e., class B/C/D/E airspace, typically near airports), to fly a UAS above 55 lbs, and to fly a UAS beyond line-of-sight.
+Some of these authorizations are relatively easy to obtain (e.g., many requests to fly in controlled airspace below 400 feet (122 m) AGL can be automatically granted in near real time using the Low Altitude Authorization and Notification Capability (LAANC)), while others are nearly impossible (at the time of this writing) and are likely beyond the reach of an ecological data collection campaign (e.g., beyond visual line-of-sight flights).
 It is important to always call the appropriate land manager before flying on public land to obtain appropriate site access if necessary, to check for temporary closures (e.g., bird nesting), and to be a good neighbor.
 Because NEON does not own the land on which they operate, flying NEON sites will require contacting and obtaining permission from the site host; contact information is available on the NEON webpage for each site, and NEON staff may also help facilitate those connections.
 Additional, non-NEON research is allowed at some but not all sites.
@@ -389,7 +389,7 @@ Because the field measurements of GCP locations can be a slow step, it might be 
 Pre-existing permanent (or semi-permanent) points may also be used if they can be readily measured on the ground and are visible from the air.
 For example, NEON TOS plots have permanent markers that have been georeferenced with high precision (approximately 0.3 m) that can be used as GCPs if they are visible to the UAS (`r fig_nums(name = "fig-crosshatch", display = "cite")`).
 
-RTK and PPK kinematic corrections augment the accuracy of a UAS' built-in GNSS receiver by correcting the noise inherent in the instrument using additional equipment and processing steps without the need for laying out GCPs and determining their locations.
+RTK and PPK corrections augment the accuracy of a UAS' built-in GNSS receiver by correcting the noise inherent in the instrument using additional equipment and processing steps without the need for laying out GCPs and determining their locations.
 This can result in massive time savings, particularly when surveying large areas.
 For instance, @gillan2021 was able to survey and process data covering over 190 hectares of rangeland in approximately 30 days versus an estimated 141 days using a conventional UAS workflow, with an estimated 47 days saved just from using an RTK system versus GCPs.
 Even with RTK and PPK corrections, it is still considered good practice to lay out some GCPs at precisely known locations, then quantify geolocation error in the final SfM products by measuring the difference between the field- and UAS-measured GCP locations.
@@ -417,7 +417,7 @@ Storing those two devices in different locations while in the field (e.g., in tw
 Once those data are transferred to other devices, it is safe to delete the images on the SD cards in order to reuse them.
 It’s recommended to perform quality assurance (QA) checks on the images while it is still possible to re-collect data.
 This could mean viewing the images on a laptop on-site, or while still on location near the field study site.
-Check the data for obvious artifacts such as over or under exposure in images, that the number of images expected were collected, that file sizes appear consistent and reasonable, and that necessary metadata was capture with each image (e.g., the geolocation).
+Check the data for obvious artifacts such as over or under exposure in images, that the number of images expected were collected, that file sizes appear consistent and reasonable, and that necessary metadata was captured with each image (e.g., the geolocation).
 Generally a full QA assessment cannot be performed in the field due to time and computation limitations, but the field QA should be sufficient to ensure the images can be processed into desired products.
 Some NEON sites (e.g., NIWO) have a field house that may be accessed, with permission, for laptop friendly workspaces and/or charging options.
 
@@ -453,8 +453,8 @@ Higher-end gaming desktops are often sufficiently powerful workstations for proc
 Even if most of the processing takes place in the cloud, it can still be beneficial to have a relatively powerful local machine in order to readily view and manipulate the resulting data products.
 
 SfM workflows require myriad decisions about processing parameters, all of which might affect the quality of the resulting data products.
-An excellent SfM guide has been published by the USGS for the Agisoft Metashape software [@over2021], and some researchers have experimented with various SfM processing parameter combinations to empirically determine optimal parameter sets for particular use cases [@tinkham2021; @young2021] though some trial and error may still be required for new study systems.
-Some software allows for automating the SfM processing using coding scripts, which then serve as the transparent and reproducible record of the workflow.
+An excellent SfM guide has been published by the US Geological Survey (USGS) for the Agisoft Metashape software [@over2021], and some researchers have experimented with various SfM processing parameter combinations to empirically determine optimal parameter sets for particular use cases [@tinkham2021; @young2021] though some trial and error may still be required for new study systems.
+Some software allow for automating the SfM processing using coding scripts, which then serve as the transparent and reproducible record of the workflow.
 Other software workflows are based on a point-and-click graphical user interface (GUI), which requires the user to take note of the processing steps.
 It will eliminate some friction points with resulting SfM products (particularly the three-dimensional point cloud) to work in a coordinate reference system that measures local distances in true units of distance (e.g., distance measured in meters with the Universal Transverse Mercator (UTM) coordinate reference system).
 In any case, it is important to be consistent with the coordinate reference system for each of your data products (e.g., GNSS positions of GCPs, GNSS locations of UAS camera).
@@ -482,13 +482,13 @@ We use the previous section's "core principles" as a framework for describing ou
 ## Vehicle
 
 Our vehicle was a DJI Matrice 100 rotocopter with four propellers and a proven track record of safe, predictable flights.
-The vertical take offs and landings of the rotocopter style drone allowed us to operate the vehicle from a clearing as small as the width of the dirt access road to the site.
+The vertical takeoffs and landings of the rotocopter style drone allowed us to operate the vehicle from a clearing as small as the width of the dirt access road to the site.
 We used a piece of plywood laid on the ground as a flat, stable takeoff platform that would also help to minimize the amount of dust kicked up by the rotor wash during takeoff and landing. 
 The Matrice 100 has a relatively high lift capacity that allows for a payload to be integrated, and is heavier than many consumer rotocopters which makes it both more stable in windy conditions and more challenging to transport beyond a road.
 
 ## Payload
 
-We captured imagery using two co-mounted sensors: a gimbal-stabilized DJI Zenmuse X3 RGB camera, and a MicaSense RedEdge 3 sensor, which captures reflectance information in 5 distinct channels.
+We captured imagery using two co-mounted sensors: a gimbal-stabilized DJI Zenmuse X3 RGB camera, and a MicaSense RedEdge 3 sensor, which is sensitive to electromagnetic radiation in five distinct spectral channels across the visible and near infrared wavelengths.
 The DJI Zenmuse X3 camera has a focal length of 3.6 mm, a sensor width of 6.17 mm, and a sensor height of 4.55 mm.
 The MicaSense RedEdge 3 sensor has a focal length of 5.5 mm, a sensor width of 4.8 mm, and a sensor height of 3.6 mm.
 We used a fixed mount and a prebuilt integration kit for the MicaSense RedEdge 3 made by the sensor manufacturer to integrate with our vehicle.
@@ -497,7 +497,7 @@ The RedEdge 3 sensor image capture mechanism is independent from the flight plan
 Prior to flight, we connected to the RedEdge 3 sensor with a laptop via its built-in WiFi to verify that the sensor's onboard GNSS receiver was functioning properly and to initiate image capture.
 We set the RedEdge 3 sensor to capture images at a rate of 1 image per second.
 We set the DJI Zenmuse X3 camera to capture images at a rate of 0.5 images per second.
-Using the quantum efficiency and filter bandpass sensitivity of an average RedEdge 3 sensor provided by MicaSense, we estimated the relative spectral response of the instrument which characterizes how the sensor captures reflectance information across the electromagnetic spectrum (`r fig_nums(name = "fig-rededge-rsr-neon-aop", display = "cite")`).
+Using the quantum efficiency and filter bandpass sensitivity of an average RedEdge 3 sensor provided by MicaSense, we estimated the relative spectral response of the instrument which characterizes how the sensor captures light across the electromagnetic spectrum (`r fig_nums(name = "fig-rededge-rsr-neon-aop", display = "cite")`).
 We provide the relative spectral response data in a format that makes it interoperable with the hsdar package [@lehnert2019].
 
 ## Environment
@@ -658,7 +658,7 @@ In this work, we aid the adoption of these tools amongst macroecologists by prov
 Challenges remain for integrating UAS with NEON, but they are surmountable.
 Some of these challenges are fundamentally associated with "big", cross-scale data.
 Integrating data across scales brings a host of potential pitfalls that could pollute inference if care isn't taken to avoid them [@zipkin2021].
-Clear documentation of data provenance including sensor characteristics, data acquisition methods (e.g., flight pattern), data acquisition conditions (e.g., time of day, cloud cover) will enable rigorous cross-scale data integration.
+Clear documentation of data provenance including sensor characteristics, data acquisition methods (e.g., flight pattern), and data acquisition conditions (e.g., time of day, cloud cover) will enable rigorous cross-scale data integration.
 The proliferation of reasonably low-cost, off-the-shelf, drone-ready sensors (many designed for precision agriculture use) creates a need for validation of whether those instruments produce "science grade" data (which itself is a relative term, depending on what the specific science requirements are for a given project).
 This validation may be achieved via direct comparison of the low-cost sensors with “state of the science” instruments using coincident flights [e.g., @fawcett2020].
 Big data in ecology is relatively new [@farley2018], and approaches to UAS-derived big data are fairly ad hoc across researchers [@wyngaard2019].
