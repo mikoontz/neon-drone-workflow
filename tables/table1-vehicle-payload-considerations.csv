@@ -1,17 +1,18 @@
 ﻿Consideration,Options,Advantages,Disadvantages,Reference(s)
-,Rotocopter,Ease of takeoff and landing,Shorter flight time (~20 minutes),
+Vehicle,Rotocopter,Ease of takeoff and landing,Shorter flight time (~20 minutes),@anderson2013b; @goodbody2017; @padua2017
 ,,Hover capability,,
 ,,maneuverability,,
-Vehicle,,Affordable,,
-,,Longer flight time (2+ hours),,
-,Fixed wing,Covers large spatial extent,"Higher minimum flight speed to keep it aloft (affecting overlap, image quality)",@anderson2013b; @goodbody2017; @padua2017
-,,More stable in wind,Complex takeoff/landing,
+,,Affordable,,
+,Fixed wing,Longer flight time (2+ hours),"Higher minimum flight speed to keep it aloft (affecting overlap, image quality)",
+,,Covers large spatial extent,Complex takeoff/landing,
+,,More stable in wind,,
 ,VTOL fixed wing hybrid,Simpler takeoff/landing,Newer technology,
 ,,Longer flight time,Expensive,
-,,Small size,,
-,RGB camera,Affordable,Limited spectral extent to visible wavelengths,
+Payload,RGB camera,Small size,Limited spectral extent to visible wavelengths,@padua2017; @adao2017
+,,Affordable,"Spectrally overlapping, imprecise spectral information",
 ,,Fine spatial resolution,,
-Payload,Multispectral sensor,Small size,Limited spectral sampling typically in visible and infrared wavelengths,@padua2017; @adao2017
-,,More precise spectral information,Complex data acquisition and post-processing,
+,Multispectral sensor,Small size,Limited spectral sampling typically in visible and infrared wavelengths,
+,,More precise spectral information,More complex data acquisition and post-processing,
 ,Hyperspectral/Imaging spectrometer,High spectral resolution,Heavy,
 ,,High spectral extent,Expensive,
+,,,Very complex data acquisition and post-processing,

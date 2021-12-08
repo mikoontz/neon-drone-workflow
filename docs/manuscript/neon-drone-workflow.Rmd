@@ -20,10 +20,6 @@ params:
     ^4^Department of Human-Environment Systems, Boise State University; Boise, ID, USA  
     ^5^Battelle, National Ecological Observatory Network (NEON); Boulder, CO, USA  
     ^6^Hydrosat Inc., Washington, DC 20036, USA
-    # ^3^Geosciences and Environmental Change Science Center, US Geological Survey; Lakewood, CO, USA  
-    # ^4^Department of Ecology and Evolutionary Biology, University of Colorado; Boulder, CO, USA  
-    # ^5^Department of Human-Environment Systems, Boise State University; Boise, ID, USA  
-    # ^6^Battelle, National Ecological Observatory Network (NEON); Boulder, CO, USA  
 
   correspondence: |
     mikoontz@gmail.com
@@ -47,7 +43,7 @@ header-includes:
 
 output:
   pdf_document
-  # bookdown::word_document2: default
+  # bookdown::word_document2
   # bookdown::html_document2: default
 
 ---
@@ -56,7 +52,7 @@ output:
 knitr::opts_chunk$set(echo = FALSE, include = FALSE)
 ```
 
-# `r params$title`
+# `r params$title` {-}
 
 `r params$author`
 
@@ -80,7 +76,7 @@ table_nums <- captioner(prefix = "Table")
 eq_nums <- captioner(prefix = "Equation")
 ```
 
-## Abstract 
+# Abstract 
 
 Macroecology research seeks to understand ecological phenomena with causes and consequences that accumulate, interact, and emerge across scales spanning several orders of magnitude.
 Broad-extent, fine-grain (i.e., high resolution) information is needed to adequately capture these cross-scale phenomena, but these data are costly to acquire and process. 
@@ -91,7 +87,7 @@ This inspired a working group of UAS-using academic ecologists, NEON professiona
 Specifically, we provide (1) a collection of core principles for collecting high-quality UAS data for NEON integration and (2) a case study illustrating a sample workflow for processing UAS data into meaningful ecological information and integrating it with NEON data collected on the ground with the Terrestrial Observation System and remotely from the Airborne Observation Platform. 
 With this mental model, we advance the democratization of macroecology by making a key observational domain-- broad-extent, fine-grain data-- more accessible via NEON/UAS integration.
 
-## Introduction
+# Introduction
 
 Macroecology is the study of spatially extensive systems whose biological, geophysical, and social components interact dynamically both within and across spatiotemporal scales [@heffernan2014].
 Macroecology, in its explicit consideration of scale, extends from a rich history of basic ecological research seeking to explain patterns in nature [@turner1989; @levin1992]. 
@@ -151,18 +147,18 @@ Mental models help novices become experienced practitioners by providing a conte
 A lack of a synthesized contextual framework for practical use of UAS for ecology research, particularly for NEON integration, challenges adoption of these tools and hampers their ability to democratize macroecology [@assmann2019; @wyngaard2019].
 We assembled a working group of participants at the 2019 NEON Science Summit in Boulder, Colorado with a goal to synthesize current practical knowledge and provide a sample workflow to guide ecologists with a mental model for using UAS and integrating with NEON. 
 In this work, we aim to effectively lower the barrier to entry for using UAS and NEON to do ecology.
-Specifically, we focus on optical data collected by each tool over terrestrial sites and provide (1) a collection of what we consider to be the nine most important practical considerations for collecting high-quality optical data from a UAS for integration with NEON (science requirements, vehicle, payload, environment, flight planning, rules/regulations, radiometric calibration, georeferencing, data management, and data processing) and (2) a real-world workflow illustrating how to consider these principles depicting the processing of UAS data into meaningful ecological information at the NEON Niwot Ridge (NIWO) field site.
+Specifically, we focus on optical data collected by each tool over terrestrial sites and provide (1) a collection of what we consider to be the ten most important practical considerations for collecting high-quality optical data from a UAS for integration with NEON (science requirements, vehicle, payload, environment, flight planning, rules/regulations, radiometric calibration, georeferencing, data management, and data processing) and (2) a real-world workflow illustrating how to consider these principles depicting the processing of UAS data into meaningful ecological information at the NEON Niwot Ridge (NIWO) field site.
 
-## Core principles for UAS/NEON integration
+# Core principles for UAS/NEON integration
 
-### Science requirements
+## Science requirements
 
 Both NEON- and UAS-enabled ecology have faced criticism for having “backwards” approaches to science.
 Critics suggest that clear science questions take a back seat to high-quality but rote data collection in the case of NEON [@lindenmayer2018] or perpetual methodological refinement in the case of UAS [@gillan2021].
 In light of this, we echo @assmann2019 in emphasizing that the main consideration to keep in mind while integrating UAS with NEON is: what are the science requirements for the data to be collected and what data collection efforts are "good enough" to meet those requirements?
 A clear science question helps guide the data collection needs, which can minimize the amount of researcher time and energy spent on developing tools that ultimately prove to be superfluous [@joseph2021].
 
-### Vehicle
+## Vehicle
 
 The vehicle in a UAS is the flying machine that holds the payload.
 One key distinction between vehicle types is whether rotor systems or fixed wings are used for lift (the upward force that keeps the vehicle in the air).
@@ -208,14 +204,14 @@ pander::pandoc.table(vehicle_payload_table_print,
                      keep.line.breaks = TRUE)
 ```
 
-### Payload
+## Payload
 
 The payload is the equipment carried by the UAS that collects data and combines with the vehicle to constitute the system (the "S" in "UAS").
 In fact, despite the typical focus on the drone vehicle, the payload component is at least as important, since the main purpose of the vehicle is merely to position the payload where it needs to be in order to capture appropriate data.
 For ecologists interested in optical data, the payload may be a simple camera or a more general remote sensing sensor sensitive to reflectance of electromagnetic light.
 The scientific questions will dictate the data requirements, which will in turn drive the payload decision.
 Typically, the selection of a sensor represents a trade-off between spatial resolution (the size of pixels in the imagery at a set altitude), spectral resolution (the number of distinct portions of the electromagnetic spectrum that the sensor can detect), spectral extent (how much of the electromagnetic spectrum the sensor can detect), and cost.
-For example, while hyperspectral data provide high spectral resolution and extent that may allow measurement of specific chemical compounds in vegetation [e.g., foliar nitrogen; @knyazikhin2013], a multispectral instrument with fewer spectral channels [@koontz2021] or even an RGB camera [@scholl2020] may be more than sufficient for classifying vegetation to species.
+For example, while hyperspectral data provide high spectral resolution and extent that may allow measurement of specific chemical compounds in vegetation [e.g., foliar nitrogen\; @knyazikhin2013], a multispectral instrument with fewer spectral channels [@koontz2021] or even an RGB camera [@scholl2020] may be more than sufficient for classifying vegetation to species.
 Similarly, sensors with high spatial resolution can capture fine detail in their imagery but may reduce the ability to measure a variable of interest, such as individual trees, as post-processing steps can be negatively affected by the movement of those fine details in the wind [@young2021].
 Hyperspectral instruments and high resolution cameras are relatively expensive in terms of purchase cost, post-processing time, and data storage requirements, but simple RGB and multispectral cameras can be affordably bought off-the-shelf so it is worth considering whether they would suffice for the scientific question of interest.
 A summary of the advantages and disadvantages of these different payload types for collecting optical data can be found in `r table_nums(name = "table-vehicle-payload", display = "cite")`.
@@ -225,7 +221,7 @@ In some cases, the payload can operate entirely independently from the vehicle, 
 In other cases, the payload relies both on power and electronic signaling from the vehicle in order to capture data, and integration may require more specialized electrical and mechanical engineering expertise.
 It's generally advisable to use a pre-built integration kit or an already-integrated sensor/vehicle system if the payload meets the science requirements (or nearly so).
 
-### Environment
+## Environment
 
 The environment of the UAS mission can affect both the equipment performance and the data collection such that the intended operation conditions must be considered during vehicle/payload selection and flight planning.
 Foremost, the vehicle and the payload must be capable of functioning in the desired environment.
@@ -250,7 +246,7 @@ A handheld instrument for measuring temperature, relative humidity, and wind spe
 In many cases, taking a picture of the sky and a screenshot of the weather forecast from a reputable source (e.g., the National Oceanic and Atmospheric Administration) is a convenient and sufficient way to ensure later reporting on flight conditions.
 In fact, the NEON AOP does exactly this for their daily flight reports.
 
-### Flight planning
+## Flight planning
 
 One of the key benefits of UAS operations is the ability to program missions to be automatically followed by the vehicle’s onboard flight software.
 For optical data collection such as that required for structure from motion photogrammetry, the mission typically involves aerial transects with images captured at regular time or distance intervals so that objects in a scene are imaged from many viewing angles (often in excess of 100; `r fig_nums(name = "fig-crosshatch", display = "cite")`).
@@ -296,7 +292,7 @@ The flight area should therefore be larger than the area of interest to ensure s
 
 ![`r fig_nums(name = "fig-crosshatch")`](../../figs/fig01_photo-points-overlap-and-gcps.png)
 
-### Regulations (airspace and pilot)
+## Regulations (airspace and pilot)
 
 In the United States, use of UAS is constrained by regulations on pilot credentials, airspace in which operations take place, and vehicle type.
 This is an oft-cited hurdle to adoption of UAS for research use [@vincent2015].
@@ -329,7 +325,7 @@ Several channels of the NEON AOP instrument comprise each of the MicaSense RedEd
 
 ![`r fig_nums(name = "fig-rededge-rsr-neon-aop")`](../../figs/fig02_relative-spectral-response-rededge3-and-neon-aop.png)
 
-### Radiometric Calibration and Corrections
+## Radiometric Calibration and Corrections
 
 Optical data from UAS-mounted sensors must be radiometrically calibrated in order to convert otherwise arbitrary image pixel values into meaningful, standardized units like reflectance.
 Applying image preprocessing steps (e.g., correcting for camera artifacts such as vignetting and dark noise) and subsequent radiometric calibration allows our UAS data to be comparable with high-quality scientific data products derived from the NEON AOP.
@@ -365,27 +361,7 @@ Regardless of panel cost, color, or material, it is critical to clean, re-measur
 This is especially important when field work involves exposing panels to harsh environmental conditions with dirt, dust, sand, sun, and any other types of physical damage or degradation.
 Depending on the manufacturer, some panel models cannot be cleaned as this will force debris further into the pores of the panel material (e.g., https://support.micasense.com/hc/en-us/articles/360005163934-Calibrated-Reflectance-Panel-Care-Instructions).
 
-<!-- To illustrate this point, we re-measured a calibrated reflectance panel after three years of field work using a handheld Analytical Spectral Devices (ASD, ASD Inc., a Malvern PANalytical Company, Longmont, Colorado) FieldSpec 4 spectrometer (USGS data release DOI available upon publication). -->
-<!-- We present the vendor-provided panel reflectance from the time of purchase in 2017 with the averaged ASD handheld reflectance collected three years later in 2020 (`r fig_nums(name = "fig-calibration-panel", display = "cite")`). -->
-<!-- The reflectance of the panel has decreased by as much as 10% due to the presence of dirt and dust. -->
-<!-- This decrease in reflectance is especially noticeable in the shorter wavelengths. -->
-<!-- If we use the vendor-provided panel reflectance data from 2017 for current and future flights, we will introduce significant error into our reflectance calibration. -->
-<!-- According to the manufacturer, this make and model of calibration panel is not able to be cleaned (though newer panels from this manufacturer can be cleaned; see https://support.micasense.com/hc/en-us/articles/360005163934-Calibrated-Reflectance-Panel-Care-Instructions) as this will force debris further into the pores of the panel material, so it is important to use the updated reflectance measurement for this panel during radiometric calibration. -->
-
-<!-- ```{r} -->
-<!-- fig_nums(name = "fig-calibration-panel", "Comparison of reflectance spectra (A) for a calibrated reflectance panel (B). -->
-<!-- The panel vendor provides a reflectance spectrum describing the panel’s reflectance at the time of purchase (black reflectance profile, “MicaSense, 2017”). -->
-<!-- After three years of using the panel repeatedly for field work, we re-measured the panel using a handheld spectrometer (blue reflectance profile, “ASD, 2020”) to evaluate the change in spectral reflectance for the panel. -->
-<!-- The spectra in (A) are reflectance values as a function of wavelength across the visible and near infrared. -->
-<!-- The MicaSense RedEdge 3 spectral band ranges (blue, green, red, red edge, near infrared) are illustrated here as vertical bars of color. -->
-<!-- The panel reflectance decreased between measurements collected in 2017 and 2020, with this decrease being more pronounced towards the shorter wavelengths. -->
-<!-- This is a result of the panel becoming dirty from dust and sand in the field, as seen on the plastic case for the panel (in the lower right corner of B). -->
-<!-- This change in reflectance demonstrates the necessity to clean, re-measure, or replace calibration panels when performing radiometric calibration.") -->
-<!-- ``` -->
-
-<!-- ![`r fig_nums(name = "fig-calibration-panel")`](../../figs/micasense-rededge3-calibrated-reflectance-panel-deterioration.png) -->
-
-### Georeferencing
+## Georeferencing
 
 It is important to consider how the geographic positions of objects within the UAS survey are used to answer the research question.
 Those positions can range from being globally accurate with precise correspondence to a location on the Earth (e.g., the tree is located at these coordinates, plus or minus 5 centimeters) to being relatively accurate with the spatial relationships and real-world distances between objects in the scene preserved but perhaps all frame-shifted by some amount compared to reality (e.g., the first tree is 5 meters away from the second tree, but all the trees are shifted 10 meters compared to their true on-the-ground coordinates).
@@ -427,7 +403,7 @@ The size of the area covered by the main photograph is approximately 180 m wide 
 
 ![`r fig_nums(name = "fig-gcps")`](../../figs/example-gcps-with-inset.png)
 
-### Data management
+## Data management
 
 Image data collected from a UAS can quickly become "big data", and being intentional about data management will ease friction points at every step in the science workflow, from data collection to manuscript writing (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`).
 Having a ballpark idea of the total anticipated data storage requirements will help guide data storage hardware purchases such as Secure Digital memory cards (SD cards), external hard drives, internal hard drives, network attached storage (NAS), third-party cloud storage allotments, or university/organization-provided cloud storage allotments. 
@@ -455,7 +431,7 @@ Typically, Level 0 represents raw data (the original images from the sensor in t
 
 For public-facing storage, we suggest publishing all data product levels to a long-term data repository with a digital object identifier (DOI) in the open science spirit of broadening access to research.
 Ideally, this includes the original raw images taken from UAS missions, which may be processed in the future to even higher quality products given the rapid advances in SfM photogrammetry software.
-This can prove costly With particularly high data volumes, but it may be possible to rely on university/organization cyberinfrastructure resources, or other options that cater specifically to researchers aiming to practice open science principles (e.g., Cyverse, Open Science Framework). 
+This can prove costly with particularly high data volumes, but it may be possible to rely on university/organization cyberinfrastructure resources, or other options that cater specifically to researchers aiming to practice open science principles (e.g., Cyverse, Open Science Framework). 
 
 ```{r}
 fig_nums(name = "fig-data-management-schematic", "Planning a data management pipeline is a large upfront investment but can save time and money in the long-run, making it well-worth prioritizing up-front.
@@ -467,7 +443,7 @@ For example, whereas building your own data management system may be more afford
 
 ![`r fig_nums(name = "fig-data-management-schematic")`](../../figs/fig05_data-management-and-processing.png)
 
-### Data processing
+## Data processing
 
 One common approach for processing UAS-derived imagery such that it can be integrated with other data sources (e.g., NEON) is SfM photogrammetry, which converts the original images into data products such as a two-dimensional orthomosaic and a three-dimensional point cloud.
 Many software applications are available for SfM photogrammetry that produce results of similar quality [@forsmoo2019], and many have steep discounts for research or educational use (e.g., Agisoft Metashape, Pix4DMapper).
@@ -491,26 +467,26 @@ Several packages have also been developed specifically for working with NEON dat
 A recent review by @atkins2022 describes the ecosystem of `R` packages available for working with forestry data, many of which are relevant for the types of geospatial data produced by UAS and NEON.
 More generally, working with these kinds of high-resolution geospatial data, which are often classically "big", can benefit from following the few simple rules recently outlined by @joseph2021.
 
-## Case study
+# Case study
 
-### Science Requirements
+## Science Requirements
 Forest inventories describe the geolocation and physical attributes of individual trees, and provide critical information for management decision-making and advancing ecological theory [@young2021].
 Remote sensing approaches to creating forest inventories can cover more area than field-based methods at a lower cost per area, and recent approaches still allow for characterization of individual trees [@weinstein2019].
-NEON collects field-based forest inventory data in their Terrestrial Observation System (TOS) (the "Woody Plant Vegetation Structure" data product; DP1.10098.001) and remote sensing data in their Aerial Observation Platform that have been used to generate forest inventory data [@weinstein2020].
+NEON collects field-based forest inventory data in their Terrestrial Observation System (TOS) (the "Woody Plant Vegetation Structure" data product; DP1.10098.001) and remote sensing data in their Airborne Observation Platform that have been used to generate forest inventory data [@weinstein2020].
 The field-based data are restricted to 20 x 20m field plots, while the AOP data cover dozens of square kilometers but at moderately coarse resolution (10 cm for RGB imagery, 1 m for imaging spectrometer data, 1 m for LiDAR data).
 UAS have the capacity to fill in missing scales of observation for creating forest inventories by capturing a broader spatial extent than field-based NEON data, but at a finer spatial resolution than NEON AOP data.
 With this as a motivation, here we present a case study where we collect and process UAS data coincident with a NEON TOS plot to create a forest inventory.
 We then benchmark that forest inventory against the NEON TOS field data, and describe how to extract individual tree-scale spectral information that is comparable to that collected by the NEON AOP.
 We use the previous section's "core principles" as a framework for describing our workflow, and provide all data and code to further aid our mental model building. 
 
-### Vehicle
+## Vehicle
 
 Our vehicle was a DJI Matrice 100 rotocopter with four propellers and a proven track record of safe, predictable flights.
 The vertical take offs and landings of the rotocopter style drone allowed us to operate the vehicle from a clearing as small as the width of the dirt access road to the site.
 We used a piece of plywood laid on the ground as a flat, stable takeoff platform that would also help to minimize the amount of dust kicked up by the rotor wash during takeoff and landing. 
 The Matrice 100 has a relatively high lift capacity that allows for a payload to be integrated, and is heavier than many consumer rotocopters which makes it both more stable in windy conditions and more challenging to transport beyond a road.
 
-### Payload
+## Payload
 
 We captured imagery using two co-mounted sensors: a gimbal-stabilized DJI Zenmuse X3 RGB camera, and a MicaSense RedEdge 3 sensor, which captures reflectance information in 5 distinct channels.
 The DJI Zenmuse X3 camera has a focal length of 3.6 mm, a sensor width of 6.17 mm, and a sensor height of 4.55 mm.
@@ -524,11 +500,11 @@ We set the DJI Zenmuse X3 camera to capture images at a rate of 0.5 images per s
 Using the quantum efficiency and filter bandpass sensitivity of an average RedEdge 3 sensor provided by MicaSense, we estimated the relative spectral response of the instrument which characterizes how the sensor captures reflectance information across the electromagnetic spectrum (`r fig_nums(name = "fig-rededge-rsr-neon-aop", display = "cite")`).
 We provide the relative spectral response data in a format that makes it interoperable with the hsdar package [@lehnert2019].
 
-### Environment
+## Environment
 Our data collection took place on a single day under mostly sunny, light wind conditions on October 9th, 2019 starting at 2pm mountain daylight time.
 We ideally would have flown closer to solar noon to minimize shadows in the imagery, particularly this late in the year.
 
-### Flight Planning
+## Flight Planning
 We used Map Pilot for DJI, an Apple iPad iOS app, for planning the flight.
 Map Pilot is a reliable, full-featured flight planning application that allows us to set flight parameters such as forward overlap, side overlap, and sensor angle.
 We flew at an altitude of 100 m, and set the forward overlap to 95% and side overlap to 80% (based on the built-in DJI RGB camera, the Zenmuse X3).
@@ -570,12 +546,12 @@ Our aerial transects were 17.14 m apart, our vehicle flew at 3.16 m/s, the side 
 The estimated number of photos per point in the survey area was 200 for the Zenmuse X3 camera, and 105.5 for the MicaSense RedEdge 3 sensor.
 The crosshatch flight plan effectively doubles the expected number of photos per point to 400 for the X3 camera and 211.0 for the RedEdge 3 (`r fig_nums(name = "fig-crosshatch", display = "cite")`).
 
-### Regulations
+## Regulations
 
 We obtained permission to access the NIWO NEON site from the site host, the University of Colorado Boulder Mountain Research Station, as well as NEON itself.
 We flew under the FAA Part 107 rules for commercial drone operations with a current remote pilot certificate, and ensured that the airspace was free for operating the UAS.
 
-### Radiometric Calibration
+## Radiometric Calibration
 
 The MicaSense RedEdge 3 multispectral camera comes with a small, grey calibrated reflectance panel that reflects approximately 60% of light across the entire spectral extent captured by the sensor.
 We held the UAS over the panel and captured an image of the calibration panel prior to flight ensuring our shadow didn't cover the panel.
@@ -583,13 +559,13 @@ The RedEdge 3 also integrates a DLS, which faces upwards and measures illuminati
 We included the calibration panel photos in the SfM processing workflow and also enabled the image-to-image corrections from the DLS.
 When loading the calibration panel photos into the SfM software, we set the "known reflectance" of the panel in each of the five spectral channels to be those provided by the panel manufacturer.
 
-### Georeferencing
+## Georeferencing
 
 We laid out orange cloth X's over the 9 permanent markers within the NIWO_017 field site (red points in `r fig_nums(name = "fig-crosshatch", display = "cite")`).
 Five of these points were visible from the air.
 These ground control points were located within the center of the flight area, without any geolocation representation at the edges which wasn't ideal [@zimmerman2020; @santana2021].
 
-### Data Collection
+## Data Collection
 
 For data collection, we recorded each flight’s imagery on a separate 32 GB SD card rated at >90 MB/s write speed.
 For multi-day trips or if SD cards need to be reused, we transfer imagery from the SD cards to at least one portable solid state hard drive (Samsung T series).
@@ -599,7 +575,7 @@ We use the same data levels as @koontz2021, except we didn't process our data to
 To allow for future data collection to integrate easily into this project, we compartmentalized each data product to a folder for the specific flight date (2019-10-09), which was housed in a folder for the specific flight location (NIWO_017).
 We used the Open Science Framework for public-facing storage (available upon publication).
 
-### Data Processing
+## Data Processing
 
 We used a local desktop computer (Alienware Aurora R7 with an Intel i7-8700k 3.70 GHz hexacore processor and 64 GB of RAM) for data processing.
 We followed the USGS workflow to process our raw MicaSense RedEdge 3 imagery into a digital surface model, an orthomosaic and a dense point cloud using Agisoft Metashape version 1.6.1 [@over2021].
@@ -671,7 +647,7 @@ The nonlinear model fit highlights how, at the individual tree scale, spectral r
 ![`r fig_nums(name = "fig-crown-ndvi-compare")`](../../figs/uas-vs-neon-ndvi-per-crown.png)
 
 
-## Discussion
+# Discussion
 
 Macroecology will benefit from a “macroscope” to enable the study of broad-extent phenomena across multiple scales of biological, geophysical, and social processes [@beck2012; @lawton1996; @dornelas2019]. 
 The ideal macroscope comprises a nested array of tools that provide full coverage of spatial and temporal observational domains. 
@@ -681,14 +657,14 @@ In this work, we aid the adoption of these tools amongst macroecologists by prov
 
 Challenges remain for integrating UAS with NEON, but they are surmountable.
 Some of these challenges are fundamentally associated with "big", cross-scale data.
-Integrating data cross scales brings a host of potential pitfalls that could pollute inference if care isn't taken to avoid them [@zipkin2021].
+Integrating data across scales brings a host of potential pitfalls that could pollute inference if care isn't taken to avoid them [@zipkin2021].
 Clear documentation of data provenance including sensor characteristics, data acquisition methods (e.g., flight pattern), data acquisition conditions (e.g., time of day, cloud cover) will enable rigorous cross-scale data integration.
 The proliferation of reasonably low-cost, off-the-shelf, drone-ready sensors (many designed for precision agriculture use) creates a need for validation of whether those instruments produce "science grade" data (which itself is a relative term, depending on what the specific science requirements are for a given project).
 This validation may be achieved via direct comparison of the low-cost sensors with “state of the science” instruments using coincident flights [e.g., @fawcett2020].
 Big data in ecology is relatively new [@farley2018], and approaches to UAS-derived big data are fairly ad hoc across researchers [@wyngaard2019].
 Maintaining supportive communities of practice, such as the High Latitude Drone Ecology Network (https://arcticdrones.org/), can help overcome some of these idiosyncratic approaches.
 Integrating UAS operations with NEON can help anchor the community to the common currency of NEON data types, organization, and collection protocols which will enhance the interoperability of UAS data.
-Cyberinfrastructure for managing and processing UAS data are not yet built in a way that encourages consistency between projects or researchers.
+Cyberinfrastructure for managing and processing UAS data is not yet built in a way that encourages consistency between projects or researchers.
 In this way, NEON provides an aspirational example for how purpose-built cyberinfrastructure can facilitate macroecology, and the foundational resources for building an equivalently valuable architecture for UAS data may already be represented in other NSF-sponsored projects (e.g., Cyverse, OpenTopography, Open Science Framework). 
 NEON also provides an aspirational target for educational resources, which are critical to ensuring that would-be NEON/UAS users have the environmental data science skills necessary to turn their data into inference [@hampton2017].
 Critically, reducing some barriers to access to an elusive observational domain (broad-extent, fine-grain) doesn’t equate to it being fully accessible. 
@@ -707,12 +683,12 @@ We conclude with a research agenda for UAS/NEON integration paired with example 
 1. Replacing high-cost NEON AOP flights with lower-cost alternatives (e.g., if the drone-derived data are "good enough" compared to the AOP, can we reduce the operational costs of the AOP)
 1. Using NEON data as a common currency for validating new methods (e.g., the case study we showed here, comparing a deep learning/orthomosaic based approach and a variable window filter/canopy height model approach to detecting individual trees measured by the NEON TOS)
 
-## Acknowledgements
+# Acknowledgements {-}
 
 Funding for the 2019 NEON Science Summit was provided by NSF Award #1906144. Additional funding was provided by Earth Lab through the University of Colorado, Boulder’s Grand Challenge Initiative, the Cooperative Institute for Research in Environmental Sciences, and the North Central Climate Adaptation Science Center. We would also like to acknowledge the National Aeronautics and Space Administration (NASA) New Investigator Program (NIP) grant 80NSSC18K0750 to M. E. Cattau. The National Ecological Observatory Network is a program sponsored by the National Science Foundation and operated under cooperative agreement by Battelle. This material is based in part upon work supported by the National Science Foundation through the NEON Program. We thank Chelsea Nagy, Jeff Sloan, and two anonymous reviewers for their feedback, which greatly improved the manuscript.
 
-## Data availability
-All data and code required to reproduce the analysis and the workflow presented in this manuscript can be found on the Open Science Framework at (available upon publication) and on GitHub (available upon publication)
+# Data availability {-}
+All data and code required to reproduce the analysis and the workflow presented in this manuscript can be found on the Open Science Framework at https://doi.org/10.17605/OSF.IO/ENBWU and on GitHub at https://github.com/mikoontz/neon-drone-workflow.
 
 <!-- ## Author contributions -->
 
@@ -721,4 +697,4 @@ All data and code required to reproduce the analysis and the workflow presented 
 
 \newpage
 
-## References
+# References {-}
