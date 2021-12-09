@@ -64,6 +64,8 @@ knitr::opts_chunk$set(echo = FALSE, include = FALSE)
 
 Date report generated: `r params$date_generated`
 
+Open Research Statement: All data and code required to reproduce the analysis and the workflow presented in this manuscript can be found on the Open Science Framework at https://doi.org/10.17605/OSF.IO/ENBWU and on GitHub at https://github.com/mikoontz/neon-drone-workflow.
+
 ```{r libraries}
 library(tidyverse)
 library(pander)
@@ -686,9 +688,6 @@ We conclude with a research agenda for UAS/NEON integration paired with example 
 # Acknowledgements {-}
 
 Funding for the 2019 NEON Science Summit was provided by NSF Award #1906144. Additional funding was provided by Earth Lab through the University of Colorado, Boulder’s Grand Challenge Initiative, the Cooperative Institute for Research in Environmental Sciences, and the North Central Climate Adaptation Science Center. We would also like to acknowledge the National Aeronautics and Space Administration (NASA) New Investigator Program (NIP) grant 80NSSC18K0750 to M. E. Cattau. The National Ecological Observatory Network is a program sponsored by the National Science Foundation and operated under cooperative agreement by Battelle. This material is based in part upon work supported by the National Science Foundation through the NEON Program. We thank Chelsea Nagy, Jeff Sloan, and two anonymous reviewers for their feedback, which greatly improved the manuscript.
-
-# Data availability {-}
-All data and code required to reproduce the analysis and the workflow presented in this manuscript can be found on the Open Science Framework at https://doi.org/10.17605/OSF.IO/ENBWU and on GitHub at https://github.com/mikoontz/neon-drone-workflow.
 
 <!-- ## Author contributions -->
 
