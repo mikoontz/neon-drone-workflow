@@ -1,0 +1,6 @@
+"channel","band","fwhm","center"
+1,"blue",20,475
+2,"green",20,560
+3,"red",10,668
+5,"re",10,717
+4,"nir",40,840
