@@ -40,25 +40,25 @@ cropped_sparse_point_cloud_osf_id <- osfr::osf_retrieve_file(id = "7pjmc")
 # orthomosaic -------------------------------------------------------------
 if(!file.exists(cropped_ortho_fname)) {
   osfr::osf_download(x = cropped_ortho_osf_id, 
-                     path = cropped_ortho_fname)
+                     path = dirname(cropped_ortho_fname))
 }
 
 # digital surface model ---------------------------------------------------
 if(!file.exists(cropped_dsm_fname)) {
   osfr::osf_download(x = cropped_dsm_osf_id, 
-                     path = cropped_dsm_fname)
+                     path = dirname(cropped_dsm_fname))
 }
 
 # dense point cloud -------------------------------------------------------
 if(!file.exists(cropped_dense_point_cloud_fname)) {
   osfr::osf_download(x = cropped_dense_point_cloud_osf_id, 
-                     path =  cropped_dense_point_cloud_fname)
+                     path =  dirname(cropped_dense_point_cloud_fname))
 }
 
 # sparse point cloud ------------------------------------------------------
 if(!file.exists(cropped_sparse_point_cloud_fname)) {
   osfr::osf_download(x = cropped_sparse_point_cloud_osf_id, 
-                     path = cropped_sparse_point_cloud_fname)
+                     path = dirname(cropped_sparse_point_cloud_fname))
 }
 
 
