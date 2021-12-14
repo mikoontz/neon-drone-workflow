@@ -141,7 +141,7 @@ Each can be a key tool for macroecology research, but their integration offers a
 NEON data derive from "state of the science" instrumentation with thorough documentation, and are standardized at a continental scale.
 NEON data collection is pre-planned, which makes the resulting data somewhat predictable, but also rigid in space, time, and type.
 On the other hand, UAS operations are nimble and customizable, but the resulting data are relatively under-validated with data standards that are ad-hoc, idiosyncratic, and lacking in a consistency which makes interoperability of those data across projects a challenge [@wyngaard2019].
-Realization of the benefits of UAS-NEON integration by ecologists is challenged by the relative novelty of these tools and associated workflows [@nagyInpress].
+Realization of the benefits of UAS-NEON integration by ecologists is challenged by the relative novelty of these tools and associated workflows [@nagy2021].
 Not knowing where to start with not one, but two new tools is a daunting proposition and gaining enough proficiency to use them in a research setting often comes at the expense of doing research itself [@olah2017].
 Reducing these barriers to proficiency therefore has tremendous research value.
 

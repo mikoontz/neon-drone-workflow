@@ -3,12 +3,9 @@
 # Users may wish to start from this point to download the data that have
 # already been through the structure from motion workflow
 
-dependencies <- c("tidyverse", "sf", "raster", "lidR", "stars", "ForestTools")
+dependencies <- c("osfr")
 need_install <- dependencies[!sapply(dependencies, require, character.only = TRUE)]
 install.packages(need_install, character.only = TRUE)
-
-library(raster)
-library(lidR)
 
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
@@ -21,7 +18,8 @@ flight_datetime <- "2019-10-09"
 # create directory to store L1 products -----------------------------------
 
 if(!dir.exists(file.path("data", "drone", "L1", site_name, flight_datetime))) {
-  dir.create(file.path("data", "drone", "L1", site_name, flight_datetime), recursive = TRUE)
+  dir.create(file.path("data", "drone", "L1", site_name, flight_datetime),
+             recursive = TRUE)
 }
 
 # files to be downloaded from remote and named
@@ -30,11 +28,53 @@ cropped_dsm_fname <- file.path("data", "drone", "L1", site_name, flight_datetime
 cropped_dense_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dense-point-cloud_cropped.las"))
 cropped_sparse_point_cloud_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_sparse-point-cloud_cropped.las"))
 
-# remote files (currently on S3, should be shifted to OSF or the like)
+# these data are permanently archived on the Open Science Framework
+cropped_ortho_rgb_osf_id <- osfr::osf_retrieve_file(id = "x57dk")
+cropped_ortho_osf_id <- osfr::osf_retrieve_file(id = "kh7vu")
+cropped_dsm_osf_id <- osfr::osf_retrieve_file(id = "zdext")
+cropped_dense_point_cloud_osf_id <- osfr::osf_retrieve_file(id = "eg2sn")
+cropped_sparse_point_cloud_osf_id <- osfr::osf_retrieve_file(id = "7pjmc")
+
+# try to retrieve data from the permanently-archived versions on Open Science
+# Framework
+# orthomosaic -------------------------------------------------------------
+if(!file.exists(cropped_ortho_fname)) {
+  osfr::osf_download(x = cropped_ortho_osf_id, 
+                     path = cropped_ortho_fname)
+}
+
+# digital surface model ---------------------------------------------------
+if(!file.exists(cropped_dsm_fname)) {
+  osfr::osf_download(x = cropped_dsm_osf_id, 
+                     path = cropped_dsm_fname)
+}
+
+# dense point cloud -------------------------------------------------------
+if(!file.exists(cropped_dense_point_cloud_fname)) {
+  osfr::osf_download(x = cropped_dense_point_cloud_osf_id, 
+                     path =  cropped_dense_point_cloud_fname)
+}
+
+# sparse point cloud ------------------------------------------------------
+if(!file.exists(cropped_sparse_point_cloud_fname)) {
+  osfr::osf_download(x = cropped_sparse_point_cloud_osf_id, 
+                     path = cropped_sparse_point_cloud_fname)
+}
+
+
+
+# If Open Science Framework doesn't work, you can see whether they are
+# still available via the CU Boulder Earth Lab Amazon S3 bucket. But they
+# might have been purged, depending on how much time has passed! If those
+# two sources fail (OSF and AWS), you can email mikoontz <at> gmail <dot> com
+# to request direct access
+
+# remote files (these are the non-permanently-archived versions on an Earth Lab AWS S3 bucket)
 cropped_ortho_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/", site_name, "_", flight_datetime, "_ortho_cropped.tif")
 cropped_dsm_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/", site_name, "_", flight_datetime, "_dsm_cropped.tif")
 cropped_dense_point_cloud_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/", site_name, "_", flight_datetime, "_dense-point-cloud_cropped.las")
 cropped_sparse_point_cloud_url <- paste0("https://earthlab-mkoontz.s3-us-west-2.amazonaws.com/neon-drone-workflow/", site_name, "_", flight_datetime, "_sparse-point-cloud_cropped.las")
+
 
 # get L1 and L2 products from S3 -------------------------------------------------
 
