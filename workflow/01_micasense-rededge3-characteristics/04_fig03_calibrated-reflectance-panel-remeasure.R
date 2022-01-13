@@ -2,29 +2,28 @@
 # vendor-provided reflectance spectra at the time of panel purchase. 
 
 # Download the spectral data .csv files from the USGS data release:
-#      https://www.sciencebase.gov/catalog/item/613ba6a0d34e40dd9c0f974f
+# https://www.sciencebase.gov/catalog/item/613ba6a0d34e40dd9c0f974f
+
+# Place the .csv files in the data/raw folder.
 
 # ------ Setup ----------------------------------------------------
 
 library(dplyr)
 library(ggplot2)
-
-# Place this script and the .csv files in a folder.
-# Set this folder as the working directory (I know this is old school and bad practice :( !)
-setwd("~/github/ecosphere_figure")
+library(cowplot)
 
 # Read the csv files
-asd_data <- read.csv("handheld-collected_spectral_reflectance_data.csv")
-micasense_data <- read.csv("vendor-provided_spectral_reflectance_data.csv")
+asd_data <- read.csv("data/raw/handheld-collected_spectral_reflectance_data.csv")
+micasense_data <- read.csv("data/raw/vendor-provided_spectral_reflectance_data.csv")
 
 # Specify the panel ID that you would like to create a figure for.
 panel_ID <- "RP02-1701230-SC"
 
 # Create directory for output figures
-out_dir <- "output"
+out_dir <- "figs"
 
 # create a folder for the output files if it doesn't already exist
-if(!exists(out_dir)){
+if(!dir.exists(out_dir)){
   dir.create(out_dir)
 }
 
@@ -37,6 +36,7 @@ sensor_specs <- data.frame(band_name = c("blue", "green", "red", "red_edge", "ni
                            center_wavelength_nm = c(475, 560, 668, 717, 840),
                            bandwidth_nm = c(20, 20, 10, 10, 40))
 band_colors <- c("#3C5488FF", "#00A087FF", "#DC0000FF", "#8491B4FF", "#B09C85FF")
+band_colors <- c("blue", "green", "red", "#ff0055", "darkred")
 print(paste0(micasense_sensor, "band info: "))
 print(sensor_specs)
 
@@ -76,10 +76,9 @@ micasense_spectrum_plot <- ggplot2::ggplot() +
                      size = 1, linetype = "dashed") + 
   theme_bw() + 
   # theme and text parameters
-  theme(text=element_text(size=14),
-        # move legend inside graph area to save space on border
-        legend.position = c(0.2, 0.1)) +
-  labs(x = "Wavelength [nm]",
+  theme(# move legend inside graph area to save space on border
+        legend.position = c(0.21, 0.09)) +
+  labs(x = "Wavelength (nm)",
        y = "Reflectance"
        #,title = "Panel reflectance comparison"
        ) + 
@@ -91,6 +90,8 @@ micasense_spectrum_plot <- ggplot2::ggplot() +
     'MicaSense, 2017' = 'black',
     'ASD, 2020' = 'blue')) +
   labs(color = 'Data source') 
+
+micasense_spectrum_plot
 
 # add shading to show the sensitivity of each spectral band 
 for(b in 1:length(sensor_specs$band_name)){
@@ -114,3 +115,18 @@ ggplot2::ggsave(filename = file.path(out_dir,
                 device = "png",
                 width = 6, height = 7, dpi = 600, units = "in")
 
+# Get the panel photo
+photo_path <- "figs/panel-photo_cropped.jpeg"
+
+fig03b <- 
+  cowplot::ggdraw() +
+  cowplot::draw_image(image = photo_path)
+
+fig03b
+
+fig03 <-
+  cowplot::plot_grid(micasense_spectrum_plot, fig03b, labels = "auto", rel_widths = c(1.4, 1))
+
+fig03
+
+ggsave(filename = file.path(out_dir, "fig03_micasense-rededge3-calibrated-reflectance-panel-deterioration.png"), plot = fig03, dpi = 300, width = 180, height = 135, units = "mm")

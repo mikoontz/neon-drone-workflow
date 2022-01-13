@@ -380,7 +380,7 @@ The change in reflectance between 2017 and 2020 is likely the result of accumula
 The difference between the manufacturer-reported panel reflectance and the actual reflectance after heavy use demonstrates the necessity to clean, remeasure, or replace calibration panels when performing radiometric calibration.")
 ```
 
-![`r fig_nums(name = "fig-calibration-panel")`](../../figs/micasense-rededge3-calibrated-reflectance-panel-deterioration.png)
+![`r fig_nums(name = "fig-calibration-panel")`](../../figs/fig03_micasense-rededge3-calibrated-reflectance-panel-deterioration.png)
 
 ## Georeferencing
 
