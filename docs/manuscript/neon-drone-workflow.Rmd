@@ -5,21 +5,22 @@ params:
   title: "Democratizing macroecology: integrating uncrewed aerial systems with the National Ecological Observatory Network"
   author: |
     Michael J. Koontz^1\*^,
-    Victoria M. Scholl^1,2^,
-    Anna I. Spiers^1,3^,
-    Megan E. Cattau^4^,
-    John Adler^2,5^,
-    Joseph McGlinchy^1,6^,
-    Tristan Goulden^5^,
-    Brett A. Melbourne^3^,
+    Victoria M. Scholl^1,2,3^,
+    Anna I. Spiers^1,4^,
+    Megan E. Cattau^5^,
+    John Adler^2,6^,
+    Joseph McGlinchy^1,7^,
+    Tristan Goulden^6^,
+    Brett A. Melbourne^4^,
     Jennifer K. Balch^1,2^
   affiliation: |
     ^1^Earth Lab, University of Colorado; Boulder, CO, USA  
     ^2^Department of Geography, University of Colorado; Boulder, CO, USA  
-    ^3^Department of Ecology and Evolutionary Biology, University of Colorado; Boulder, CO, USA  
-    ^4^Department of Human-Environment Systems, Boise State University; Boise, ID, USA  
-    ^5^Battelle, National Ecological Observatory Network (NEON); Boulder, CO, USA  
-    ^6^Hydrosat Inc., Washington, DC 20036, USA
+    ^3^Geosciences and Environmental Change Science Center, U.S. Geological Survey; Lakewood, CO, USA  
+    ^4^Department of Ecology and Evolutionary Biology, University of Colorado; Boulder, CO, USA  
+    ^5^Department of Human-Environment Systems, Boise State University; Boise, ID, USA  
+    ^6^Battelle, National Ecological Observatory Network (NEON); Boulder, CO, USA  
+    ^7^Hydrosat Inc., Washington, DC 20036, USA
 
   correspondence: |
     mikoontz@gmail.com
@@ -42,8 +43,8 @@ header-includes:
   - \usepackage{amsmath}
 
 output:
-  pdf_document
-  # bookdown::word_document2
+  # pdf_document
+  bookdown::word_document2
   # bookdown::html_document2: default
 
 ---
@@ -119,7 +120,7 @@ NEON is designed to collect rigorous, consistent, long-term, and open access dat
 NEON observations span spatial scales, from measurements of individual organisms within small field plots to 10 cm resolution red-green-blue (RGB) imagery and 1 m hyperspectral and lidar imagery across hundreds of square kilometers, with measurements replicated across  sites that span the  continental extent of the Observatory [@keller2008].
 A stated goal of NEON is to democratize access to ecological research, particularly at broad extents [@nsf2013]-- its promise is continental-scale ecology for everyone.
 NEON pairs publicly available data with a strong outreach and education effort to help realize this promise.
-In this way, NEON broadens access to macroecology by reducing barriers to entry, particularly cost, fieldwork requirements, and technical expertise [@nagyInpress].
+In this way, NEON broadens access to macroecology by reducing barriers to entry, particularly cost, fieldwork requirements, and technical expertise [@nagy2021].
 An “instrument” like NEON collecting standardized data at such scales leads to inevitable tradeoffs-- in the specific times, locations, and type of data that are sampled.
 While the NEON data are on their own sufficient for advancing ecology, part of what makes NEON revolutionary is its foresight in facilitating connections to other ecological data.
 In this way, the fundamental limitations of NEON can be overcome with bridges to more targeted ecological studies.
@@ -352,7 +353,7 @@ Panels should be matte (as opposed to shiny or glossy) with a smooth, horizontal
 Panel colors should be shades of black (near 0% reflectance) and gray, ideally covering the range of reflectance for the subject of interest.
 White (near 100% reflectance) panels are not recommended since they can saturate and cause other issues [@cao2019].
 For plant surveys, we recommend a medium grey, dark grey, and black target since vegetation tends to be about 50% average reflectance or medium gray.
-Calibrated reflectance panels often come with the sensor to be integrated on the vehicle, but they can also be purchased separately from vendors or made at home.
+Calibrated reflectance panels often come with the sensor to be integrated on the vehicle, but they can also be purchased separately made at home.
 Care must be taken with homemade panels because even though they may appear a particular shade to the human eye (visible spectrum), they may not be a similar reflectance across all wavelengths observed by a multi-spectral or hyperspectral sensor.
 Many studies have identified promising materials for homemade panels: plywood covered with matte paint [@rosas2020], gray linoleum, and black fine-weave cotton fabric [@cao2019].
 
@@ -361,9 +362,27 @@ If in-flight panel photos are not possible or if only a small panel is available
 Many off-the-shelf multispectral sensors only come with one small calibration panel, but having one panel is better than none even though this may limit the data calibration possibilities in the future.
 Further, popular commercial SfM software like Agisoft Metashape and Pix4D may only accommodate one panel, so correcting UAS imagery with a single panel may be the only practical option.
 When only a single calibration panel is used, choosing a gray panel (rather than a white or black one) helps to avoid crushing or clipping in under/over exposed images.
-Regardless of panel cost, color, or material, it is critical to clean, re-measure, re-calibrate, and/or replace them over time to ensure the most accurate reflectance calibration possible.
+
+Regardless of panel cost, color, or material, it is critical to clean, remeasure, recalibrate, and/or replace them over time to ensure the most accurate reflectance calibration possible.
 This is especially important when field work involves exposing panels to harsh environmental conditions with dirt, dust, sand, sun, and any other types of physical damage or degradation.
-Depending on the manufacturer, some panel models cannot be cleaned as this will force debris further into the pores of the panel material (e.g., https://support.micasense.com/hc/en-us/articles/360005163934-Calibrated-Reflectance-Panel-Care-Instructions).
+Illustrating this point, @scholl2021 remeasured a calibrated reflectance panel after three years of field work using a handheld Analytical Spectral Devices (ASD, ASD Inc., a Malvern PANalytical Company, Longmont, Colorado) FieldSpec 4 spectrometer.
+`r fig_nums(name = "fig-calibration-panel", display = "cite")` depicts the manufacturer-provided panel reflectance spectrum from the time of purchase in 2017 (Micasense) compared to the reflectance spectrum measured three years later with the handheld ASD.
+The reflectance of the panel has decreased by as much as 10% due to the presence of dirt and dust, especially in the shorter wavelengths.
+The manufacturer advises against cleaning this make and model of calibration panel as it would force debris further into the pores of the panel material, though newer panels from this manufacturer can be cleaned (see https://support.micasense.com/hc/en-us/articles/360005163934-Calibrated-Reflectance-Panel-Care-Instructions).
+In general, it is key to ensure that the panel reflectance data being used for radiometric calibration accurately represent the panel's actual reflectance, either by using the manufacturer-provided reflectance data for new/clean panels or by using updated reflectance measurements on a panel that can't be restored to its initial conditions.
+
+```{r}
+fig_nums(name = "fig-calibration-panel", "a) Reflectance of a calibrated reflectance panel as a function of wavelength. 
+The black solid line corresponds to the manufacturer-provided reflectance spectrum representing the panel’s reflectance at the time of purchase.
+The blue dashed line corresponds to remeasurements of the panel's reflectance spectrum in 2020 with a handheld spectrometer, after three years of field use.
+The MicaSense RedEdge 3 spectral band ranges (blue, green, red, red edge, near infrared) are depicted as vertical bars of color.
+The panel reflectance decreased between 2017 and 2020, with this decrease being more pronounced towards the shorter wavelengths.
+b) A photograph of the calibrated reflectance panel measured in a), taken in 2020 after three years of field use. 
+The change in reflectance between 2017 and 2020 is likely the result of accumulated dust and sand from the field, as seen partially wiped away on the lower, right corner of the panel's plastic case.
+The difference between the manufacturer-reported panel reflectance and the actual reflectance after heavy use demonstrates the necessity to clean, remeasure, or replace calibration panels when performing radiometric calibration.")
+```
+
+![`r fig_nums(name = "fig-calibration-panel")`](../../figs/fig03_micasense-rededge3-calibrated-reflectance-panel-deterioration.png)
 
 ## Georeferencing
 
@@ -561,7 +580,7 @@ The MicaSense RedEdge 3 multispectral camera comes with a small, grey calibrated
 We held the UAS over the panel and captured an image of the calibration panel prior to flight ensuring our shadow didn't cover the panel.
 The RedEdge 3 also integrates a DLS, which faces upwards and measures illumination at the same time as the downward-facing image capture.
 We included the calibration panel photos in the SfM processing workflow and also enabled the image-to-image corrections from the DLS.
-When loading the calibration panel photos into the SfM software, we set the "known reflectance" of the panel in each of the five spectral channels to be those provided by the panel manufacturer.
+When loading the calibration panel photos into the SfM software, we set the "known reflectance" of the panel in each of the five spectral channels to be those that we measured for this particular panel (`r fig_nums(name = "fig-calibration-panel", display = "cite")`), rather than those provided by the manufacturer.
 
 ## Georeferencing
 
