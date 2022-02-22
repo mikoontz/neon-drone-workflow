@@ -156,10 +156,12 @@ Specifically, we focus on optical data collected by each tool over terrestrial s
 
 ## Science requirements
 
-Both NEON- and UAS-enabled ecology have faced criticism for having “backwards” approaches to science.
-Critics suggest that clear science questions take a back seat to high-quality but rote data collection in the case of NEON [@lindenmayer2018] or perpetual methodological refinement in the case of UAS [@gillan2021].
-In light of this, we echo @assmann2019 in emphasizing that the main consideration to keep in mind while integrating UAS with NEON is: what are the science requirements for the data to be collected and what data collection efforts are "good enough" to meet those requirements?
-A clear science question helps guide the data collection needs, which can minimize the amount of researcher time and energy spent on developing tools that ultimately prove to be superfluous [@joseph2021].
+We support and extend one of @assmann2019's themes regarding research use of UAS in order to highlight the first core principle for integrating UAS with NEON: knowing what the science requirements are for the data to be collected and what data collection efforts are "good enough" to meet those requirements.
+Using NEON to advance ecology is a type of data-driven discovery, in which the high-quality, but rote data collection occurs before the science questions are generated [@lindenmayer2018].
+UAS data collection can be more flexible and responsive, which makes it more suitable for discovery driven by particular questions posed ahead of time.
+Integration of UAS and NEON could therefore be considered a hybrid between data- and question-driven discovery, 
+where there is a dynamic between creative use of the existing NEON data, generation of new specific questions, and augmentation of the existing NEON data with UAS data collection to help answer those questions.
+During this process, a clear science question helps guide the data collection/collation needs, which can minimize the amount of researcher energy spent on developing tools and workflows that ultimately prove to be superfluous [@joseph2021].
 
 ## Vehicle
 
@@ -295,26 +297,36 @@ The flight area should therefore be larger than the area of interest to ensure s
 
 ![`r fig_nums(name = "fig-crosshatch")`](../../figs/fig01_photo-points-overlap-and-gcps.png)
 
-## Regulations (airspace and pilot)
+## Regulations
 
-In the United States, use of UAS is constrained by regulations on pilot credentials, airspace in which operations take place, and vehicle type.
-These restrictions are an oft-cited hurdle to adoption of UAS for research use [e.g., @vincent2015].
+In the United States, research use of UAS must comply with legal regulations that govern flight operations.
+These restrictions have historically been cited as a hurdle to adoption of UAS for research use [@vincent2015].
+There are currently three main legal frameworks governing UAS operations within the United States: permissions/regulations for a specific organization (e.g., a university) granted under a Certificate of Authorization (COA) from the Federal Aviation Administration (FAA), regulations for commercial operations (described in Title 14 of the Code of Federal Regulations Part 107 and colloquially referred to as "Part 107 rules"), and regulations for recreational operations (described in Chapter 448 of Title 49, United States Code, Section 44809 and colloquially referred to as "Recreational Flyer rules").
+COAs are generally labor intensive to set up and maintain, as they require ongoing coordination with the FAA, but they can allow for operations not typically permitted under other regulatory frameworks.
+The commercial and recreational operational rules apply to individuals, rather than organizations, and have progressively become more clearly defined and permissive.
+For instance, a recent amendment to the Part 107 regulations clarified that use of UAS by an institution of higher education for research or education purposes is considered "recreational use", and is subject to recreational operations rules rather than commercial operations rules.
+These rules applying to individuals allow for myriad opportunities to use UAS to collect ecological data without the complex organizational overhead required for a COA.
+However, the rules within each of these categories are still liable to change, and UAS pilots are responsible for staying aware of any updates.
 
-There are currently three main legal frameworks governing UAS operations within the United States: regulations for commercial operations (described in Title 14 of the Code of Federal Regulations Part 107, colloquially referred to as "Part 107"), regulations for recreational operations (described in Title 49 of the United States Code Section 44809), and regulations for a specific organization under a Certificate of Authorization (COA) granted by the Federal Aviation Administration (FAA).
-The rules within each of these categories are actively changing, and drone pilots are responsible for staying aware of these updates.
+UAS pilots in the US must obtain some kind of credentials to operate UAS for research use.
+Researchers flying under a COA would obtain credentials according to the rules specific to their organization.
+Flying under Part 107 rules requires a "remote pilot certificate" from the FAA, which can be obtained by passing an initial knowledge exam and expires after 2 years.
+Flying under Recreational Flyer rules requires a TRUST Certificate from the FAA, which can be obtained by completing a Recreational UAS Safety Test that does not expire.
+Unlike permissions granted under a COA, the Part 107 and TRUST credentials stay with the pilot and are transferable if the pilot changes organizations (e.g., a graduate student can't operate a UAS for research under a university's COA after they graduate, but they would still retain their ability to operate with their FAA-granted credentials).
 
-
-COAs for organizations are generally labor intensive to set up and maintain, as they require ongoing coordination with the FAA, but they can allow for operations not typically permitted under other regulatory frameworks.
-Part 107 credentials can be readily obtained by individuals without the need for complex organizational overhead as would be required for a COA.
-Obtaining Part 107 credentials-- a "remote pilot certificate" from the FAA-- requires successful completion of an initial knowledge exam and needs renewing every 2 years.
-Unlike permissions granted under a COA, the Part 107 credentials stay with the pilot and are transferable if the pilot changes organizations (e.g., a graduate student can't operate a UAS for research under a university's COA after they graduate, but they would still retain their ability to operate under Part 107).
-As of this writing, the rules for flying under Part 107 are broadly permissive and allow for myriad opportunities to use UAS to collect ecological data.
-Two of the most relevant restrictions for ecologists operating under Part 107 are: 1) the UAS must be within visual line-of-sight of the pilot in command (or within visual line of sight of another crew member acting as a "visual observer" as long as that observer has direct communication with the pilot in command), 2) the UAS must fly no higher than 400 feet (122 m) above ground level (AGL).
-Part 107 does constrain operations in other ways (e.g., UAS can't fly faster than 87 knots [161 km/h], UAS must be at least 500 feet [152 m] below clouds and 2000 feet [609 m] horizontally from clouds), but high quality optical data collection usually requires UAS operations to be well within these limits.
-
+In general, there are some legal limits to the kinds of UAS flight operations allowed under any regulatory framework.
+UAS pilots are responsible for ensuring that their equipment and flight plan are in compliance with whichever regulatory framework they are operating under.
+As with pilot credentials, researchers operating under a COA would need to comply with the flight operations rules specific to their organization.
+Two of the most relevant flight restrictions for ecologists operating under both Part 107 and Recreational Flyer rules are: 1) the UAS must be within visual line-of-sight of the pilot in command (or within visual line of sight of another crew member acting as a "visual observer" as long as that observer has direct communication with the pilot in command), 2) the UAS must fly no higher than 400 feet (122 m) above ground level (AGL).
+Part 107 rules do constrain operations in other specific ways, which may also apply to flights under Recreational Flyer rules that prohibit unsafe operations.
+For instance, UAS can't fly faster than 87 knots [161 km/h], UAS must be at least 500 feet [152 m] below clouds and 2000 feet [609 m] horizontally from clouds.
+However, high quality optical data collection usually requires UAS operations to be well within these limits.
 Additional authorizations are needed to fly in "controlled" airspace (i.e., class B/C/D/E airspace, typically near airports), to fly a UAS above 55 lbs, and to fly a UAS beyond line-of-sight.
 Some of these authorizations are relatively easy to obtain (e.g., many requests to fly in controlled airspace below 400 feet (122 m) AGL can be automatically granted in near real time using the Low Altitude Authorization and Notification Capability (LAANC)), while others are nearly impossible (at the time of this writing) and are likely beyond the reach of an ecological data collection campaign (e.g., beyond visual line-of-sight flights).
-It is important to always call the appropriate land manager before flying on public land to obtain appropriate site access if necessary, to check for temporary closures (e.g., bird nesting), and to be a good neighbor.
+Finally, the drone itself may need to be marked and registered with the FAA.
+The FAA website is usually the best source of the most up-to-date information about the rules that might govern UAS research flights.
+
+It is important to connect with the appropriate land manager before flying on public land to obtain appropriate site access if necessary, to check for temporary closures (e.g., bird nesting), and to be a good neighbor.
 Because NEON does not own the land on which they operate, flying NEON sites will require contacting and obtaining permission from the site host; contact information is available on the NEON webpage for each site, and NEON staff may also help facilitate those connections.
 Additional, non-NEON research is allowed at some but not all sites.
 If permission is obtained, it is important not to disturb any existing research being conducted at those sites, to maintain a 20m buffer around any NEON distributed plot, and to completely avoid the area of the tower airshed (which is also delineated on the NEON webpage for each site; e.g., https://www.neonscience.org/data-samples/data/spatial-data-maps).
@@ -445,7 +457,7 @@ Generally a full QA assessment cannot be performed in the field due to time and 
 Some NEON sites (e.g., NIWO) have a field house that may be accessed, with permission, for laptop friendly workspaces and/or charging options.
 
 Once the data collection is completed, data management can be broken into a quick access phase when data need to be readily available (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`, Short-term storage), and a slower access phase which concerns the longer-term storage of both data and metadata (`r fig_nums(name = "fig-data-management-schematic", display = "cite")`, Long-term storage).
-During quick access phase, the data should be as "close" to the workstation doing the SfM processing as possible-- ideally on a fast internal hard drive (e.g., a solid state drive) on the same computer as the SfM software.
+During the quick access phase, the data should be as "close" to the workstation doing the SfM processing as possible-- ideally on a fast internal hard drive (e.g., a solid state drive) on the same computer as the SfM software.
 Having a good long-term storage solution for the imagery (and derived data products) are important for the slower access phase, and having a copy of those data off-site will satisfy the 3-2-1 Backup Rule.
 Some universities/organizations might already have storage infrastructure capable of accommodating vast data volumes and off-site backups (e.g., Research Computing storage).
 If university/organization storage infrastructure isn't an option, third-party cloud storage (e.g., Cyverse) or data storage-specific compute hardware (e.g., network attached storage) are also good options.
@@ -642,7 +654,7 @@ For comparison, the DeepForest algorithm's predictions for the locations of tree
 The poorer performance of the UAS-derived tree detection approach suggests that a different combination of flight parameters, SfM photogrammetry parameters, or tree detection algorithm/parameters might be better suited to the subalpine forest at NIWO [@young2021].
 
 To integrate our UAS data with NEON AOP reflectance data, we calculated NDVI from each sensor.
-We used the `neonUtilities` package to download the NEON AOP imaging spectrometer data (data product DP3.30006.001) that covers the NIWO_017 site from 2019, using the easting and northing of the centroid of the NIWO_017 plot and a 20 m buffer as argumeents to the `byTileAOP()` function [@lunch2021].
+We used the `neonUtilities` package to download the NEON AOP imaging spectrometer data (data product DP3.30006.001) that covers the NIWO_017 site from 2019, using the easting and northing of the centroid of the NIWO_017 plot and a 20 m buffer as arguments to the `byTileAOP()` function [@lunch2021].
 We used the `neonhs` [@joseph2021a] package to convert the raw NEON AOP data product into a raster object more readily manipulatable in `R`. 
 Because the imaging spectrometer spectral response overlaps with, but doesn't perfectly align with the spectral response of the MicaSense RedEdge 3 sensor, we spectrally resampled the NEON AOP data to match the spectral resolution of the MicaSense RedEdge 3 sensor using the `hsdar` package [@lehnert2019] and the relative spectral response that we derived (`r fig_nums(name = "fig-rededge-rsr-neon-aop", display = "cite")`).
 We used the UAS-derived orthomosaic and the spectrally-resampled NEON AOP orthomosaic to calculate NDVI.
@@ -663,7 +675,7 @@ Note that the difference in NDVI between the images may derive from three main s
 ```{r}
 fig_nums(name = "fig-crown-ndvi-compare", "NDVI for each detected tree crown in the NIWO_017 plot as derived from the NEON AOP imaging spectrometer versus NDVI derived from the MicaSense RedEdge 3 sensor.
 The one-to-one line is red, and the best fit curve from a general additive model is shown in blue with a 95% confidence interval shown in grey.
-The NEON AOP data, collected closer to peak growing season, mostly has higer per-tree values of NDVI.
+The NEON AOP data, collected closer to peak growing season, mostly has higher per-tree values of NDVI.
 The nonlinear model fit highlights how, at the individual tree scale, spectral responses vary differently throughout the year which might prove useful for future work (e.g., classifying trees to species based on how variable their spectral response is through the year).")
 ```
 
@@ -675,36 +687,51 @@ The nonlinear model fit highlights how, at the individual tree scale, spectral r
 Macroecology will benefit from a “macroscope” to enable the study of broad-extent phenomena across multiple scales of biological, geophysical, and social processes [@beck2012; @lawton1996; @dornelas2019]. 
 The ideal macroscope comprises a nested array of tools that provide full coverage of spatial and temporal observational domains. 
 In their complementarity, the value of multiple observational tools in concert is more than the sum of the parts [@dornelas2019]. 
-Pairing UAS with NEON partially completes the constellation of Earth observing tools that contribute to the macroscope, and combines the flexibility of UAS with the high-quality and consistency of NEON. 
+Pairing UAS with NEON partially completes the constellation of Earth observing tools that contribute to the macroscope, and combines the flexibility of UAS with the high quality and consistency of NEON. 
 In this work, we aid the adoption of these tools among macroecologists by providing a mental model-- a contextual framework-- and some practical considerations for their integration.
 
-Challenges remain for integrating UAS with NEON, but they are surmountable.
-Some of these challenges are fundamentally associated with "big", cross-scale data.
-Integrating data across scales brings a host of potential pitfalls that could pollute inference if care isn't taken to avoid them [@zipkin2021].
-Clear documentation of data provenance including sensor characteristics, data acquisition methods (e.g., flight pattern), and data acquisition conditions (e.g., time of day, cloud cover) will enable rigorous cross-scale data integration.
-The proliferation of reasonably low-cost, off-the-shelf, drone-ready sensors (many designed for precision agriculture use) creates a need for validation of whether those instruments produce "science grade" data (which itself is a relative term, depending on what the specific science requirements are for a given project).
+## Challenges
+
+Challenges remain for integrating UAS with NEON, but they are surmountable. 
+Some of these challenges are fundamentally associated with “big,” cross-scale data. 
+Integrating data across scales brings a host of potential pitfalls that could pollute inference if care isn’t taken to avoid them [@zipkin2021]. 
+Big data in ecology is relatively new [@farley2018], and approaches to UAS-derived big data are fairly ad hoc across researchers [@wyngaard2019]. 
+Maintaining supportive communities of practice, such as the High Latitude Drone Ecology Network (https://arcticdrones.org/), can help overcome some of these idiosyncratic approaches. 
+In the same vein, NEON provides an aspirational target for UAS educational resources, which are critical to ensuring that would-be NEON/UAS users have the environmental data science skills necessary to turn their data into inference [@hampton2017].
+
+The proliferation of reasonably low-cost, off-the-shelf, drone-ready sensors (many designed for precision agriculture use) creates a need for validation of whether those instruments produce “science grade” data (which itself is a relative term, depending on what the specific science requirements are for a given project). 
 This validation may be achieved via direct comparison of the low-cost sensors with “state of the science” instruments using coincident flights [e.g., @fawcett2020].
-Big data in ecology is relatively new [@farley2018], and approaches to UAS-derived big data are fairly ad hoc across researchers [@wyngaard2019].
-Maintaining supportive communities of practice, such as the High Latitude Drone Ecology Network (https://arcticdrones.org/), can help overcome some of these idiosyncratic approaches.
-Integrating UAS operations with NEON can help anchor the community to the common currency of NEON data types, organization, and collection protocols which will enhance the interoperability of UAS data.
-Cyberinfrastructure for managing and processing UAS data is not yet built in a way that encourages consistency between projects or researchers.
-In this way, NEON provides an aspirational example for how purpose-built cyberinfrastructure can facilitate macroecology, and the foundational resources for building an equivalently valuable architecture for UAS data may already be represented in other NSF-sponsored projects (e.g., Cyverse, OpenTopography, Open Science Framework). 
-NEON also provides an aspirational target for educational resources, which are critical to ensuring that would-be NEON/UAS users have the environmental data science skills necessary to turn their data into inference [@hampton2017].
-Critically, reducing some barriers to access to an elusive observational domain (broad-extent, fine-grain) doesn’t equate to it being fully accessible. 
-We can illustrate this point using access to the Landsat archive, which we previously discussed as an exemplar of the effect of data access on democratization of science. 
-While the reduced cost of Landsat images brought more researchers from lower prestige institutions and lower income parts of the world into the user base [@nagaraj2020], those users are still overwhelmingly men [@miller2016; @miller2016a].
-A truly accessible tool wouldn't exhibit such a demographic bias, and it is incumbent upon the UAS and NEON community to be self-reflective about who is being excluded from the community and proactive about what steps can be taken to make it more inclusive.
+Clear documentation of data provenance including sensor characteristics, data acquisition methods (e.g., flight pattern), and data acquisition conditions (e.g., time of day, cloud cover) will enable more rigorous data integration across instruments. 
+Thus, integrating UAS operations with NEON can help anchor the community to the common currency of NEON data types, organization, and collection protocols which will enhance the interoperability of UAS data.
 
-We conclude with a research agenda for UAS/NEON integration paired with example ecology applications, which we hope provides a vision to be built upon:  
+Cyberinfrastructure for managing and processing UAS data is not yet built in a way that encourages consistency between projects or researchers. 
+In this way, NEON again provides an aspirational example for how purpose-built cyberinfrastructure can facilitate macroecology. 
+In fact, the foundational resources for building a valuable architecture for UAS data may already be represented in other NSF-sponsored projects (e.g., Cyverse, OpenTopography, Open Science Framework). 
+UAS-enabled research would benefit greatly from data storage solutions and streamlined analysis pipelines that are intentionally built to support a wide variety of users and use cases.
 
-1. Filling in spatial scales missed by NEON data collection (e.g., collecting data on a similar vegetation type of a NEON site but outside of NEON's direct footprint, capturing data at spatial resolutions finer than 10 cm in order to measure post-disturbance vegetation recovery)
-1. Filling in temporal scales missed by NEON data collection (e.g., capturing data in a year when a NEON site is skipped by the AOP, capturing data at a site multiple times per year to understand how snowpack changes through the year, tracking individual plant phenology through time and linking to phenocam data)
+Critically, reducing some barriers to access to an elusive observational domain (broad-extent, fine-grain) does not equate to it being fully accessible. 
+Illustrating this point: the reduced cost of Landsat images brought more researchers into the user base from lower-resourced institutions and underrepresented parts of the world to do more topically diverse science [@nagaraj2020], but those users are still overwhelmingly men [@miller2016; @miller2016a].
+Fuller accessibility of Landsat requires striving to reduce that demographic bias. 
+Similarly, it is incumbent upon the UAS and NEON community to be self-reflective about who is being excluded from the community and to be proactive about what steps can be taken to make it more inclusive.
+
+## The future
+
+We conclude with a set of research themes that are well-suited for UAS/NEON integration with example ecology applications, which we hope provides a vision to be built upon:  
+
+1. Filling in spatial scales missed by NEON data collection (e.g., collecting data on a similar vegetation type of a NEON site but outside of NEON’s direct footprint, capturing data at spatial resolutions finer than 10 cm in order to measure post-disturbance vegetation recovery)
+1. Filling in temporal scales missed by NEON data collection (e.g., capturing data in a year when a NEON site is skipped by the AOP, capturing data at a site multiple times per year to understand how snowpack changes through the year, tracking individual plant phenology through time and linking to phenocam data; understanding temporal trends in biodiversity)
 1. Opportunistic data collection (e.g., capturing data immediately after a disturbance event to measure its severity)
-1. Connecting NEON data to other Earth observing systems using UAS data as a bridge (e.g., spectrally unmixing Landsat pixels to determine relative species compositions by matching UAS spectral measurements to NEON TOS field measurements)
-1. Supplementing NEON data using sensors that aren't part of the NEON suite of sensors (e.g., thermal data to compare thermal regulation of different plant species, measuring water stress in different trees across gradients of topoclimate) 
+1. Connecting NEON data to other Earth observing systems using UAS data as a bridge (e.g., spectrally unmixing Landsat pixels to determine relative species compositions by matching UAS spectral measurements to NEON TOS field measurements; coordinating NEON data collection with UAS and other data collection to expand the utility of NEON products [e.g., @chadwick2020; @wang2020])
+1. Supplementing NEON data using sensors that aren’t part of the NEON suite of sensors (e.g., thermal data to compare thermal regulation of different plant species, measuring water stress in different trees across gradients of topoclimate)
 1. Validating lower cost, off-the-shelf payloads against the state-of-the-science NEON data collection (e.g., determining how well a multispectral imager designed for agriculture captures surface reflectance, determining how well an algorithm detects the trees in a NEON vegetation structure plot)
-1. Replacing high-cost NEON AOP flights with lower-cost alternatives (e.g., if the drone-derived data are "good enough" compared to the AOP, can we reduce the operational costs of the AOP)
+1. Replacing high-cost NEON AOP flights with lower-cost alternatives (e.g., if the drone-derived data are “good enough” compared to the AOP, can we reduce the operational costs of the AOP)
 1. Using NEON data as a common currency for validating new methods (e.g., the case study we showed here, comparing a deep learning/orthomosaic based approach and a variable window filter/canopy height model approach to detecting individual trees measured by the NEON TOS)
+
+UAS integration can help ecologists harness the NEON data revolution with its complementary approach to measuring the understudied broad extent/fine-grain observational domain. 
+NEON’s long-term, consistent, high-quality, continental extent measurements enable data-driven discovery that is enhanced with new opportunities to explore cross-scale questions when paired with the relatively affordable, flexible measurements of UAS. 
+We hope that by providing a mental model for data collection and integration, we remove some of the friction points associated with these tools and make them more accessible. 
+Further democratizing macroecology will require community support for an open science ethos, which might include: low-cost cyberinfrastructure, open observatories, data networks, well-documented workflows, open education resources that increase data skills, and more inclusive practices that create opportunities for researchers across a diversity of career stages and institutions to participate in and contribute to ‘big data’ macroecology. 
+We envision NEON as an anchor for UAS-enabled ecology, with future research efforts that embrace the spirit of democratization and strive to broaden participation in this emerging discipline.
 
 # Acknowledgements {-}
 
