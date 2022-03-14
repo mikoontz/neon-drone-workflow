@@ -112,21 +112,21 @@ x3_sensor_height_mm <- 4.55
 # Note this is set in the mission planner app and is limited by the write speed 
 # of the DJI X3 camera to the SD card. 0.5 is the fastest possible speed that 
 # MapPilot can tell the DJI X3 camera to write, and that will only work with a fast 
-# SD card
-x3_shutter_speed <- 0.5 # 
+# SD card. Units are photos per second.
+x3_photo_capture_rate <- 0.5
 
 # Expected (non-double-gridded) overlap of RGB imagery based on flight and camera characteristics
 x3_h_footprint_planned_agl_m <- (x3_sensor_width_mm / x3_focal_length_mm) * agl_m
 x3_v_footprint_planned_agl_m <- (x3_sensor_height_mm / x3_focal_length_mm) * agl_m
 
 transect_spacing <- (1 - x3_planned_side_overlap) * x3_h_footprint_planned_agl_m
-flight_speed <- (1 - x3_planned_forward_overlap) * x3_v_footprint_planned_agl_m * x3_shutter_speed
+flight_speed <- (1 - x3_planned_forward_overlap) * x3_v_footprint_planned_agl_m * x3_photo_capture_rate
 
 x3_h_footprint_actual_agl_m <- (x3_sensor_width_mm / x3_focal_length_mm) * (agl_m + offset_m)
 x3_v_footprint_actual_agl_m <- (x3_sensor_height_mm / x3_focal_length_mm) * (agl_m + offset_m)
 
 x3_actual_side_overlap_agl <- 1 - (transect_spacing / x3_h_footprint_actual_agl_m)
-x3_actual_forward_overlap_agl <- 1 - (flight_speed / x3_shutter_speed / x3_v_footprint_actual_agl_m)
+x3_actual_forward_overlap_agl <- 1 - (flight_speed / x3_photo_capture_rate / x3_v_footprint_actual_agl_m)
 
 x3_estimated_photo_count <- 1 / ((1 - x3_actual_side_overlap_agl) * (1 - x3_actual_forward_overlap_agl))
 
@@ -177,8 +177,8 @@ re_focal_length_mm <- 5.5
 
 # Note that this shutter speed is set in the web browser interface to the RedEdge
 # camera. A shutter speed of 1 image per second is the fastest that the RedEdge
-# camera can write.
-re_shutter_speed <- 1
+# camera can write. Units are photos per second.
+re_photo_capture_rate <- 1
 
 re_h_footprint_planned_agl_m <- (re_sensor_width_mm / re_focal_length_mm) * agl_m
 re_v_footprint_planned_agl_m <- (re_sensor_height_mm / re_focal_length_mm) * agl_m
@@ -187,10 +187,10 @@ re_h_footprint_actual_agl_m <- (re_sensor_width_mm / re_focal_length_mm) * (agl_
 re_v_footprint_actual_agl_m <- (re_sensor_height_mm / re_focal_length_mm) * (agl_m + offset_m)
 
 re_planned_side_overlap_agl <- 1 - (transect_spacing / re_h_footprint_planned_agl_m)
-re_planned_forward_overlap_agl <- 1 - (flight_speed / re_shutter_speed / re_v_footprint_planned_agl_m)
+re_planned_forward_overlap_agl <- 1 - (flight_speed / re_photo_capture_rate / re_v_footprint_planned_agl_m)
 
 re_actual_side_overlap_agl <- 1 - (transect_spacing / re_h_footprint_actual_agl_m)
-re_actual_forward_overlap_agl <- 1 - (flight_speed / (re_shutter_speed * re_v_footprint_actual_agl_m))
+re_actual_forward_overlap_agl <- 1 - (flight_speed / (re_photo_capture_rate * re_v_footprint_actual_agl_m))
 
 re_estimated_photo_count <- 1 / ((1 - re_actual_side_overlap_agl) * (1 - re_actual_forward_overlap_agl))
 
@@ -198,8 +198,8 @@ multispec_meta <-
   read.csv(multispec_photos_metadata_fname) %>% 
   dplyr::filter(band_name == "blue") %>% 
   sf::st_as_sf(coords = c("GPSLongitude", "GPSLatitude"), crs = 4326, remove = FALSE) %>% 
-  dplyr::mutate(h_footprint = (re_sensor_width_mm / re_focal_length_mm) * (agl),
-                v_footprint = (re_sensor_height_mm / re_focal_length_mm) * (agl)) %>% 
+  dplyr::mutate(h_footprint = (re_sensor_width_mm / re_focal_length_mm) * (agl_m),
+                v_footprint = (re_sensor_height_mm / re_focal_length_mm) * (agl_m)) %>% 
   dplyr::mutate(lon = sf::st_coordinates(.)[, "X"],
                 lat = sf::st_coordinates(.)[, "Y"],
                 # https://gis.stackexchange.com/questions/190198/how-to-get-appropriate-crs-for-a-position-specified-in-lat-lon-coordinates/190209#190209
