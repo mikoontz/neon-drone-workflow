@@ -177,7 +177,7 @@ neon_resampled_ndvi <-
 ndvi <- c(drone_ndvi, neon_resampled_ndvi)
 
 two_panel <-
-  tmap::tm_shape(ndvi[[1]]) +
+  tmap::tm_shape(ndvi) +
   tmap::tm_raster(style = "cont", palette = viridis(100), title = "NDVI", midpoint = NA) +
   tmap::tm_grid(alpha = 0.2, ticks = TRUE) +
   tmap::tm_xlab(text = "Easting (m)") +
@@ -189,7 +189,7 @@ two_panel <-
 
 two_panel
 
-tmap::tmap_save(tm = two_panel, filename = file.path("figs", "ndvi_neon-spectral-resampled-v-drone-original.png"), dpi = 300, width = 180, height = 70, units = "mm")
+# tmap::tmap_save(tm = two_panel, filename = file.path("figs", "ndvi_neon-spectral-resampled-v-drone-original.png"), dpi = 300, width = 180, height = 70, units = "mm")
 
 
 neon_ndvi_tmap <-
@@ -198,7 +198,7 @@ neon_ndvi_tmap <-
   tmap::tm_grid(alpha = 0.2, n.x = 4, n.y = 4) +
   tmap::tm_xlab(text = "                                                                                                    Easting (m)") +
   tmap::tm_ylab(text = "Northing (m)", space = 0.1) +
-  tmap::tm_layout(legend.show = FALSE, asp = 1)
+  tmap::tm_layout(legend.show = FALSE, asp = 1, main.title = "a", main.title.size = 0.9)
 
 neon_ndvi_tmap
 
@@ -208,7 +208,7 @@ drone_ndvi_tmap <-
   tmap::tm_grid(alpha = 0.2, labels.show = c(TRUE, TRUE), n.x = 4, n.y = 4) +
   tmap::tm_xlab(text = "Easting (m)                                                             ") +
   tmap::tm_ylab(text = "") +
-  tmap::tm_layout(legend.show = FALSE, asp = 1)
+  tmap::tm_layout(legend.show = FALSE, asp = 1, main.title = "b", main.title.size = 0.9)
 
 drone_ndvi_tmap
 

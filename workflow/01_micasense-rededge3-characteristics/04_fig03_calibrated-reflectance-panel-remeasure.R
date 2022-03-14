@@ -129,4 +129,4 @@ fig03 <-
 
 fig03
 
-ggsave(filename = file.path(out_dir, "fig03_micasense-rededge3-calibrated-reflectance-panel-deterioration.png"), plot = fig03, dpi = 300, width = 180, height = 135, units = "mm")
+ggsave(filename = file.path(out_dir, "micasense-rededge3-calibrated-reflectance-panel-deterioration.png"), plot = fig03, dpi = 300, width = 180, height = 135, units = "mm")

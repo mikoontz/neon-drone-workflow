@@ -11,7 +11,7 @@ multispec_photos_metadata_fname <- paste0("data/drone/L0/", site_name, "_", flig
 gcp_locations_fname <- paste0("data/out/", site_name, "_gcp-locations.gpkg")
 
 # files to be written in this script
-figure_fname <- file.path("figs", "fig01_photo-points-overlap-and-gcps.png")
+figure_fname <- file.path("figs", "photo-points-overlap-and-gcps.png")
 
 # read data to be used to build plots
 multispec_meta <- 

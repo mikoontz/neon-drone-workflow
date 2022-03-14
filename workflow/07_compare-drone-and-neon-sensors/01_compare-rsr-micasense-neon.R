@@ -109,4 +109,4 @@ neon_micasense_rsr_gg <-
 two_panel <- ((full_redege_rsr_gg + geom_vline(xintercept = c(650, 750), lty = 2)) / (neon_micasense_rsr_gg + geom_vline(xintercept = c(650, 750), lty = 2)))
 two_panel <- (two_panel + patchwork::plot_layout(guides = "collect") + patchwork::plot_annotation(tag_levels = "a"))
 
-ggsave(filename = file.path("figs", "fig02_relative-spectral-response-rededge3-and-neon-aop.png"), plot = two_panel, dpi = 300, width = 180, units = "mm")
+ggsave(filename = file.path("figs", "relative-spectral-response-rededge3-and-neon-aop.png"), plot = two_panel, dpi = 300, width = 180, units = "mm")
