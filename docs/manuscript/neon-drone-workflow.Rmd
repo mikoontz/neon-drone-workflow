@@ -626,10 +626,11 @@ In this way, NEON again provides an aspirational example for how purpose-built c
 In fact, the foundational resources for building a valuable architecture for UAS data may already be represented in other NSF-sponsored projects (e.g., Cyverse, OpenTopography, Open Science Framework). 
 UAS-enabled research would benefit greatly from data storage solutions and streamlined analysis pipelines that are intentionally built to support a wide variety of users and use cases.
 
-Critically, reducing some barriers to access to an elusive observational domain (broad-extent, fine-grain) does not equate to it being fully accessible. 
-Illustrating this point: the reduced cost of Landsat images brought more researchers into the user base from lower-resourced institutions and underrepresented parts of the world to do more topically diverse science [@nagaraj2020], but those users are mostly men [@miller2016; @miller2016a].
-That is, the Landsat archive was made more accessible, to the collective benefit of science and society, but even broader access is possible.
-Similarly, broader access to UAS and NEON will require their user communities to be self-reflective about what barriers to access still exist, and to be proactive about eliminating those barriers.
+Critically, our work to increase access to the elusive broad-extent/fine-grain observational domain with a mental model and an open workflow is an important, but incomplete effort towards accessible macroecology.
+Illustrating this point, the reduced cost of Landsat images brought more researchers into the user base from lower-resourced institutions and underrepresented parts of the world to do more topically diverse science [@nagaraj2020], but some barriers to access still exist [@miller2016; @miller2016a].
+For instance, nearly 30% of Landsat 8 users reported challenges to processing data to a usable point, and most users are highly educated men with many years of experience using satellite imagery and/or GIS software [@miller2016].
+The Landsat archive was undeniably made more accessible, to the collective benefit of science and society [@miller2016; @nagaraj2020], but even broader access is possible.
+Similarly, greater accessibility of UAS and NEON will require their user communities to be self-reflective and proactive about identifying and eliminating barriers [@nagy2021].
 
 ## The future
 
@@ -658,7 +659,7 @@ M. E. Cattau was supported in part by the National Aeronautics and Space Adminis
 J. K. Balch was supported in part by the National Science Foundation's CAREER (grant #1846384) and Macrosystems (grant #2017889) programs.
 The National Ecological Observatory Network is a program sponsored by the National Science Foundation and operated under cooperative agreement by Battelle. 
 This material is based in part upon work supported by the National Science Foundation through the NEON Program. 
-We thank Chelsea Nagy, Jeff Sloan, Natalie Latysh, and two anonymous reviewers for their feedback, which greatly improved the manuscript.
+We thank Chelsea Nagy, Jeff Sloan, Natalie Latysh, Harland Goldstein, and two anonymous reviewers for their feedback, which greatly improved the manuscript.
 Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the U.S. Government.
 
 
