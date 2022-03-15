@@ -47,28 +47,8 @@ crowns_with_uas_ndvi <-
 crowns <- 
   dplyr::left_join(x = crowns_with_neon_ndvi, y = crowns_with_uas_ndvi, by = "treeID") %>% 
   dplyr::left_join(crowns_raw, by = "treeID") %>% 
-  sf::st_as_sf()
+  sf::st_as_sf() %>% 
+  dplyr::mutate(diff_ndvi = ndvi_mean_uas - ndvi_mean_neon)
 
 sf::st_write(obj = crowns, dsn = augmented_crowns_fname)
 
-crowns <-
-  crowns %>% 
-  dplyr::mutate(diff_ndvi = ndvi_mean_uas - ndvi_mean_neon)
-
-ndvi_two_source_gg <-
-  ggplot(crowns, aes(x = ndvi_mean_uas, y = ndvi_mean_neon)) +
-  geom_point() +
-  geom_abline(slope = 1, intercept = 0, color = "red") +
-  geom_smooth() +
-  theme_bw() +
-  labs(x = "Mean UAS-derived NDVI",
-       y = "Mean NEON-derived NDVI")
-
-ggplot(crowns, aes(x = ndvi_mean_uas, y = diff_ndvi)) +
-  geom_point() +
-  geom_smooth() +
-  theme_bw() +
-  labs(x = "Mean UAS-derived NDVI",
-       y = "Mean NEON-derived NDVI")
-
-ggsave(plot = ndvi_two_source_gg, filename = fig_fname, width = 180, height = 180, units = "mm", dpi = 300)
