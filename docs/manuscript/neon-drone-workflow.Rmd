@@ -626,11 +626,12 @@ In this way, NEON again provides an aspirational example for how purpose-built c
 In fact, the foundational resources for building a valuable architecture for UAS data may already be represented in other NSF-sponsored projects (e.g., Cyverse, OpenTopography, Open Science Framework). 
 UAS-enabled research would benefit greatly from data storage solutions and streamlined analysis pipelines that are intentionally built to support a wide variety of users and use cases.
 
-Critically, our work to increase access to the elusive broad-extent/fine-grain observational domain with a mental model and an open workflow is an important, but incomplete effort towards accessible macroecology.
-Illustrating this point, the reduced cost of Landsat images brought more researchers into the user base from lower-resourced institutions and underrepresented parts of the world to do more topically diverse science [@nagaraj2020], but some barriers to access still exist [@miller2016; @miller2016a].
-For instance, nearly 30% of Landsat 8 users reported challenges to processing data to a usable point, and most users are highly educated men with many years of experience using satellite imagery and/or GIS software [@miller2016].
-The Landsat archive was undeniably made more accessible, to the collective benefit of science and society [@miller2016; @nagaraj2020], but even broader access is possible.
-Similarly, greater accessibility of UAS and NEON will require their user communities to be self-reflective and proactive about identifying and eliminating barriers [@nagy2021].
+Critically, "accessibility" and "democratization" of macroecology encompass a broad, multifaceted notion of availability for and usability by anyone, and obstacles to accessibility extend beyond those we sought to remedy here. 
+That is, our work to increase access to the elusive broad-extent/fine-grain observational domain with a mental model and an open workflow is an important, but incomplete effort towards accessible macroecology. 
+Illustrating this point, the reduced cost of Landsat images brought more researchers into the user base from lower-resourced institutions and underrepresented parts of the world to do more topically diverse science [@nagaraj2020], but some barriers to access still exist [@miller2016]. 
+For instance, three-quarters of users are men, and 65% of users are academic researchers [@miller2016].
+The Landsat archive was undeniably made more accessible, to the collective benefit of science and society [@miller2016a; @nagaraj2020], but even broader access [and therefore greater value; @miller2016a] is possible. 
+Greater accessibility of UAS and NEON as tools for macroecology will similarly require their user communities to be self-reflective and proactive about identifying and eliminating barriers to entry [@nagy2021].
 
 ## The future
 
@@ -699,9 +700,6 @@ Each point needs to be imaged a large number of times (likely more than 100 for 
 The flight area should therefore be larger than the area of interest to ensure sufficient data coverage.")
 ```
 
-`r fig_nums(name = "fig-crosshatch")`
-<!-- ![`r fig_nums(name = "fig-crosshatch")`](../../figs/photo-points-overlap-and-gcps.png) -->
-
 ```{r}
 fig_nums(name = "fig-calibration-panel", "a) Reflectance of a calibrated reflectance panel as a function of wavelength. 
 The black solid line corresponds to the manufacturer-provided reflectance spectrum representing the panel’s reflectance at the time of purchase.
@@ -713,9 +711,6 @@ The change in reflectance between 2017 and 2020 is likely the result of accumula
 The difference between the manufacturer-reported panel reflectance and the actual reflectance after heavy use demonstrates the necessity to clean, remeasure, or replace calibration panels when performing radiometric calibration.")
 ```
 
-`r fig_nums(name = "fig-calibration-panel")`
-<!-- ![`r fig_nums(name = "fig-calibration-panel")`](../../figs/micasense-rededge3-calibrated-reflectance-panel-deterioration.png) -->
-
 
 ```{r}
 fig_nums(name = "fig-gcps", "Aerial RGB photograph captured using a DJI Phantom 4 Pro on January 23, 2020 at 120m of altitude above ground level.
@@ -724,8 +719,6 @@ The GCPs are progressively more conspicuous under the canopy, in the shrub field
 The size of the area covered by the main photograph is approximately 180 m wide x 120 m high.")
 ```
 
-`r fig_nums(name = "fig-gcps")`
-<!-- ![`r fig_nums(name = "fig-gcps")`](../../figs/example-gcps-with-inset.png) -->
 
 ```{r}
 fig_nums(name = "fig-data-management-schematic", "Planning a data management pipeline is a large upfront investment but can save time and money in the long-run, making it well-worth prioritizing up-front.
@@ -735,8 +728,6 @@ There are trade-offs at each decision point, so it is important to understand yo
 For example, whereas building your own data management system may be more affordable and tailored to your needs, rented external storage systems will back up your data automatically and maintain the system and hardware requirements for you.")
 ```
 
-`r fig_nums(name = "fig-data-management-schematic")`
-<!-- ![`r fig_nums(name = "fig-data-management-schematic")`](../../figs/data-management-and-processing.png) -->
 
 ```{r}
 fig_nums(name = "fig-rededge-rsr-neon-aop", "a) Relative spectral response of the MicaSense RedEdge 3 camera in 5 distinct spectral bands based on the quantum efficiency of the image sensor per wavelength and the bandpass filter transmission per wavelength. 
@@ -744,9 +735,6 @@ The dashed vertical lines in a) demarcate the spectral extent of panel b).
 b) Relative spectral responses for two channels of the MicaSense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer.
 Several channels of the NEON AOP instrument comprise each of the MicaSense RedEdge 3 channels, so the reflectance data from the NEON AOP are resampled (weighted, in effect) such that they can be used as though the NEON instrument exhibited the same spectral sensitivity as the MicaSense RedEdge 3 instrument.")
 ```
-
-`r fig_nums(name = "fig-rededge-rsr-neon-aop")`
-<!-- ![`r fig_nums(name = "fig-rededge-rsr-neon-aop")`](../../figs/relative-spectral-response-rededge3-and-neon-aop.png) -->
 
 
 ```{r}
@@ -756,8 +744,6 @@ The higher spatial resolution of the drone-derived data are highlighted.
 Note that the difference in NDVI between the images may derive from three main sources: phenological differences in the vegetation, differences in the flight conditions such as time of day and cloud cover, or differences in instrumentation.")
 ```
 
-`r fig_nums(name = "fig-comparing-scenes")`
-<!-- ![`r fig_nums(name = "fig-comparing-scenes")`](../../figs/ndvi_neon-spectral-resampled-v-drone-original.png) -->
 
 ```{r}
 fig_nums(name = "fig-crown-ndvi-compare", "NDVI for each detected tree crown in the NIWO_017 plot as derived from the NEON AOP imaging spectrometer versus NDVI derived from the MicaSense RedEdge 3 sensor.
@@ -766,5 +752,30 @@ The NEON AOP data, collected closer to peak growing season, mostly has higher pe
 The nonlinear model fit highlights how, at the individual tree scale, spectral responses vary differently throughout the year which might prove useful for future work (e.g., classifying trees to species based on how variable their spectral response is through the year).")
 ```
 
+`r fig_nums(name = "fig-crosshatch")`
+
+`r fig_nums(name = "fig-calibration-panel")`
+
+`r fig_nums(name = "fig-gcps")`
+
+`r fig_nums(name = "fig-data-management-schematic")`
+
+`r fig_nums(name = "fig-rededge-rsr-neon-aop")`
+
+`r fig_nums(name = "fig-comparing-scenes")`
+
 `r fig_nums(name = "fig-crown-ndvi-compare")`
+
+<!-- ![`r fig_nums(name = "fig-crosshatch")`](../../figs/photo-points-overlap-and-gcps.png) -->
+
+<!-- ![`r fig_nums(name = "fig-calibration-panel")`](../../figs/micasense-rededge3-calibrated-reflectance-panel-deterioration.png) -->
+
+<!-- ![`r fig_nums(name = "fig-gcps")`](../../figs/example-gcps-with-inset.png) -->
+
+<!-- ![`r fig_nums(name = "fig-data-management-schematic")`](../../figs/data-management-and-processing.png) -->
+
+<!-- ![`r fig_nums(name = "fig-rededge-rsr-neon-aop")`](../../figs/relative-spectral-response-rededge3-and-neon-aop.png) -->
+
+<!-- ![`r fig_nums(name = "fig-comparing-scenes")`](../../figs/ndvi_neon-spectral-resampled-v-drone-original.png) -->
+
 <!-- ![`r fig_nums(name = "fig-crown-ndvi-compare")`](../../figs/uas-vs-neon-ndvi-per-crown.png) -->
