@@ -577,13 +577,15 @@ For each tree crown, we created a new geometry representing its bounding box (i.
 We benchmarked our tree detection using the `NeonTreeEvaluation` package [@weinstein2021a] to compare our tree detections with the NEON TOS field-collected tree locations and with previously-annotated crown bounding boxes derived from NEON AOP imagery [@weinstein2021a].
 The stem locations of the trees in the NEON TOS sites can be determined using a combination of the `neonUtilities` package [@lunch2021] to download the `geoNEON` package [@nationalecologicalobservatorynetwork2020], but they are also directly available in the `NeonTreeEvaluation` package.
 Within the NIWO_017 plot, we detected 60% of the field-measured stems (i.e., a recall score of 0.6).
-Comparison with the annotated crowns using the `compute_precision_recall()` function in the `NeonTreeEvaluation` package also provides precision scores, which measures the amount of false positive tree identifications and which can be combined with the recall score in an integrated measure of predictive ability called the F-score:
+Comparison with the annotated crowns using the `compute_precision_recall()` function in the `NeonTreeEvaluation` package also provides precision scores (a measure of the false positive tree detection rate) which can be combined with the recall scores (a measure of the true positive tree detection rate) in an integrated measure of predictive ability called the F-score:
 
 \begin{align*}
+p &= \frac{T_{reference} \cap T_{UAS}}{T_{UAS}} \\
+r &= \frac{T_{reference} \cap T_{UAS}}{T_{reference}} \\
 F &= \frac{2 * p * r}{p + r}
 \end{align*}
 
-Where $F$ is the F-score, $p$ is the precision, and $r$ is the recall.
+Where $p$ is the precision, $r$ is the recall, $F$ is the F-score, $T_{reference}$ is the number of reference trees (e.g., those identified in a field survey), $T_{UAS}$ is the number of trees detected by the UAS, and $T_{reference} \cap T_{UAS}$ is the number of reference trees that were correctly detected by the drone  (i.e., the true positive detections).
 
 For our comparison, we set the threshold argument of the `compute_precision_recall()` function to 0.1 such that a predicted tree was considered correctly predicted if the intersection of its bounding box with an annotated crown's bounding box divided by the area of the union of those bounding boxes is greater than 0.1.
 Our UAS-derived map of detected trees had a recall of 0.788 and a precision of 0.276, resulting in an F-score of 0.409.
@@ -630,10 +632,10 @@ Critically, "accessibility" and "democratization" of macroecology encompass a br
 That is, our work to increase access to the elusive broad-extent/fine-grain observational domain with a mental model and an open workflow is an important, but incomplete effort towards accessible macroecology. 
 Illustrating this point, the reduced cost of Landsat images brought more researchers into the user base from lower-resourced institutions and underrepresented parts of the world to do more topically diverse science [@nagaraj2020], but some barriers to access still exist [@miller2016]. 
 For instance, three-quarters of users are men, and 65% of users are academic researchers [@miller2016].
-The Landsat archive was undeniably made more accessible, to the collective benefit of science and society [@miller2016a; @nagaraj2020], but even broader access [and therefore greater value; @miller2016a] is possible. 
+The Landsat archive was undeniably made more accessible, to the collective benefit of science and society [@miller2016a; @nagaraj2020], but even broader access [and therefore greater value\; @miller2016a] is possible. 
 Greater accessibility of UAS and NEON as tools for macroecology will similarly require their user communities to be self-reflective and proactive about identifying and eliminating barriers to entry [@nagy2021].
 
-## The future
+## Future directions
 
 We conclude with a set of research themes that are well-suited for UAS/NEON integration with example ecology applications, which we hope provides a vision to be built upon:  
 
