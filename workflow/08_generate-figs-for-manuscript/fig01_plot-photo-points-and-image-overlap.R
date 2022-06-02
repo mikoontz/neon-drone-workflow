@@ -4,6 +4,9 @@ library(raster)
 library(tmap)
 library(viridis)
 
+site_name <- "niwo_017"
+flight_datetime <- "2019-10-09"
+
 # files to be read in this script
 multispec_photo_overlap_count_fname <- file.path("data", "out", paste0(site_name, "_", flight_datetime, "_", "multispec-photo-overlap-count.tif"))
 # multispec_photo_overlap_pct_fname <- file.path("data", "out", paste0(site_name, "_", flight_datetime, "_", "multispec-photo-overlap-percent.tif"))
@@ -11,7 +14,7 @@ multispec_photos_metadata_fname <- paste0("data/drone/L0/", site_name, "_", flig
 gcp_locations_fname <- paste0("data/out/", site_name, "_gcp-locations.gpkg")
 
 # files to be written in this script
-figure_fname <- file.path("figs", "photo-points-overlap-and-gcps.png")
+figure_fname <- file.path("figs", "photo-points-overlap-and-gcps.pdf")
 
 # read data to be used to build plots
 multispec_meta <- 
@@ -68,4 +71,4 @@ tmap::tm_layout(legend.position = c(1.01, 0.65),
 
 combined_plot
 
-tmap::tmap_save(tm = combined_plot, filename = figure_fname, width = 180, height = 135, dpi = 300, units = "mm")
+tmap::tmap_save(tm = combined_plot, filename = figure_fname, width = 180, height = 135, units = "mm")

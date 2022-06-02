@@ -67,7 +67,7 @@ knitr::opts_chunk$set(echo = FALSE, include = FALSE)
 
 Date report generated: `r params$date_generated`
 
-Open Research Statement: All data and code required to reproduce the analysis and the workflow presented in this manuscript can be found on the Open Science Framework at https://doi.org/10.17605/OSF.IO/ENBWU and on GitHub at https://github.com/mikoontz/neon-drone-workflow.
+Open Research Statement: All data and code required to reproduce the analysis and the workflow presented in this manuscript can be found on the Open Science Framework at https://doi.org/10.17605/OSF.IO/ENBWU.
 
 ```{r libraries}
 library(tidyverse)
@@ -678,7 +678,7 @@ Any use of trade, firm, or product names is for descriptive purposes only and do
 # Tables
 
 ```{r}
-table_nums(name = "table-vehicle-payload", "Summary of vehicle and payload considerations for UAS-enabled ecology.")
+table_nums(name = "table-vehicle-payload", "Summary of vehicle and payload considerations for UAS-enabled ecology. '--' indicates content is repeated from the cell above.")
 ```
 
 
