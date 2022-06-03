@@ -27,6 +27,7 @@ if(!dir.exists(out_dir)){
   dir.create(out_dir)
 }
 
+figure_fname <- file.path(out_dir, "fig02_micasense-rededge3-calibrated-reflectance-panel-deterioration.pdf")
 
 # ------ Generate the figure --------------------------------------
 
@@ -35,7 +36,7 @@ micasense_sensor <- "RedEdge"
 sensor_specs <- data.frame(band_name = c("blue", "green", "red", "red_edge", "nir"),
                            center_wavelength_nm = c(475, 560, 668, 717, 840),
                            bandwidth_nm = c(20, 20, 10, 10, 40))
-band_colors <- c("#3C5488FF", "#00A087FF", "#DC0000FF", "#8491B4FF", "#B09C85FF")
+# band_colors <- c("#3C5488FF", "#00A087FF", "#DC0000FF", "#8491B4FF", "#B09C85FF")
 band_colors <- c("blue", "green", "red", "#ff0055", "darkred")
 print(paste0(micasense_sensor, "band info: "))
 print(sensor_specs)
@@ -77,7 +78,9 @@ micasense_spectrum_plot <- ggplot2::ggplot() +
   theme_bw() + 
   # theme and text parameters
   theme(# move legend inside graph area to save space on border
-        legend.position = c(0.21, 0.09)) +
+        legend.position = c(0.21, 0.09),
+        axis.text = element_text(color="black"),
+        axis.ticks = element_line(color = "black")) +
   labs(x = "Wavelength (nm)",
        y = "Reflectance"
        #,title = "Panel reflectance comparison"
@@ -89,7 +92,7 @@ micasense_spectrum_plot <- ggplot2::ggplot() +
   scale_color_manual(values = c(
     'MicaSense, 2017' = 'black',
     'ASD, 2020' = 'blue')) +
-  labs(color = 'Data source') 
+  labs(color = 'Data source')
 
 micasense_spectrum_plot
 
@@ -101,7 +104,8 @@ for(b in 1:length(sensor_specs$band_name)){
                                (sensor_specs$bandwidth_nm[b] /2)), 
              xmax = (sensor_specs$center_wavelength_nm[b] + 
                        (sensor_specs$bandwidth_nm[b] /2)), 
-             ymin= -Inf, ymax=Inf, alpha=0.1, fill= band_colors[b]) 
+             ymin= -Inf, ymax=Inf, alpha=0.1, fill= band_colors[b])
+    
 } 
 
 # show the micasense plot 
@@ -118,15 +122,15 @@ ggplot2::ggsave(filename = file.path(out_dir,
 # Get the panel photo
 photo_path <- "figs/panel-photo_cropped.jpeg"
 
-fig03b <- 
+fig02b <- 
   cowplot::ggdraw() +
   cowplot::draw_image(image = photo_path)
 
-fig03b
+fig02b
 
-fig03 <-
-  cowplot::plot_grid(micasense_spectrum_plot, fig03b, labels = "auto", rel_widths = c(1.4, 1))
+fig02 <-
+  cowplot::plot_grid(micasense_spectrum_plot, fig02b, labels = "auto", rel_widths = c(1.4, 1))
 
-fig03
+fig02
 
-ggsave(filename = file.path(out_dir, "micasense-rededge3-calibrated-reflectance-panel-deterioration.png"), plot = fig03, dpi = 300, width = 180, height = 135, units = "mm")
+ggsave(filename = figure_fname, plot = fig02, width = 180, height = 135, units = "mm")

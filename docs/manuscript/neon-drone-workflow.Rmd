@@ -190,11 +190,12 @@ Takeoffs and landings from a clean, stable, flat surface (e.g., plywood, car flo
 With any platform, vehicle endurance limitations and the mission goals will determine how many flights are required to complete data collection.
 In many cases, it will be necessary to purchase several batteries to keep the vehicle flying for the duration of a field day.
 Even if only one flight is needed to collect data, extra batteries are still valuable to have on hand in case the first flight doesn't go as planned and follow-up flights are required.
+Batteries from many vehicle manufacturers (e.g., Da-Jiang Innovations (DJI)) will automatically discharge after a period of non-use as a safety feature, so it is good practice to wait to charge all batteries until near the time they will be used in order to ensure that they will be at their peak capacity when they are needed (e.g., don't charge them until the night before you need them).
 An energy source to charge batteries in the field, like a solar charger or gasoline-powered generator, may also be necessary for very long missions or multiple days of data collection.
 As a guideline, you can determine how many batteries your portable energy source can charge by determining its energy capacity in watt-hours (Wh), multiplying by 90% (making the calculation such that you leave 10% of the capacity rather than fully draining it), then dividing by the capacity of a single UAS battery in watt-hours and rounding down to the nearest whole number to account for any unpredictable inefficiencies.
 For instance, a Goal Zero Yeti 1400 battery (used successfully by some authors) can be charged with solar panels and stores 1,400 Wh of energy, which results in 1,260 Wh of usable energy if it were to be drained to 10% capacity.
-Each TB48 battery of the DJI Matrice 100 aircraft stores about 130 Wh of energy, so the Yeti 1400 should be able to charge about nine batteries before it needs to be recharged itself (1,260 / 130 = 9.7, which is 9 when rounded down).
-If an efficient one-gallon, gasoline-powered generator can produce 6,000 Wh of energy, that results in 5,400 Wh of usable energy which is equivalent to charging about 41 batteries for the Matrice 100.
+Each battery of the DJI Phantom 4 Pro aircraft stores 89.2 Wh of energy, so the Yeti 1400 should be able to charge about 14 batteries before it needs to be recharged itself (1,260 / 89.2 = 14.13, which is 14 when rounded down).
+If an efficient one-gallon, gasoline-powered generator can produce 6,000 Wh of energy, that results in 5,400 Wh of usable energy which is equivalent to charging about 60 batteries for the DJI Phantom 4 Pro.
 
 ## Payload
 
@@ -271,7 +272,7 @@ Not all tablets have geolocation services; as of this writing, the Cellular+WiFi
 
 A final consideration for successful flight planning is to create a routine for consistently executing missions.
 Consistent repetition of routine steps prior to, during, and after a flight ensures that all components of the UAS work as intended in concert with each other, and checklists facilitate this consistency [@degani1993].
-We highly recommend developing and using some kind of checklist for UAS operations (Supplementary Information)-- there is good reason they are part of standard operations for a range of aviators from pilots of small private aircraft to NEON AOP to NASA astronauts! Some applications (such as Kittyhawk; https://kittyhawk.io/) allow for automatic logging of checklist run-throughs, which further reduces barriers to their use.
+We highly recommend developing and using some kind of checklist for UAS operations (Appendix S1)-- there is good reason they are part of standard operations for a range of aviators from pilots of small private aircraft to NEON AOP to NASA astronauts! Some applications (such as Kittyhawk; https://kittyhawk.io/) allow for automatic logging of checklist run-throughs, which further reduces barriers to their use.
 For our mission, we used Map Pilot for DJI by DronesMadeEasy, which enables full control of front/side overlap and camera angle, as well as allows for crosshatch flight patterns, terrain following, and caching of data for use in the field when an internet connection isn’t available.
 
 ## Regulations
@@ -308,7 +309,7 @@ Because NEON does not own the land on which they operate, flying NEON sites will
 Additional, non-NEON research is allowed at some but not all sites.
 If permission is obtained, it is important not to disturb any existing research being conducted at those sites, to maintain a 20m buffer around any NEON distributed plot, and to completely avoid the area of the tower airshed (which is also delineated on the NEON webpage for each site; e.g., https://www.neonscience.org/data-samples/data/spatial-data-maps).
 Clear communication with concerned parties of UAS flights for research, even if there is every legal right to fly at a particular location, is important for building community credibility and longevity for UAS as a tool for ecologists.
-Finally, as with flight planning, it is best practice to develop a routine and a checklist (see Supplementary Information) for determining whether UAS flights are allowed in the intended survey area under the relevant regulatory framework.
+Finally, as with flight planning, it is best practice to develop a routine and a checklist (see Appendix S1) for determining whether UAS flights are allowed in the intended survey area under the relevant regulatory framework.
 
 ## Radiometric calibration
 
@@ -381,7 +382,7 @@ For example, NEON TOS plots have permanent markers that have been georeferenced 
 
 RTK and PPK corrections augment the accuracy of a UAS' built-in GNSS receiver by correcting the noise inherent in the instrument using additional equipment and processing steps without the need for laying out GCPs and determining their locations.
 This can result in massive time savings, particularly when surveying large areas.
-For instance, @gillan2021 was able to survey and process data covering over 190 hectares of rangeland in approximately 30 days versus an estimated 141 days using a conventional UAS workflow, with an estimated 47 days saved just from using an RTK system versus GCPs.
+For instance, @gillan2021a was able to survey and process data covering over 190 hectares of rangeland in approximately 30 days versus an estimated 141 days using a conventional UAS workflow, with an estimated 47 days saved just from using an RTK system versus GCPs.
 Even with RTK and PPK corrections, it is still considered good practice to lay out some GCPs at precisely known locations, then quantify geolocation error in the final SfM products by measuring the difference between the field- and UAS-measured GCP locations.
 
 ## Data management
@@ -391,7 +392,8 @@ Having a ballpark idea of the total anticipated data storage requirements will h
 Given the desired flight plan, number of survey areas, and payload (as determined by what meets the science requirements), it should be possible to estimate the amount of data that will be collected per flight, per survey area, and in total for the whole project.
 It is best practice to adhere as closely as possible to the "3-2-1 Backup Rule", where three copies of the data exist with a local, accessible copy on two different devices (e.g., local computer and an external hard drive) and one copy off-site (e.g., a cloud backup service) [@ruggiero2012]. 
 
-UAS optical data are typically collected on SD cards inserted in the sensor, so it is important to have enough empty SD cards prior to flights to accommodate the data being collected in the field.
+UAS optical data are typically collected on SD cards inserted in the sensor, so it is important to have enough SD cards prior to flights to accommodate the data being collected in the field.
+Formatting the SD cards (i.e., erasing all data on them) prior to a new flight is a good practice that ensures the full capacity of each SD card is available for new data collection (provided that the old data are safely transferred/managed to another medium-- see below).
 Swapping out the SD card after each flight for an empty one is advisable, so that the only copy of freshly-collected imagery data isn't lost in the event of a UAS mishap on the next flight.
 Frequently transferring data from the SD cards to both a laptop hard drive and an external hard drive in the field satisfies the backup rule on having data stored on "two different devices."
 Storing those two devices in different locations while in the field (e.g., in two different vehicles, or in the trunk and under the car seat) might prevent some types of data loss (e.g., theft of one of the devices).
@@ -457,6 +459,7 @@ Our vehicle was a DJI Matrice 100 rotocopter with four propellers and a proven t
 The vertical takeoffs and landings of the rotocopter style drone allowed us to operate the vehicle from a clearing as small as the width of the dirt access road to the site.
 We used a piece of plywood laid on the ground as a flat, stable takeoff platform that would also help to minimize the amount of dust kicked up by the rotor wash during takeoff and landing. 
 The Matrice 100 has a relatively high lift capacity that allows for a payload to be integrated, and is heavier than many consumer rotocopters which makes it both more stable in windy conditions and more challenging to transport beyond a road.
+We charged all vehicle batteries the night prior to the flight.
 
 ## Payload
 
@@ -477,7 +480,7 @@ Our data collection took place on a single day under mostly sunny, light wind co
 We ideally would have flown closer to solar noon to minimize shadows in the imagery, particularly this late in the year.
 
 ## Flight planning
-We used Map Pilot for DJI, an Apple iPad iOS app, for planning the flight.
+We used Map Pilot for DJI on a 2nd generation, WiFi+Cellular-equipped, 10.5 inch Apple iPad Pro for planning the flight.
 Map Pilot is a reliable, full-featured flight planning application that allows us to set flight parameters such as forward overlap, side overlap, and sensor angle.
 We flew at an altitude of 100 m, and set the forward overlap to 95% and side overlap to 80% (based on the built-in DJI RGB camera, the Zenmuse X3).
 We used a zero-degree sensor angle (i.e., downward/nadir facing), and added a perpendicular set of aerial transects to create a crosshatch flight pattern (`r fig_nums(name = "fig-crosshatch", display = "cite")`).
@@ -539,7 +542,7 @@ These ground control points were located within the center of the flight area, w
 
 ## Data management
 
-For data collection, we recorded each flight’s imagery on a separate 32 GB SD card rated at >90 MB/s write speed.
+For data collection, we recorded each flight’s imagery on a separate 32 GB SD card rated at >90 MB/s write speed that we formatted prior to the flight.
 For multi-day trips or if SD cards need to be reused, we transfer imagery from the SD cards to at least one portable solid state hard drive (Samsung T series).
 Upon returning from the field, we transferred images from the SD cards (or portable solid state hard drive, as the case may be) to two locations: 1) the solid state hard drive on a local desktop gaming computer for short term storage and processing, and 2) a Network Attached Storage (NAS) with 6 spinning disk hard drives in a RAID array for long-term storage.
 Both the short-term storage (local desktop) and long-term storage (NAS) solutions are backed up to the cloud using a 3rd party backup client (Backblaze) at a cost of ~$5.00 USD per terabyte per month.
@@ -692,11 +695,11 @@ pander::pandoc.table(vehicle_payload_table_print,
                      keep.line.breaks = TRUE)
 ```
 
-# Figure legends
+# Figure captions
 
 ```{r}
-fig_nums(name = "fig-crosshatch", "Black points depict the UAS position for each photo captured during the flight.
-Red points in the “X” formation at the center are the high-precision geolocations of the NEON vegetation plot monuments.
+fig_nums(name = "fig-crosshatch", "Black points depict the Unoccupied Aerial System (UAS) position for each photo captured during the flight.
+Red points in the “X” formation at the center are the high-precision geolocations of the National Ecological Observatory Network (NEON) vegetation plot monuments.
 The background color represents the approximate number of photos captured over each point in the surveyed area based on idealized image footprints projected on the ground surrounding the geolocation of each photo point (i.e., the black points).
 Each point needs to be imaged a large number of times (likely more than 100 for denser vegetation), which means that some areas with image capture at the edges of the flown area won’t have coverage suitable for structure from motion data processing. 
 The flight area should therefore be larger than the area of interest to ensure sufficient data coverage.")
@@ -715,7 +718,7 @@ The difference between the manufacturer-reported panel reflectance and the actua
 
 
 ```{r}
-fig_nums(name = "fig-gcps", "Aerial RGB photograph captured using a DJI Phantom 4 Pro on January 23, 2020 at 120m of altitude above ground level.
+fig_nums(name = "fig-gcps", "Aerial red-green-blue (RGB) photograph captured using a Da-Jiang Innovations (DJI) Phantom 4 Pro on January 23, 2020 at 120m of altitude above ground level.
 The photo depicts three ground control points (GCPs) each of two different types in the center of the image: 1 m long spray painted orange cotton drop cloth in an “X” pattern and 1 x 1 m squares of cotton drop cloth spray painted with black triangles.
 The GCPs are progressively more conspicuous under the canopy, in the shrub field, and on the dirt road.
 The size of the area covered by the main photograph is approximately 180 m wide x 120 m high.")
@@ -734,13 +737,13 @@ For example, whereas building your own data management system may be more afford
 ```{r}
 fig_nums(name = "fig-rededge-rsr-neon-aop", "a) Relative spectral response of the MicaSense RedEdge 3 camera in 5 distinct spectral bands based on the quantum efficiency of the image sensor per wavelength and the bandpass filter transmission per wavelength. 
 The dashed vertical lines in a) demarcate the spectral extent of panel b).
-b) Relative spectral responses for two channels of the MicaSense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the NEON AOP imaging spectrometer.
+b) Relative spectral responses for two channels of the MicaSense RedEdge 3 camera plotted with the relative spectral responses for twenty channels of the National Ecological Observatory Network Airborne Observation Platform (NEON AOP) imaging spectrometer.
 Several channels of the NEON AOP instrument comprise each of the MicaSense RedEdge 3 channels, so the reflectance data from the NEON AOP are resampled (weighted, in effect) such that they can be used as though the NEON instrument exhibited the same spectral sensitivity as the MicaSense RedEdge 3 instrument.")
 ```
 
 
 ```{r}
-fig_nums(name = "fig-comparing-scenes", "NDVI image over NIWO017 plot a) derived from the NEON AOP spectral imager using data collected in August of 2019 (data collection flights over NIWO on August 14, 15, 19, and 26 of 2019) and b) derived from the MicaSense RedEdge 3 camera using data collected on October 09, 2019.
+fig_nums(name = "fig-comparing-scenes", "Normalized Difference Vegetation Index (NDVI) image over NIWO017 plot a) derived from the National Ecological Observatory Network Airborne Observation Platform (NEON AOP) spectral imager using data collected in August of 2019 (data collection flights over Niwot Ridge NEON site (NIWO) on August 14, 15, 19, and 26 of 2019) and b) derived from the MicaSense RedEdge 3 camera using data collected on October 09, 2019.
 The NEON AOP data were first spectrally resampled into the equivalent red and near infrared bands of the MicaSense RedEdge 3 camera based on the relative spectral response of the RedEdge 3 instrument.
 The higher spatial resolution of the drone-derived data are highlighted.
 Note that the difference in NDVI between the images may derive from three main sources: phenological differences in the vegetation, differences in the flight conditions such as time of day and cloud cover, or differences in instrumentation.")
@@ -748,7 +751,7 @@ Note that the difference in NDVI between the images may derive from three main s
 
 
 ```{r}
-fig_nums(name = "fig-crown-ndvi-compare", "NDVI for each detected tree crown in the NIWO_017 plot as derived from the NEON AOP imaging spectrometer versus NDVI derived from the MicaSense RedEdge 3 sensor.
+fig_nums(name = "fig-crown-ndvi-compare", "Normalized Difference Vegetation Index (NDVI) for each detected tree crown in the NIWO_017 plot as derived from the National Ecological Observatory Network Airborne Observation Platform (NEON AOP) imaging spectrometer versus NDVI derived from the MicaSense RedEdge 3 sensor.
 The one-to-one line is red, and the best fit curve from a general additive model is shown in blue with a 95% confidence interval shown in gray.
 The NEON AOP data, collected closer to peak growing season, mostly has higher per-tree values of NDVI.
 The nonlinear model fit highlights how, at the individual tree scale, spectral responses vary differently throughout the year which might prove useful for future work (e.g., classifying trees to species based on how variable their spectral response is through the year).")

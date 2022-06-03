@@ -4,7 +4,11 @@ library(ggplot2)
 # read in the figure's source data
 # figure source data generated in workflow/06_NEON-AOP-data-integration-with-drone/03_compare-rsr-micasense-neon.R
 
-neon_micasense_rsr <- read.csv(file = "data/out/relative-spectral-response-rededge3-and-neon-aop.csv")
+figure_fname <- file.path("figs", "fig05_relative-spectral-response-rededge3-and-neon-aop.pdf")
+
+neon_micasense_rsr <- 
+  read.csv(file = "data/out/relative-spectral-response-rededge3-and-neon-aop.csv") %>% 
+  dplyr::as_tibble()
 
 neon_micasense_rsr_zoom <- 
   neon_micasense_rsr %>% 
@@ -13,15 +17,22 @@ neon_micasense_rsr_zoom <-
   mutate(source = ifelse(source == "rededge3", yes = band_fullname, no = source),
          source = factor(source, levels = c("NEON", "red", "red edge")))
 
+micasense_rededge3_rsr <-
+  neon_micasense_rsr %>% 
+  dplyr::filter(source == "rededge3") %>% 
+  dplyr::mutate(band_fullname = factor(band_fullname, levels = c("blue", "green", "red", "red edge", "near infrared")))
+
 ### The plots for a 2-panel figure
-full_redege_rsr_gg <- 
+full_rededge_rsr_gg <- 
   ggplot(micasense_rededge3_rsr, aes(x = wavelength_nm, y = relative_spectral_response, color = band_fullname)) +
   geom_line() +
   scale_color_manual(values = c("blue", "green", "red", "#ff0055", "darkred")) +
   labs(color = "Band name",
        x = "Wavelength (nm)",
        y = "Relative spectral response") +
-  theme_bw()
+  theme_bw() +
+  theme(axis.text = element_text(color="black"),
+        axis.ticks = element_line(color = "black"))
 
 neon_micasense_rsr_gg <-
   ggplot(neon_micasense_rsr_zoom, 
@@ -31,10 +42,12 @@ neon_micasense_rsr_gg <-
   theme_bw() +
   labs(x = "Wavelength (nm)",
        y = "Relative spectral response") +
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        axis.text = element_text(color="black"),
+        axis.ticks = element_line(color = "black"))
 
 
-two_panel <- ((full_redege_rsr_gg + geom_vline(xintercept = c(650, 750), lty = 2)) / (neon_micasense_rsr_gg + geom_vline(xintercept = c(650, 750), lty = 2)))
+two_panel <- ((full_rededge_rsr_gg + geom_vline(xintercept = c(650, 750), lty = 2)) / (neon_micasense_rsr_gg + geom_vline(xintercept = c(650, 750), lty = 2)))
 two_panel <- (two_panel + patchwork::plot_layout(guides = "collect") + patchwork::plot_annotation(tag_levels = "a"))
 
-ggsave(filename = file.path("figs", "relative-spectral-response-rededge3-and-neon-aop.png"), plot = two_panel, dpi = 300, width = 180, units = "mm")
+ggsave(filename = figure_fname, plot = two_panel, width = 180, height = 220, units = "mm")

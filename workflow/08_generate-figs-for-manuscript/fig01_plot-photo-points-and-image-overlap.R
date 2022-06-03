@@ -14,7 +14,7 @@ multispec_photos_metadata_fname <- paste0("data/drone/L0/", site_name, "_", flig
 gcp_locations_fname <- paste0("data/out/", site_name, "_gcp-locations.gpkg")
 
 # files to be written in this script
-figure_fname <- file.path("figs", "photo-points-overlap-and-gcps.pdf")
+figure_fname <- file.path("figs", "fig01_photo-points-overlap-and-gcps.pdf")
 
 # read data to be used to build plots
 multispec_meta <- 
@@ -54,7 +54,7 @@ combined_plot <-
   # tmap::tm_shape(photo_count, bbox = bbox_new) +
   tmap::tm_shape(photo_count) +
   tmap::tm_raster(palette = viridis::viridis(100), style = "cont", title = "Number of\noverlapping photos") +
-  tmap::tm_grid(alpha = 0.25) +
+  tmap::tm_grid(col = "black", alpha = 0.5, labels.col = "black") +
   tmap::tm_xlab(text = "Easting (m)") +
   tmap::tm_ylab(text = "Northing (m)") +
   tmap::tm_shape(multispec_meta) +
@@ -66,8 +66,8 @@ combined_plot <-
                       col = c("black", "red"), 
                       shape = 19) +
   # tmap::tm_layout(legend.position = c("left", "bottom"))
-tmap::tm_layout(legend.position = c(1.01, 0.65),
-                outer.margins = c(0.01, 0.01, 0.01, 0.2))
+  tmap::tm_layout(legend.position = c(1.01, 0.65),
+                  outer.margins = c(0.01, 0.01, 0.01, 0.2))
 
 combined_plot
 

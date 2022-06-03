@@ -1,0 +1,33 @@
+---
+geometry: margin=1in
+header-includes:
+  - \usepackage[left]{lineno}
+  # - \linenumbers
+  - \usepackage{setspace}
+  - \doublespacing
+  - \DeclareUnicodeCharacter{200E}{}
+  - \usepackage{caption}
+  - \captionsetup[figure]{labelformat=empty}
+  - \captionsetup[table]{labelformat=empty}
+  - \usepackage{amsmath}
+
+output:
+  pdf_document
+  # word_document
+  # bookdown::word_document2: 
+    # number_sections: FALSE
+  # bookdown::html_document2: default
+
+---
+
+```{r setup, include = FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE, include = FALSE)
+```
+
+**Journal:** Ecosphere
+
+**Article title:** Democratizing macroecology: integrating unoccupied aerial systems with the National Ecological Observatory Network
+
+**Authors:** Michael J. Koontz, Victoria M. Scholl, Anna I. Spiers, Megan E. Cattau, John Adler, Joseph McGlinchy, Tristan Goulden, Brett A. Melbourne, Jennifer K. Balch
+
+**Appendix S1. Example checklists to aid in safe, compliant flight operations.**
