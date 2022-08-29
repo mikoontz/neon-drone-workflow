@@ -22,32 +22,48 @@ micasense_rededge3_rsr <-
   dplyr::filter(source == "rededge3") %>% 
   dplyr::mutate(band_fullname = factor(band_fullname, levels = c("blue", "green", "red", "red edge", "near infrared")))
 
+# https://www.johndcook.com/wavelength_to_RGB.html
+# Same color scheme as for Figure 2
+band_colors <- c("#00c0ffff", "#c3ff00ff", "#ff0000ff", "#e00000ff", "#B09C85FF")
+
 ### The plots for a 2-panel figure
+label_df <- data.frame(x = c(475, 560, 668, 717, 840), y = 1.025, label = c("blue", "green", "red", "red edge", "near infrared"))
+
 full_rededge_rsr_gg <- 
-  ggplot(micasense_rededge3_rsr, aes(x = wavelength_nm, y = relative_spectral_response, color = band_fullname)) +
+  ggplot(data = micasense_rededge3_rsr, aes(x = wavelength_nm, y = relative_spectral_response, color = band_fullname)) +
   geom_line() +
-  scale_color_manual(values = c("blue", "green", "red", "#ff0055", "darkred")) +
+  scale_color_manual(values = band_colors) +
   labs(color = "Band name",
        x = "Wavelength (nm)",
        y = "Relative spectral response") +
   theme_bw() +
   theme(axis.text = element_text(color="black"),
-        axis.ticks = element_line(color = "black"))
+        axis.ticks = element_line(color = "black")) +
+  geom_label(data = label_df, mapping = aes(x = x, y = y, label = label), inherit.aes = FALSE, hjust = 0.5, vjust = 0) +
+  theme(legend.position = "none") +
+  xlim(c(400, 900)) +
+  ylim(c(0, 1.05)) +
+  geom_segment(aes(x = 650, xend = 650, y = 0, yend = 1), color = "black", lty = 2) +
+  geom_segment(aes(x = 750, xend = 750, y = 0, yend = 1), color = "black", lty = 2)
 
 neon_micasense_rsr_gg <-
   ggplot(neon_micasense_rsr_zoom, 
          aes(x = wavelength_nm, y = relative_spectral_response, color = source, group = channel)) + 
   geom_line() +
-  scale_color_manual(values = c("black", "red", "#ff0055")) +
+  scale_color_manual(values = c("black", band_colors[3:4])) +
   theme_bw() +
   labs(x = "Wavelength (nm)",
        y = "Relative spectral response") +
   theme(legend.position = "none",
         axis.text = element_text(color="black"),
-        axis.ticks = element_line(color = "black"))
+        axis.ticks = element_line(color = "black")) +
+  geom_label(data = label_df[3:4, ], mapping = aes(x = x, y = y, label = label), inherit.aes = FALSE, hjust = 0.5, vjust = 0) +
+  theme(legend.position = "none") + 
+  ylim(c(0, 1.05)) +
+  geom_segment(aes(x = 650, xend = 650, y = 0, yend = 1), color = "black", lty = 2) +
+  geom_segment(aes(x = 750, xend = 750, y = 0, yend = 1), color = "black", lty = 2)
 
-
-two_panel <- ((full_rededge_rsr_gg + geom_vline(xintercept = c(650, 750), lty = 2)) / (neon_micasense_rsr_gg + geom_vline(xintercept = c(650, 750), lty = 2)))
+two_panel <- (full_rededge_rsr_gg) / (neon_micasense_rsr_gg)
 two_panel <- (two_panel + patchwork::plot_layout(guides = "collect") + patchwork::plot_annotation(tag_levels = "a"))
 
 ggsave(filename = figure_fname, plot = two_panel, width = 180, height = 220, units = "mm")

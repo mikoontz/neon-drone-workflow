@@ -28,7 +28,8 @@ chm <- terra::rast(cropped_chm_fname)
 dtm <- terra::rast(cropped_dtm_fname)
 pc <- lidR::readLAS(cropped_classified_dense_pc_fname)
 
-normalized_pc <- lidR::lasnormalize(las = pc, algorithm = dtm)
+normalized_pc <- lidR::normalize_height(las = pc, algorithm = raster::raster(dtm))
+plot(normalized_pc)
 
 # From Young et al., 2021
 # VWF algorithm with a = 0, b = 0.04, smooth = 2

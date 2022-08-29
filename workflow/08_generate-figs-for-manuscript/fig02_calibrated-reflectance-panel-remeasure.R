@@ -36,8 +36,12 @@ micasense_sensor <- "RedEdge"
 sensor_specs <- data.frame(band_name = c("blue", "green", "red", "red_edge", "nir"),
                            center_wavelength_nm = c(475, 560, 668, 717, 840),
                            bandwidth_nm = c(20, 20, 10, 10, 40))
-# band_colors <- c("#3C5488FF", "#00A087FF", "#DC0000FF", "#8491B4FF", "#B09C85FF")
-band_colors <- c("blue", "green", "red", "#ff0055", "darkred")
+
+# band_colors <- c("blue", "green", "red", "#ff0055", "darkred")
+
+# https://www.johndcook.com/wavelength_to_RGB.html
+band_colors <- c("#00c0ffff", "#c3ff00ff", "#ff0000ff", "#e00000ff", "#B09C85FF")
+
 print(paste0(micasense_sensor, "band info: "))
 print(sensor_specs)
 
@@ -104,12 +108,16 @@ for(b in 1:length(sensor_specs$band_name)){
                                (sensor_specs$bandwidth_nm[b] /2)), 
              xmax = (sensor_specs$center_wavelength_nm[b] + 
                        (sensor_specs$bandwidth_nm[b] /2)), 
-             ymin= -Inf, ymax=Inf, alpha=0.1, fill= band_colors[b])
+             ymin = -Inf, ymax = Inf, alpha = 0.2, fill= band_colors[b])
     
 } 
 
 # show the micasense plot 
-micasense_spectrum_plot
+label_df <- data.frame(x = c(475, 560, 668, 717, 840), y = 0.7, label = c("blue", "green", "red", "red\nedge", "near\ninfrared"))
+
+micasense_spectrum_plot <-
+  micasense_spectrum_plot +
+  geom_label(data = label_df, mapping = aes(x = x, y = y, label = label), inherit.aes = FALSE, size = 2.5, hjust = 0.5, vjust = 0.5)
 
 # write plot to file 
 ggplot2::ggsave(filename = file.path(out_dir, 
