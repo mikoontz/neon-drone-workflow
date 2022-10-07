@@ -3,6 +3,7 @@
 library(tidyverse)
 library(lidR)
 library(raster)
+# install.packages("RCSF")
 
 site_name <- "niwo_017"
 flight_datetime <- "2019-10-09"
@@ -61,7 +62,7 @@ classified_sparse_point_cloud <- lidR::classify_ground(las = sparse_point_cloud,
 plot(sparse_point_cloud)
 
 # Plot the classification of the point cloud for inspection
-plot(classified_sparse_point_cloud, color = "Classification", col = c("darkgreen", "white"))
+lidR::plot(classified_sparse_point_cloud, color = "Classification", pal = c("darkgreen", "white"))
 
 # Create a 1m resolution digital terrain model using the classified ground points
 # and interpolation between those ground points using the tin() function from lidR which 

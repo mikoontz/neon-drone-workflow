@@ -22,6 +22,13 @@ if(!dir.exists(file.path("data", "drone", "L1", site_name, flight_datetime))) {
              recursive = TRUE)
 }
 
+# create directory to store L2 products -----------------------------------
+
+if(!dir.exists(file.path("data", "drone", "L2", "radiometric-corrections", site_name, flight_datetime))) {
+  dir.create(file.path("data", "drone", "L2", "radiometric-corrections", site_name, flight_datetime),
+             recursive = TRUE)
+}
+
 # files to be downloaded from remote and named
 cropped_ortho_fname <- file.path("data", "drone", "L2", "radiometric-corrections", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_ortho_cropped.tif"))
 cropped_dsm_fname <- file.path("data", "drone", "L1", site_name, flight_datetime, paste0(site_name, "_", flight_datetime, "_dsm_cropped.tif"))
@@ -60,8 +67,6 @@ if(!file.exists(cropped_sparse_point_cloud_fname)) {
   osfr::osf_download(x = cropped_sparse_point_cloud_osf_id, 
                      path = dirname(cropped_sparse_point_cloud_fname))
 }
-
-
 
 # If Open Science Framework doesn't work, you can see whether they are
 # still available via the CU Boulder Earth Lab Amazon S3 bucket. But they
