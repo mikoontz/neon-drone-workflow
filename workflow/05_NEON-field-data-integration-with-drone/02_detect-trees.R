@@ -37,7 +37,12 @@ a <- 0
 b <- 0.04
 c <- 0
 
-# Smooth the chm 
+# Smooth out the chm and set any negative values to 0 (meaning "ground") following
+# advice from Zagalikis, Cameron, and Miller (2004) and references therein
+# More recently, a 3x3 pixel smoothing filter was specifically suggested as ideal
+# for sUAS derived chm by Mohan et al. (2017)
+# chm_smooth <- raster::focal(chm, w = matrix(1, 3, 3), mean)
+# chm_smooth[raster::getValues(chm_smooth) < 0] <- 0
 chm_res <- mean(terra::res(chm))
 pixels_smooth_2 <- round(((1/chm_res)-1)/2)*2 + 1
 
@@ -56,7 +61,7 @@ ttops <- ForestTools::vwf(CHM = raster::raster(chm),
 # ttops <- lidR::find_trees(las = normalized_pc, algorithm = lmf(ws = 1.5))
 
 plot(chm, col = viridis::viridis(100))
-plot(ttops %>% st_transform(4326) %>% st_geometry(), add = TRUE, pch = 19, col = "red")  
+plot(sf::st_geometry(ttops), add = TRUE, pch = 19, col = "red")  
   
 if(!dir.exists(L3a_geo_dir)) {
   dir.create(L3a_geo_dir, recursive = TRUE)
