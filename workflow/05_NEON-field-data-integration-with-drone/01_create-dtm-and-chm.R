@@ -69,15 +69,17 @@ lidR::plot(classified_sparse_point_cloud, color = "Classification", pal = c("dar
 # Create a 1m resolution digital terrain model using the classified ground points
 # and interpolation between those ground points using the tin() function from lidR which 
 # implements a Delaunay triangulation method
-dtm <- lidR::grid_terrain(las = classified_sparse_point_cloud,
+dtm <- 
+  lidR::grid_terrain(las = classified_sparse_point_cloud,
                           res = 0.5,
-                          algorithm = tin())
+                          algorithm = tin()) |>
+  terra::rast()
 
-dtm_4326 <- raster::projectRaster(from = dtm, crs = sp::CRS("+init=epsg:4326"))
-dtm_4326 <- terra::project(x = terra::rast(dtm), y = "epsg:4326")
+# dtm_4326 <- raster::projectRaster(from = dtm, crs = sp::CRS("+init=epsg:4326"))
+dtm_4326 <- terra::project(x = dtm, y = "epsg:4326")
 
 # Write the dtm file to disk
-raster::writeRaster(x = dtm, filename = cropped_dtm_fname, overwrite = TRUE)
+# raster::writeRaster(x = dtm, filename = cropped_dtm_fname, overwrite = TRUE)
 terra::writeRaster(x = dtm, filename = cropped_dtm_fname, overwrite = TRUE)
 
 
@@ -85,27 +87,17 @@ terra::writeRaster(x = dtm, filename = cropped_dtm_fname, overwrite = TRUE)
 
 # dsm <- raster::raster(cropped_dsm_fname)
 dsm <- terra::rast(cropped_dsm_fname)
-dsm <- terra::project(x = dsm, y = paste0("epsg:", local_utm), method = "bilinear")
+# dsm <- terra::project(x = dsm, y = paste0("epsg:", local_utm), method = "bilinear")
 dsm <- terra::project(x = dsm, y = local_utm$wkt, method = "bilinear")
 
 # Using bilinear interpolation to downsample the 1m resolution DTM to have the
 # same resolution as the dsm (~5cm, but slightly different for each site)
-dtm_resamp <- raster::resample(x = dtm, y = dsm, method = "bilinear")
-# dtm_resamp <- terra::resample(dtm_4326, dsm, method = "bilinear")
+# dtm_resamp <- raster::resample(x = dtm, y = dsm, method = "bilinear")
+dtm_resamp <- terra::resample(x = dtm, y = dsm, method = "bilinear")
 
 # The Canopy Height Model (chm) is the dsm (vegetation + ground) minus the dtm (ground)
 # to give just the height of the vegetation.
 chm <- dsm - dtm_resamp
-
-# Save smoothing step for later, because different smooth values might be a variable
-# to compare different values for and rate their performance
-
-# Smooth out the chm and set any negative values to 0 (meaning "ground") following
-# advice from Zagalikis, Cameron, and Miller (2004) and references therein
-# More recently, a 3x3 pixel smoothing filter was specifically suggested as ideal
-# for sUAS derived chm by Mohan et al. (2017)
-# chm_smooth <- raster::focal(chm, w = matrix(1, 3, 3), mean)
-# chm_smooth[raster::getValues(chm_smooth) < 0] <- 0
 
 plot(dsm, col = viridis::viridis(100))
 plot(dtm_resamp, col = viridis::viridis(100))
