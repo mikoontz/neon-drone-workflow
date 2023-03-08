@@ -24,8 +24,10 @@ if(!dir.exists(L2_geo_dir)) {
   dir.create(L2_geo_dir, recursive = TRUE)
 }
 
-dense_point_cloud <- lidR::readLAS(files = cropped_dense_point_cloud_fname)
 sparse_point_cloud <- lidR::readLAS(files = cropped_sparse_point_cloud_fname)
+dense_point_cloud <- lidR::readLAS(files = cropped_dense_point_cloud_fname)
+
+local_utm <- sf::st_crs(sparse_point_cloud)
 
 # Use the cloth simulation filter by Zhang et al. (2016) [http://www.mdpi.com/2072-4292/8/6/501/htm]
 # implemented in the lidR package to classify points in the point cloud as ground or non-ground
@@ -80,9 +82,10 @@ terra::writeRaster(x = dtm, filename = cropped_dtm_fname, overwrite = TRUE)
 
 # calculate a canopy height model -----------------------------------------
 
-dsm <- raster::raster(cropped_dsm_fname)
+# dsm <- raster::raster(cropped_dsm_fname)
 dsm <- terra::rast(cropped_dsm_fname)
 dsm <- terra::project(x = dsm, y = paste0("epsg:", local_utm), method = "bilinear")
+dsm <- terra::project(x = dsm, y = local_utm$wkt, method = "bilinear")
 
 # Using bilinear interpolation to downsample the 1m resolution DTM to have the
 # same resolution as the dsm (~5cm, but slightly different for each site)
