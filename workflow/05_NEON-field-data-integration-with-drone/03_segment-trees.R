@@ -57,6 +57,9 @@ crowns <-
   dplyr::filter(point_in_crown) %>% 
   dplyr::select(-point_in_crown)
 
+plot(chm, col = viridis::viridis(100))
+plot(sf::st_geometry(crowns), add = TRUE, col = "red", cex = 0.25)  
+
 if(!file.exists(cropped_crowns_fname)) {
   sf::st_write(obj = crowns, dsn = cropped_crowns_fname, delete_dsn = TRUE)
 }
