@@ -60,7 +60,7 @@ classified_sparse_point_cloud <- lidR::classify_ground(las = sparse_point_cloud,
                                                                        iterations = 500, 
                                                                        time_step = 0.65))
 
-# Plot the classification of the point cloud for inspection
+# Plot the raw point cloud for inspection
 plot(sparse_point_cloud)
 
 # Plot the classification of the point cloud for inspection
@@ -82,7 +82,6 @@ dtm_4326 <- terra::project(x = dtm, y = "epsg:4326")
 # raster::writeRaster(x = dtm, filename = cropped_dtm_fname, overwrite = TRUE)
 terra::writeRaster(x = dtm, filename = cropped_dtm_fname, overwrite = TRUE)
 
-
 # calculate a canopy height model -----------------------------------------
 
 # dsm <- raster::raster(cropped_dsm_fname)
@@ -101,7 +100,7 @@ chm <- dsm - dtm_resamp
 
 plot(dsm, col = viridis::viridis(100))
 plot(dtm_resamp, col = viridis::viridis(100))
-# plot(chm_smooth, col = viridis::viridis(100))
+plot(chm, col = viridis::viridis(100))
 
 # Write the chm file to disk so we can use it later
 # Note that all of these outputs generated using R get written to the same place, regardless of whether the

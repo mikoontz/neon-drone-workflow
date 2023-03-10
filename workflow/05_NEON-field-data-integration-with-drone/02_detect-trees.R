@@ -61,7 +61,7 @@ ttops <- ForestTools::vwf(CHM = raster::raster(chm),
 # ttops <- lidR::find_trees(las = normalized_pc, algorithm = lmf(ws = 1.5))
 
 plot(chm, col = viridis::viridis(100))
-plot(sf::st_geometry(ttops), add = TRUE, pch = 19, col = "red")  
+plot(sf::st_geometry(ttops), add = TRUE, pch = 19, col = "red", cex = 0.25)  
   
 if(!dir.exists(L3a_geo_dir)) {
   dir.create(L3a_geo_dir, recursive = TRUE)
